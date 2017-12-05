@@ -36,7 +36,7 @@ $Descr A4 11693 8268
 encoding utf-8
 Sheet 1 1
 Title "LCD 128x64 Bricklet"
-Date "2017-12-04"
+Date "2017-12-05"
 Rev "1.0"
 Comp "Tinkerforge GmbH"
 Comment1 "Licensed under CERN OHL v.1.1"
@@ -351,9 +351,9 @@ Text Notes 5050 2950 0    39   ~ 0
 SPI Master alt\nP0.6 : CH1-DX0 : MISO\nP0.7 : CH1-DOUT : MOSI\nP0.8 : CH1-SCLKOUT : CLK\nP0.9 : CH1-SELO0 : SEL\n
 Text Notes 5050 3300 0    39   ~ 0
 SPI Slave/CH0 alt\nP0.13 : USIC0_CH0-DX2F : SEL\nP0.14 : USIC0_CH0-DX1A : CLK\nP0.15 : USIC0_CH0-DX0B : MOSI\nP2.0 : USIC0_CH0-DOUT0 : MISO
-Text GLabel 3350 4100 0    39   Output ~ 0
+Text GLabel 3250 4500 0    39   Output ~ 0
 M-CS-LCD
-Text GLabel 3350 4800 0    39   Output ~ 0
+Text GLabel 3350 4100 0    39   Output ~ 0
 M-MOSI
 $Comp
 L XMC1XXX24 U1
@@ -479,7 +479,7 @@ U 1 1 5A25A69E
 P 10000 2350
 F 0 "C11" H 10050 2450 50  0000 L CNN
 F 1 "100n" H 10000 2250 50  0000 L CNN
-F 2 "kicad-libraries:C0402F" H 10000 2350 60  0001 C CNN
+F 2 "kicad-libraries:C0603F" H 10000 2350 60  0001 C CNN
 F 3 "" H 10000 2350 60  0000 C CNN
 	1    10000 2350
 	-1   0    0    1   
@@ -659,7 +659,7 @@ U 1 1 5A256B60
 P 8450 5500
 F 0 "U2" H 8650 6350 60  0000 C CNN
 F 1 "TSC2046E" H 8700 5000 60  0000 C CNN
-F 2 "" H 9400 6400 60  0001 C CNN
+F 2 "kicad-libraries:TSSOP16" H 9400 6400 60  0001 C CNN
 F 3 "" H 9400 6400 60  0000 C CNN
 	1    8450 5500
 	1    0    0    -1  
@@ -745,12 +745,12 @@ M-CLK
 $Comp
 L R R7
 U 1 1 5A257295
-P 3750 4800
-F 0 "R7" V 3750 4700 50  0000 C CNN
-F 1 "82" V 3750 4900 50  0000 C CNN
-F 2 "kicad-libraries:R0402F" H 3750 4800 60  0001 C CNN
-F 3 "" H 3750 4800 60  0000 C CNN
-	1    3750 4800
+P 3550 4500
+F 0 "R7" V 3550 4400 50  0000 C CNN
+F 1 "82" V 3550 4600 50  0000 C CNN
+F 2 "kicad-libraries:R0402F" H 3550 4500 60  0001 C CNN
+F 3 "" H 3550 4500 60  0000 C CNN
+	1    3550 4500
 	0    1    1    0   
 $EndComp
 $Comp
@@ -846,7 +846,7 @@ Wire Wire Line
 Wire Wire Line
 	2200 1700 2550 1700
 Wire Wire Line
-	1800 2000 1450 2000
+	1450 2000 1800 2000
 Wire Wire Line
 	1450 1900 1800 1900
 Wire Wire Line
@@ -886,7 +886,7 @@ Wire Wire Line
 Wire Wire Line
 	8550 2200 9050 2200
 Wire Wire Line
-	9050 2000 8100 2000
+	8100 2000 9050 2000
 Wire Wire Line
 	8100 2000 8100 2050
 Wire Wire Line
@@ -1008,9 +1008,9 @@ Wire Notes Line
 Wire Notes Line
 	6250 500  6250 7800
 Wire Wire Line
-	9050 1700 8950 1700
+	8950 1700 9050 1700
 Wire Wire Line
-	8950 1700 8950 1000
+	8950 1000 8950 1700
 Wire Wire Line
 	8950 1000 9050 1000
 Wire Wire Line
@@ -1058,10 +1058,6 @@ Wire Wire Line
 	8400 1900 9050 1900
 Connection ~ 8500 1900
 Wire Wire Line
-	4000 4800 4150 4800
-Wire Wire Line
-	3350 4800 3500 4800
-Wire Wire Line
 	3350 4000 3450 4000
 Wire Wire Line
 	3450 4100 3350 4100
@@ -1074,9 +1070,21 @@ Wire Wire Line
 Wire Wire Line
 	4150 4200 3850 4200
 Wire Wire Line
-	3850 4100 4150 4100
-Wire Wire Line
 	4150 4000 3850 4000
 Wire Wire Line
 	4150 3500 4000 3500
+Wire Wire Line
+	3900 4800 4150 4800
+Wire Wire Line
+	3900 4800 3900 4100
+Wire Wire Line
+	3900 4100 3850 4100
+Wire Wire Line
+	3300 4500 3250 4500
+Wire Wire Line
+	3800 4500 4000 4500
+Wire Wire Line
+	4000 4500 4000 4100
+Wire Wire Line
+	4000 4100 4150 4100
 $EndSCHEMATC

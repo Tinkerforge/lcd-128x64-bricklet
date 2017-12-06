@@ -1,11 +1,11 @@
-(kicad_pcb (version 4) (host pcbnew 4.0.2+dfsg1-stable)
+(kicad_pcb (version 4) (host pcbnew 4.0.7-e2-6376~58~ubuntu17.04.1)
 
   (general
     (links 98)
-    (no_connects 62)
-    (area 98.809499 61.109499 194.190501 116.490501)
+    (no_connects 66)
+    (area 98.094999 60.394999 194.905001 117.205001)
     (thickness 1.6)
-    (drawings 13)
+    (drawings 17)
     (tracks 82)
     (zones 0)
     (modules 34)
@@ -46,7 +46,7 @@
   )
 
   (setup
-    (last_trace_width 0.2)
+    (last_trace_width 0.25)
     (user_trace_width 0.2)
     (user_trace_width 0.25)
     (user_trace_width 0.3)
@@ -683,7 +683,7 @@
   )
 
   (module kicad-libraries:ER-CON04HB-2 (layer F.Cu) (tedit 5A25326A) (tstamp 5A2657FA)
-    (at 180.2 76.9)
+    (at 92.9 79.3)
     (path /5A265705)
     (fp_text reference P4 (at 0 2.03) (layer F.Fab)
       (effects (font (size 0.15 0.15) (thickness 0.0375)))
@@ -1244,6 +1244,10 @@
     )
   )
 
+  (gr_line (start 93 76.4) (end 93.6 76.4) (angle 90) (layer Dwgs.User) (width 0.381))
+  (gr_line (start 92.7 97.1) (end 93 76.4) (angle 90) (layer Dwgs.User) (width 0.381))
+  (gr_line (start 114.6 34.9) (end 92.7 97.1) (angle 90) (layer Dwgs.User) (width 0.381))
+  (gr_line (start 114.6 71.7) (end 114.6 34.9) (angle 90) (layer Dwgs.User) (width 0.381))
   (gr_text status (at 180.18 111.53) (layer F.SilkS)
     (effects (font (size 1 1) (thickness 0.15)))
   )

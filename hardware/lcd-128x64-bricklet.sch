@@ -351,9 +351,9 @@ Text Notes 5050 2950 0    39   ~ 0
 SPI Master alt\nP0.6 : CH1-DX0 : MISO\nP0.7 : CH1-DOUT : MOSI\nP0.8 : CH1-SCLKOUT : CLK\nP0.9 : CH1-SELO0 : SEL\n
 Text Notes 5050 3300 0    39   ~ 0
 SPI Slave/CH0 alt\nP0.13 : USIC0_CH0-DX2F : SEL\nP0.14 : USIC0_CH0-DX1A : CLK\nP0.15 : USIC0_CH0-DX0B : MOSI\nP2.0 : USIC0_CH0-DOUT0 : MISO
-Text GLabel 3250 4500 0    39   Output ~ 0
-M-CS-LCD
 Text GLabel 3350 4100 0    39   Output ~ 0
+M-CS-LCD
+Text GLabel 3250 4500 0    39   Output ~ 0
 M-MOSI
 $Comp
 L XMC1XXX24 U1
@@ -368,9 +368,7 @@ F 3 "" H 4650 4600 60  0000 C CNN
 $EndComp
 Text GLabel 8850 1800 0    39   Input ~ 0
 M-CLK
-Text GLabel 8400 1800 0    39   Input ~ 0
-M-MOSI
-Text GLabel 8400 1900 0    39   Output ~ 0
+Text GLabel 8850 1900 0    39   Output ~ 0
 M-MISO
 Text GLabel 8850 700  0    39   Input ~ 0
 M-CS-LCD
@@ -787,7 +785,7 @@ Text GLabel 8850 800  0    39   Input ~ 0
 LCD-RST
 Text GLabel 3900 2950 0    39   Output ~ 0
 LCD-RST
-Text GLabel 8850 900  0    39   UnSpc ~ 0
+Text GLabel 8850 900  0    39   Input ~ 0
 LCD-CD
 Text GLabel 4000 3500 0    39   UnSpc ~ 0
 LCD-CD
@@ -1051,13 +1049,6 @@ Wire Wire Line
 Wire Wire Line
 	8850 900  9050 900 
 Wire Wire Line
-	8400 1800 8500 1800
-Wire Wire Line
-	8500 1800 8500 1900
-Wire Wire Line
-	8400 1900 9050 1900
-Connection ~ 8500 1900
-Wire Wire Line
 	3350 4000 3450 4000
 Wire Wire Line
 	3450 4100 3350 4100
@@ -1076,15 +1067,17 @@ Wire Wire Line
 Wire Wire Line
 	3900 4800 4150 4800
 Wire Wire Line
-	3900 4800 3900 4100
-Wire Wire Line
-	3900 4100 3850 4100
+	3850 4100 4150 4100
 Wire Wire Line
 	3300 4500 3250 4500
 Wire Wire Line
-	3800 4500 4000 4500
+	3800 4500 4050 4500
 Wire Wire Line
-	4000 4500 4000 4100
+	3900 4800 3900 4600
 Wire Wire Line
-	4000 4100 4150 4100
+	3900 4600 4050 4600
+Wire Wire Line
+	4050 4600 4050 4500
+Wire Wire Line
+	9050 1900 8850 1900
 $EndSCHEMATC

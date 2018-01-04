@@ -338,7 +338,7 @@ F 3 "" H 3600 3400 50  0000 C CNN
 $EndComp
 Text GLabel 4000 3900 0    39   Input ~ 0
 S-CS
-Text GLabel 4000 3800 0    39   Input ~ 0
+Text GLabel 3900 2950 0    39   Input ~ 0
 S-CLK
 Text GLabel 4000 3600 0    39   Input ~ 0
 S-MOSI
@@ -346,9 +346,9 @@ Text GLabel 3350 4300 0    39   Input ~ 0
 M-MISO
 Text GLabel 3350 4200 0    39   Output ~ 0
 M-CLK
-Text Notes 5050 2950 0    39   ~ 0
+Text Notes 5000 1950 0    39   ~ 0
 SPI Master alt\nP0.6 : CH1-DX0 : MISO\nP0.7 : CH1-DOUT : MOSI\nP0.8 : CH1-SCLKOUT : CLK\nP0.9 : CH1-SELO0 : SEL\n
-Text Notes 5050 3300 0    39   ~ 0
+Text Notes 5000 2300 0    39   ~ 0
 SPI Slave/CH0 alt\nP0.13 : USIC0_CH0-DX2F : SEL\nP0.14 : USIC0_CH0-DX1A : CLK\nP0.15 : USIC0_CH0-DX0B : MOSI\nP2.0 : USIC0_CH0-DOUT0 : MISO
 Text GLabel 3350 4100 0    39   Output ~ 0
 M-CS-LCD
@@ -782,16 +782,16 @@ Text GLabel 3900 2850 0    39   UnSpc ~ 0
 TS-BUSY
 Text GLabel 8850 800  0    39   Input ~ 0
 LCD-RST
-Text GLabel 3900 2950 0    39   Output ~ 0
+Text GLabel 4000 3800 0    39   Output ~ 0
 LCD-RST
 Text GLabel 8850 900  0    39   Input ~ 0
 LCD-CD
 Text GLabel 4000 3500 0    39   UnSpc ~ 0
 LCD-CD
-Text Notes 5050 3750 0    39   ~ 0
-SPI Slave\nP0.6 : USIC0_CH1-DX0C : MOSI\nP0.7 : USIC0_CH1-DOUT : MISO\nP0.8 : USIC0_CH1-DX1B : CLK\nP0.9 : USIC0_CH1-DX2B : SEL\n
-Text Notes 5050 4200 0    39   ~ 0
-SPI Master\nP0.12 : USIC0_CH0-SELO3    : SEL\nP0.13 : USIC0_CH0-SELO4    : SEL\nP0.14 : USIC0_CH0-SCLKOUT : CLK\nP0.15 : USIC0_CH0-DX0B    : MISO\nP2.0  : USIC0_CH0-DOUT0   : MOSI
+Text Notes 5000 2750 0    39   ~ 0
+SPI Slave auch alt\nP0.6 : USIC0_CH1-DX0C : MOSI\nP0.7 : USIC0_CH1-DOUT : MISO\nP0.8 : USIC0_CH1-DX1B : CLK\nP0.9 : USIC0_CH1-DX2B : SEL\n
+Text Notes 5000 3200 0    39   ~ 0
+SPI Master auch alt\nP0.12 : USIC0_CH0-SELO3    : SEL\nP0.13 : USIC0_CH0-SELO4    : SEL\nP0.14 : USIC0_CH0-SCLKOUT : CLK\nP0.15 : USIC0_CH0-DX0B    : MISO\nP2.0  : USIC0_CH0-DOUT0   : MOSI
 Wire Wire Line
 	4000 3600 4150 3600
 Wire Wire Line
@@ -1104,4 +1104,8 @@ Wire Wire Line
 Wire Wire Line
 	3100 4900 3050 4900
 Connection ~ 3050 4900
+Text Notes 5000 3750 0    39   ~ 0
+SPI Slave\nP0.6 : USIC0_CH1-DX0C : MOSI\nP0.7 : USIC0_CH1-DOUT : MISO\nP1.3 : CLK\nP0.9 : USIC0_CH1-DX2B : SEL\n
+Text Notes 5000 4150 0    39   ~ 0
+SPI Master\nP0.12 : USIC0_CH0-SELO3    : SEL\nP0.13 : USIC0_CH0-SELO4    : SEL\nP0.14 : USIC0_CH0-SCLKOUT : CLK\nP0.15 : USIC0_CH0-DX0B    : MISO\nP2.0  : USIC0_CH0-DOUT0   : MOSI
 $EndSCHEMATC

@@ -1,4 +1,4 @@
-update=Do 04 Jan 2018 15:49:48 CET
+update=Mo 12 Feb 2018 09:25:04 CET
 version=1
 last_client=kicad
 [cvpcb]
@@ -47,9 +47,19 @@ LibName10=led
 LibName11=dip_sockets
 LibName12=standard
 LibName13=Logo
+[schematic_editor]
+version=1
+PageLayoutDescrFile=
+PlotDirectoryName=
+SubpartIdSeparator=0
+SubpartFirstId=65
+NetFmtName=
+SpiceForceRefPrefix=0
+SpiceUseNetNumbers=0
+LabSize=60
 [eeschema]
 version=1
-LibDir=kicad-libraries
+LibDir=kicad-libraries.pretty
 [eeschema/libraries]
 LibName1=tinkerforge
 LibName2=power
@@ -82,13 +92,3 @@ LibName28=opto
 LibName29=atmel
 LibName30=contrib
 LibName31=valves
-[schematic_editor]
-version=1
-PageLayoutDescrFile=
-PlotDirectoryName=
-SubpartIdSeparator=0
-SubpartFirstId=65
-NetFmtName=
-SpiceForceRefPrefix=0
-SpiceUseNetNumbers=0
-LabSize=60

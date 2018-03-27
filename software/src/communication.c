@@ -154,11 +154,11 @@ BootloaderHandleMessageResponse write_line(const WriteLine *data) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-//	uartbb_printf("%s\n\r", data->text);
-
 	for(uint8_t i = 0; i < 22 - data->position; i++) {
 		if(data->text[i] == 0) {
-			uc1701.display_mask_changed = true;
+			if(uc1701.automatic_draw) {
+				uc1701.display_mask_changed = true;
+			}
 			return HANDLE_MESSAGE_RESPONSE_EMPTY;
 		}
 
@@ -166,14 +166,15 @@ BootloaderHandleMessageResponse write_line(const WriteLine *data) {
 			uint8_t new_data = ((j == 5) ? 0 : font[(uint8_t)data->text[i]*5 + j]);
 			uint8_t column = (data->position+i)*6 + j;
 			if(column >= LCD_MAX_COLUMNS) {
-				uc1701.display_mask_changed = true;
+				if(uc1701.automatic_draw) {
+					uc1701.display_mask_changed = true;
+				}
 				return HANDLE_MESSAGE_RESPONSE_EMPTY;
 			}
 
 			if(uc1701.display[data->line][column] != new_data) {
 				uc1701.display_mask[data->line][column] = (uc1701.display[data->line][column] ^ new_data);
 				uc1701.display[data->line][column] = new_data;
-
 			}
 		}
 	}

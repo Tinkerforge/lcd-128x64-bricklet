@@ -276,6 +276,7 @@ bool handle_touch_position_callback(void) {
 		cb.pressure = tsc2046e.touch_pressure;
 		cb.x        = tsc2046e.touch_x;
 		cb.y        = tsc2046e.touch_y;
+		cb.age      = system_timer_get_ms() - tsc2046e.touch_time;
 
 		last_pressure = tsc2046e.touch_pressure;
 		last_x        = tsc2046e.touch_x;
@@ -330,6 +331,7 @@ bool handle_touch_gesture_callback(void) {
 		cb.x_end      = tsc2046e.gesture_api_x_end;
 		cb.y_end      = tsc2046e.gesture_api_y_end;
 		cb.duration   = tsc2046e.gesture_api_duration;
+		cb.age        = system_timer_get_ms() - tsc2046e.gesture_api_time;
 
 		last_gesture  = tsc2046e.gesture_api_gesture;
 		last_x_start  = tsc2046e.gesture_api_x_start;

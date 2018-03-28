@@ -154,6 +154,7 @@ typedef struct {
 	uint16_t pressure;
 	uint16_t x;
 	uint16_t y;
+	uint32_t age;
 } __attribute__((__packed__)) TouchPosition_Callback;
 
 typedef struct {
@@ -195,6 +196,7 @@ typedef struct {
 	uint16_t y_start;
 	uint16_t x_end;
 	uint16_t y_end;
+	uint32_t age;
 } __attribute__((__packed__)) TouchGesture_Callback;
 
 

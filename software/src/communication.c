@@ -150,11 +150,11 @@ BootloaderHandleMessageResponse get_display_configuration(const GetDisplayConfig
 }
 
 BootloaderHandleMessageResponse write_line(const WriteLine *data) {
-	if((data->line > 8) || (data->position > 22)) {
+	if((data->line > 7) || (data->position > 21)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	for(uint8_t i = 0; i < 22 - data->position; i++) {
+	for(uint8_t i = 0; i < 21 - data->position; i++) {
 		if(data->text[i] == 0) {
 			if(uc1701.automatic_draw) {
 				uc1701.display_mask_changed = true;

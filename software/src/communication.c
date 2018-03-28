@@ -51,20 +51,19 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 
 
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data) {
-	if((data->column_start > data->column_end) || (data->row_start > data->row_end)) {
+	if((data->x_start > data->x_end) || (data->y_start > data->y_end)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-
 	const uint16_t length = MIN(data->pixels_length - data->pixels_chunk_offset, 448);
-	const uint8_t columns = data->column_end - data->column_start + 1;
+	const uint8_t columns = data->x_end - data->x_start + 1;
 
-	uint8_t column = data->column_start + (data->pixels_chunk_offset % columns);
-	uint8_t row = data->row_start + (data->pixels_chunk_offset / columns);
+	uint8_t column = data->x_start + (data->pixels_chunk_offset % columns);
+	uint8_t row = data->y_start + (data->pixels_chunk_offset / columns);
 
 	uint16_t counter = 0;
-	for(; row <= data->row_end; row++) {
-		for(; column <= data->column_end; column++) {
+	for(; row <= data->y_end; row++) {
+		for(; column <= data->x_end; column++) {
 			const uint8_t index = counter / 8;
 			const uint8_t bit = counter % 8;
 			const uint8_t display_bit = row % 8;
@@ -89,7 +88,7 @@ BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel
 		if(counter == length) {
 			break;
 		}
-		column = data->column_start;
+		column = data->x_start;
 	}
 
 	if(data->pixels_chunk_offset + length >= data->pixels_length) {

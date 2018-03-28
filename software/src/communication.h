@@ -76,10 +76,10 @@ void communication_init(void);
 
 typedef struct {
 	TFPMessageHeader header;
-	uint8_t column_start;
-	uint8_t row_start;
-	uint8_t column_end;
-	uint8_t row_end;
+	uint8_t x_start;
+	uint8_t y_start;
+	uint8_t x_end;
+	uint8_t y_end;
 	uint16_t pixels_length;
 	uint16_t pixels_chunk_offset;
 	uint8_t pixels_chunk_data[448/8];

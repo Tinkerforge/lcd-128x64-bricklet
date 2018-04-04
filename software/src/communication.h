@@ -59,20 +59,21 @@ void communication_init(void);
 
 // Function and callback IDs and structs
 #define FID_WRITE_PIXELS_LOW_LEVEL 1
-#define FID_CLEAR_DISPLAY 2
-#define FID_SET_DISPLAY_CONFIGURATION 3
-#define FID_GET_DISPLAY_CONFIGURATION 4
-#define FID_WRITE_LINE 5
-#define FID_DRAW_BUFFERED_FRAME 6
-#define FID_GET_TOUCH_POSITION 7
-#define FID_SET_TOUCH_POSITION_CALLBACK_CONFIGURATION 8
-#define FID_GET_TOUCH_POSITION_CALLBACK_CONFIGURATION 9
-#define FID_GET_TOUCH_GESTURE 11
-#define FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 12
-#define FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 13
+#define FID_READ_PIXELS_LOW_LEVEL 2
+#define FID_CLEAR_DISPLAY 3
+#define FID_SET_DISPLAY_CONFIGURATION 4
+#define FID_GET_DISPLAY_CONFIGURATION 5
+#define FID_WRITE_LINE 6
+#define FID_DRAW_BUFFERED_FRAME 7
+#define FID_GET_TOUCH_POSITION 8
+#define FID_SET_TOUCH_POSITION_CALLBACK_CONFIGURATION 9
+#define FID_GET_TOUCH_POSITION_CALLBACK_CONFIGURATION 10
+#define FID_GET_TOUCH_GESTURE 12
+#define FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 13
+#define FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 14
 
-#define FID_CALLBACK_TOUCH_POSITION 10
-#define FID_CALLBACK_TOUCH_GESTURE 14
+#define FID_CALLBACK_TOUCH_POSITION 11
+#define FID_CALLBACK_TOUCH_GESTURE 15
 
 typedef struct {
 	TFPMessageHeader header;
@@ -84,6 +85,21 @@ typedef struct {
 	uint16_t pixels_chunk_offset;
 	uint8_t pixels_chunk_data[448/8];
 } __attribute__((__packed__)) WritePixelsLowLevel;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t x_start;
+	uint8_t y_start;
+	uint8_t x_end;
+	uint8_t y_end;
+} __attribute__((__packed__)) ReadPixelsLowLevel;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t pixels_length;
+	uint16_t pixels_chunk_offset;
+	uint8_t pixels_chunk_data[480/8];
+} __attribute__((__packed__)) ReadPixelsLowLevel_Response;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -202,6 +218,7 @@ typedef struct {
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
+BootloaderHandleMessageResponse read_pixels_low_level(const ReadPixelsLowLevel *data, ReadPixelsLowLevel_Response *response);
 BootloaderHandleMessageResponse clear_display(const ClearDisplay *data);
 BootloaderHandleMessageResponse set_display_configuration(const SetDisplayConfiguration *data);
 BootloaderHandleMessageResponse get_display_configuration(const GetDisplayConfiguration *data, GetDisplayConfiguration_Response *response);

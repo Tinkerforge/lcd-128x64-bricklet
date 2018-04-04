@@ -34,6 +34,7 @@
 BootloaderHandleMessageResponse handle_message(const void *message, void *response) {
 	switch(tfp_get_fid_from_message(message)) {
 		case FID_WRITE_PIXELS_LOW_LEVEL: return write_pixels_low_level(message);
+		case FID_READ_PIXELS_LOW_LEVEL: return read_pixels_low_level(message, response);
 		case FID_CLEAR_DISPLAY: return clear_display(message);
 		case FID_SET_DISPLAY_CONFIGURATION: return set_display_configuration(message);
 		case FID_GET_DISPLAY_CONFIGURATION: return get_display_configuration(message, response);
@@ -98,6 +99,57 @@ BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel
 	}
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse read_pixels_low_level(const ReadPixelsLowLevel *data, ReadPixelsLowLevel_Response *response) {
+	if((data->x_start > data->x_end) || (data->y_start > data->y_end)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if((data->x_end >= LCD_MAX_COLUMNS) || (data->y_end >= (LCD_MAX_ROWS*8))) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	memset(response->pixels_chunk_data, 0, 60);
+
+	response->header.length = sizeof(ReadPixelsLowLevel_Response);
+	response->pixels_length = (data->x_end - data->x_start + 1)*(data->y_end - data->y_start + 1);
+	response->pixels_chunk_offset = uc1701.read_chunk_offset;
+
+	const uint8_t columns = data->x_end - data->x_start + 1;
+
+	uint8_t column = data->x_start + (response->pixels_chunk_offset % columns);
+	uint8_t row = data->y_start + (response->pixels_chunk_offset / columns);
+
+	uint16_t counter = 0;
+	for(; row <= data->y_end; row++) {
+		const uint16_t row_index = row / 8;
+		const uint16_t row_bit   = row % 8;
+		for(; column <= data->x_end; column++) {
+			const uint16_t data_index = counter / 8;
+			const uint16_t data_bit   = counter % 8;
+			if(uc1701.display[row_index][column] & (1 << row_bit)) {
+				response->pixels_chunk_data[data_index] |= (1 << data_bit);
+			}
+
+			counter++;
+			if(counter == 60*8) {
+				break;
+			}
+		}
+		if(counter == 60*8) {
+			break;
+		}
+
+		column = data->x_start;
+	}
+
+	uc1701.read_chunk_offset += counter;
+	if(uc1701.read_chunk_offset == response->pixels_length) {
+		uc1701.read_chunk_offset = 0;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
 BootloaderHandleMessageResponse clear_display(const ClearDisplay *data) {

@@ -48,6 +48,8 @@ typedef struct {
 	bool display_configuration_invert;
 
 	bool automatic_draw;
+
+	uint16_t read_chunk_offset;
 } UC1701;
 
 extern UC1701 uc1701;

@@ -72,10 +72,10 @@ void tsc2046e_task_new_gesture(void) {
 		// top to bottom / bottom to top
 		if(tsc2046e.gesture_y_start < tsc2046e.gesture_y_end) {
 			y_diff = tsc2046e.gesture_y_end - tsc2046e.gesture_y_start;
-			y_swipe = LCD_128X64_GESTURE_BOTTOM_TO_TOP;
+			y_swipe = LCD_128X64_GESTURE_TOP_TO_BOTTOM;
 		} else {
 			y_diff = tsc2046e.gesture_y_start - tsc2046e.gesture_y_end;
-			y_swipe = LCD_128X64_GESTURE_TOP_TO_BOTTOM;
+			y_swipe = LCD_128X64_GESTURE_BOTTOM_TO_TOP;
 		}
 
 		if((x_diff > 5) || (y_diff > 5)) {
@@ -141,7 +141,7 @@ void tsc2046e_task_tick(void) {
 				} else {
 					tsc2046e.touch_y = (y-400)*63/3200;
 				}
-				tsc2046e.touch_y = MIN(tsc2046e.touch_y, 63);
+				tsc2046e.touch_y = 63 - MIN(tsc2046e.touch_y, 63);
 
 				if(x < 200) {
 					tsc2046e.touch_x = 0;

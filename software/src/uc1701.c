@@ -187,9 +187,11 @@ void uc1701_init(void) {
 	uc1701.reset                = true;
 	uc1701.initialize           = true;
 	uc1701.display_mask_changed = true;
+	uc1701.new_contrast         = true;
+	uc1701.new_backlight        = true;
 
 	memset(uc1701.display_mask, 0xff, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
-	uc1701.display_configuration_contrast  = 21;
+	uc1701.display_configuration_contrast  = 14;
 	uc1701.display_configuration_backlight = 100;
 	uc1701.display_configuration_invert    = false;
 	uc1701.automatic_draw                  = true;

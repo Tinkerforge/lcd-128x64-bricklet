@@ -2,7 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import com.tinkerforge.IPConnection;
-import com.tinkerforge.BrickletOLED128x64V2;
+import com.tinkerforge.BrickletLCD128x64;
 
 public class ExampleScribble {
 	private static final String HOST = "localhost";
@@ -11,7 +11,7 @@ public class ExampleScribble {
 	private static final short WIDTH = 128;
 	private static final short HEIGHT = 64;
 
-	static void drawImage(BrickletOLED128x64V2 oled, BufferedImage image) throws Exception {
+	static void drawImage(BrickletLCD128x64 lcd, BufferedImage image) throws Exception {
 		boolean[] pixels = new boolean[HEIGHT * WIDTH];
 		short h, w;
 
@@ -20,20 +20,20 @@ public class ExampleScribble {
 				pixels[h*WIDTH + w] = (image.getRGB(w, h) & 0x00FFFFFF) > 0;
 			}
 		}
-		oled.writePixels(0, 0, WIDTH-1, HEIGHT-1, pixels);
+		lcd.writePixels(0, 0, WIDTH-1, HEIGHT-1, pixels);
 	}
 
 	// Note: To make the example code cleaner we do not handle exceptions. Exceptions
 	//       you might normally want to catch are described in the documentation
 	public static void main(String args[]) throws Exception {
 		IPConnection ipcon = new IPConnection(); // Create IP connection
-		BrickletOLED128x64V2 oled = new BrickletOLED128x64V2(UID, ipcon); // Create device object
+		BrickletLCD128x64 lcd = new BrickletLCD128x64(UID, ipcon); // Create device object
 
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
 		// Clear display
-		oled.clearDisplay();
+		lcd.clearDisplay();
 
 		// Draw rotating line
 		BufferedImage image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_ARGB);
@@ -56,7 +56,7 @@ public class ExampleScribble {
 			g.drawLine(originX, originY, x, y);
 			g.dispose();
 
-			drawImage(oled, image);
+			drawImage(lcd, image);
 			Thread.sleep(25);
 
 			angle++;

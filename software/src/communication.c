@@ -324,6 +324,11 @@ bool handle_touch_position_callback(void) {
 			return false;
 		}
 
+		// Never trigger callback by pressure of 1
+		if(tsc2046e.touch_pressure == 1) {
+			return false;
+		}
+
 		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(TouchPosition_Callback), FID_CALLBACK_TOUCH_POSITION);
 		cb.pressure = tsc2046e.touch_pressure;
 		cb.x        = tsc2046e.touch_x;

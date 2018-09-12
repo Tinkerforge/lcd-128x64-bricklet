@@ -1,0 +1,49 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="XYZ"(*Change XYZ to the UID of your LCD 128x64 Bricklet*)
+
+(*Create IPConnection and device object*)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+lcd=NETNew["Tinkerforge.BrickletLCD128x64",uid,ipcon]
+ipcon@Connect[host,port]
+
+(*Callback function for touch_position callback*)
+TouchPositionCB[sender_,pressure_,x_,y_,age_]:=
+ Module[{},
+  Print["Pressure: "<>ToString[pressure]];
+  Print["X: "<>ToString[x]];
+  Print["Y: "<>ToString[y]];
+  Print["Age: "<>ToString[age]]
+ ]
+
+AddEventHandler[lcd@TouchPositionCallback,TouchPositionCB]
+
+(*Callback function for touch_gesture callback*)
+TouchGestureCB[sender_,gesture_,duration_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
+ Module[{},
+  Print["Gesture: "<>ToString[gesture]];
+  Print["Duration: "<>ToString[duration]];
+  Print["X Start: "<>ToString[xStart]];
+  Print["X End: "<>ToString[xEnd]];
+  Print["Y Start: "<>ToString[yStart]];
+  Print["Y End: "<>ToString[yEnd]];
+  Print["Age: "<>ToString[age]]
+ ]
+
+AddEventHandler[lcd@TouchGestureCallback,TouchGestureCB]
+
+(*Configure touch position callback with a period of 100ms*)
+lcd@SetTouchPositionCallbackConfiguration[100,True]
+
+(*Configure touch gesture callback with a period of 100ms*)
+lcd@SetTouchGestureCallbackConfiguration[100,True]
+
+Input["Click OK to exit"]
+
+(*Clean up*)
+ipcon@Disconnect[]
+ReleaseNETObject[lcd]
+ReleaseNETObject[ipcon]

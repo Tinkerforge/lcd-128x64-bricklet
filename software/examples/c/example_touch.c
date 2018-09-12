@@ -1,0 +1,77 @@
+#include <stdio.h>
+
+#include "ip_connection.h"
+#include "bricklet_lcd_128x64.h"
+
+#define HOST "localhost"
+#define PORT 4223
+#define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
+
+// Callback function for touch_position callback
+void cb_touch_position(uint16_t pressure, uint16_t x, uint16_t y, uint32_t age,
+                       void *user_data) {
+	(void)user_data; // avoid unused parameter warning
+
+	printf("Pressure: %u\n", pressure);
+	printf("X: %u\n", x);
+	printf("Y: %u\n", y);
+	printf("Age: %u\n", age);
+	printf("\n");
+}
+
+// Callback function for touch_gesture callback
+void cb_touch_gesture(uint8_t gesture, uint32_t duration, uint16_t x_start,
+                      uint16_t x_end, uint16_t y_start, uint16_t y_end, uint32_t age,
+                      void *user_data) {
+	(void)user_data; // avoid unused parameter warning
+
+	printf("Gesture: %u\n", gesture);
+	printf("Duration: %u\n", duration);
+	printf("X Start: %u\n", x_start);
+	printf("X End: %u\n", x_end);
+	printf("Y Start: %u\n", y_start);
+	printf("Y End: %u\n", y_end);
+	printf("Age: %u\n", age);
+	printf("\n");
+}
+
+int main(void) {
+	// Create IP connection
+	IPConnection ipcon;
+	ipcon_create(&ipcon);
+
+	// Create device object
+	LCD128x64 lcd;
+	lcd_128x64_create(&lcd, UID, &ipcon);
+
+	// Connect to brickd
+	if(ipcon_connect(&ipcon, HOST, PORT) < 0) {
+		fprintf(stderr, "Could not connect\n");
+		return 1;
+	}
+	// Don't use device before ipcon is connected
+
+	// Register touch_position callback to function cb_touch_position
+	lcd_128x64_register_callback(&lcd,
+	                             LCD_128X64_CALLBACK_TOUCH_POSITION,
+	                             (void *)cb_touch_position,
+	                             NULL);
+
+	// Register touch_gesture callback to function cb_touch_gesture
+	lcd_128x64_register_callback(&lcd,
+	                             LCD_128X64_CALLBACK_TOUCH_GESTURE,
+	                             (void *)cb_touch_gesture,
+	                             NULL);
+
+	// Configure touch position callback with a period of 100ms
+	lcd_128x64_set_touch_position_callback_configuration(&lcd, 100, true);
+
+	// Configure touch gesture callback with a period of 100ms
+	lcd_128x64_set_touch_gesture_callback_configuration(&lcd, 100, true);
+
+	printf("Press key to exit\n");
+	getchar();
+	lcd_128x64_destroy(&lcd);
+	ipcon_destroy(&ipcon); // Calls ipcon_disconnect internally
+	return 0;
+}

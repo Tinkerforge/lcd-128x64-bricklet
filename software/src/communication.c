@@ -393,8 +393,6 @@ bool handle_touch_gesture_callback(void) {
 		last_duration = tsc2046e.gesture_api_duration;
 
 		last_time = system_timer_get_ms();
-
-		return false;
 	}
 
 	if(bootloader_spitfp_is_send_possible(&bootloader_status.st)) {

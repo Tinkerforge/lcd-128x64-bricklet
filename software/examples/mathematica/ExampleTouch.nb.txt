@@ -10,7 +10,7 @@ ipcon=NETNew["Tinkerforge.IPConnection"]
 lcd=NETNew["Tinkerforge.BrickletLCD128x64",uid,ipcon]
 ipcon@Connect[host,port]
 
-(*Callback function for touch_position callback*)
+(*Callback function for touch position callback*)
 TouchPositionCB[sender_,pressure_,x_,y_,age_]:=
  Module[{},
   Print["Pressure: "<>ToString[pressure]];
@@ -21,7 +21,7 @@ TouchPositionCB[sender_,pressure_,x_,y_,age_]:=
 
 AddEventHandler[lcd@TouchPositionCallback,TouchPositionCB]
 
-(*Callback function for touch_gesture callback*)
+(*Callback function for touch gesture callback*)
 TouchGestureCB[sender_,gesture_,duration_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
  Module[{},
   Print["Gesture: "<>ToString[gesture]];
@@ -35,10 +35,10 @@ TouchGestureCB[sender_,gesture_,duration_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
 
 AddEventHandler[lcd@TouchGestureCallback,TouchGestureCB]
 
-(*Configure touch position callback with a period of 100ms*)
+(*Set period for touch position callback to 0.1s (100ms)*)
 lcd@SetTouchPositionCallbackConfiguration[100,True]
 
-(*Configure touch gesture callback with a period of 100ms*)
+(*Set period for touch gesture callback to 0.1s (100ms)*)
 lcd@SetTouchGestureCallbackConfiguration[100,True]
 
 Input["Click OK to exit"]

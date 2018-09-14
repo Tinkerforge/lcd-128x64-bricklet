@@ -8,7 +8,7 @@ use constant HOST => 'localhost';
 use constant PORT => 4223;
 use constant UID => 'XYZ'; # Change XYZ to the UID of your LCD 128x64 Bricklet
 
-# Callback subroutine for touch_position callback
+# Callback subroutine for touch position callback
 sub cb_touch_position
 {
     my ($pressure, $x, $y, $age) = @_;
@@ -20,7 +20,7 @@ sub cb_touch_position
     print "\n";
 }
 
-# Callback subroutine for touch_gesture callback
+# Callback subroutine for touch gesture callback
 sub cb_touch_gesture
 {
     my ($gesture, $duration, $x_start, $x_end, $y_start, $y_end, $age) = @_;
@@ -41,16 +41,16 @@ my $lcd = Tinkerforge::BrickletLCD128x64->new(&UID, $ipcon); # Create device obj
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Register touch_position callback to subroutine cb_touch_position
+# Register touch position callback to subroutine cb_touch_position
 $lcd->register_callback($lcd->CALLBACK_TOUCH_POSITION, 'cb_touch_position');
 
-# Register touch_gesture callback to subroutine cb_touch_gesture
+# Register touch gesture callback to subroutine cb_touch_gesture
 $lcd->register_callback($lcd->CALLBACK_TOUCH_GESTURE, 'cb_touch_gesture');
 
-# Configure touch position callback with a period of 100ms
+# Set period for touch position callback to 0.1s (100ms)
 $lcd->set_touch_position_callback_configuration(100, 1);
 
-# Configure touch gesture callback with a period of 100ms
+# Set period for touch gesture callback to 0.1s (100ms)
 $lcd->set_touch_gesture_callback_configuration(100, 1);
 
 print "Press key to exit\n";

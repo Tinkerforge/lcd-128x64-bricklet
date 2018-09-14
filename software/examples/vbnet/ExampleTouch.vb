@@ -6,7 +6,7 @@ Module ExampleTouch
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change XYZ to the UID of your LCD 128x64 Bricklet
 
-    ' Callback subroutine for touch_position callback
+    ' Callback subroutine for touch position callback
     Sub TouchPositionCB(ByVal sender As BrickletLCD128x64, ByVal pressure As Integer, _
                         ByVal x As Integer, ByVal y As Integer, ByVal age As Long)
         Console.WriteLine("Pressure: " + pressure.ToString())
@@ -16,7 +16,7 @@ Module ExampleTouch
         Console.WriteLine("")
     End Sub
 
-    ' Callback subroutine for touch_gesture callback
+    ' Callback subroutine for touch gesture callback
     Sub TouchGestureCB(ByVal sender As BrickletLCD128x64, ByVal gesture As Byte, _
                        ByVal duration As Long, ByVal xStart As Integer, _
                        ByVal xEnd As Integer, ByVal yStart As Integer, _
@@ -38,16 +38,16 @@ Module ExampleTouch
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Register touch_position callback to subroutine TouchPositionCB
+        ' Register touch position callback to subroutine TouchPositionCB
         AddHandler lcd.TouchPositionCallback, AddressOf TouchPositionCB
 
-        ' Register touch_gesture callback to subroutine TouchGestureCB
+        ' Register touch gesture callback to subroutine TouchGestureCB
         AddHandler lcd.TouchGestureCallback, AddressOf TouchGestureCB
 
-        ' Configure touch position callback with a period of 100ms
+        ' Set period for touch_position callback to 0.1s (100ms)
         lcd.SetTouchPositionCallbackConfiguration(100, True)
 
-        ' Configure touch gesture callback with a period of 100ms
+        ' Set period for touch_gesture callback to 0.1s (100ms)
         lcd.SetTouchGestureCallbackConfiguration(100, True)
 
         Console.WriteLine("Press key to exit")

@@ -16,7 +16,7 @@ lcd = BrickletLCD128x64.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Register touch_position callback
+# Register touch position callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_POSITION) do |pressure, x, y, age|
   puts "Pressure: #{pressure}"
   puts "X: #{x}"
@@ -25,7 +25,7 @@ lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_POSITION) do |pressure, 
   puts ''
 end
 
-# Register touch_gesture callback
+# Register touch gesture callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_GESTURE) do |gesture, duration,
                                                                      x_start, x_end,
                                                                      y_start, y_end, age|
@@ -39,10 +39,10 @@ lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_GESTURE) do |gesture, du
   puts ''
 end
 
-# Configure touch position callback with a period of 100ms
+# Set period for touch position callback to 0.1s (100ms)
 lcd.set_touch_position_callback_configuration 100, true
 
-# Configure touch gesture callback with a period of 100ms
+# Set period for touch gesture callback to 0.1s (100ms)
 lcd.set_touch_gesture_callback_configuration 100, true
 
 puts 'Press key to exit'

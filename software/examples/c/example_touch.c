@@ -7,7 +7,7 @@
 #define PORT 4223
 #define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
 
-// Callback function for touch_position callback
+// Callback function for touch position callback
 void cb_touch_position(uint16_t pressure, uint16_t x, uint16_t y, uint32_t age,
                        void *user_data) {
 	(void)user_data; // avoid unused parameter warning
@@ -19,7 +19,7 @@ void cb_touch_position(uint16_t pressure, uint16_t x, uint16_t y, uint32_t age,
 	printf("\n");
 }
 
-// Callback function for touch_gesture callback
+// Callback function for touch gesture callback
 void cb_touch_gesture(uint8_t gesture, uint32_t duration, uint16_t x_start,
                       uint16_t x_end, uint16_t y_start, uint16_t y_end, uint32_t age,
                       void *user_data) {
@@ -51,22 +51,22 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// Register touch_position callback to function cb_touch_position
+	// Register touch position callback to function cb_touch_position
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_TOUCH_POSITION,
 	                             (void *)cb_touch_position,
 	                             NULL);
 
-	// Register touch_gesture callback to function cb_touch_gesture
+	// Register touch gesture callback to function cb_touch_gesture
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_TOUCH_GESTURE,
 	                             (void *)cb_touch_gesture,
 	                             NULL);
 
-	// Configure touch position callback with a period of 100ms
+	// Set period for touch position callback to 0.1s (100ms)
 	lcd_128x64_set_touch_position_callback_configuration(&lcd, 100, true);
 
-	// Configure touch gesture callback with a period of 100ms
+	// Set period for touch gesture callback to 0.1s (100ms)
 	lcd_128x64_set_touch_gesture_callback_configuration(&lcd, 100, true);
 
 	printf("Press key to exit\n");

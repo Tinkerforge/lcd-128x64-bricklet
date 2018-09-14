@@ -16,17 +16,17 @@ ipcon.connect(HOST, PORT,
 
 ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
     function (connectReason) {
-        // Configure touch position callback with a period of 100ms
+        // Set period for touch position callback to 0.1s (100ms)
         lcd.setTouchPositionCallbackConfiguration(100, true);
 
-        // Configure touch gesture callback with a period of 100ms
+        // Set period for touch gesture callback to 0.1s (100ms)
         lcd.setTouchGestureCallbackConfiguration(100, true);
     }
 );
 
-// Register touch_position callback
+// Register touch position callback
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_POSITION,
-    // Callback function for touch_position callback
+    // Callback function for touch position callback
     function (pressure, x, y, age) {
         console.log('Pressure: ' + pressure);
         console.log('X: ' + x);
@@ -36,9 +36,9 @@ lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_POSITION,
     }
 );
 
-// Register touch_gesture callback
+// Register touch gesture callback
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_GESTURE,
-    // Callback function for touch_gesture callback
+    // Callback function for touch gesture callback
     function (gesture, duration, xStart, xEnd, yStart, yEnd, age) {
         console.log('Gesture: ' + gesture);
         console.log('Duration: ' + duration);

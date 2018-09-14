@@ -17,7 +17,7 @@ public class ExampleTouch {
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Add touch_position listener
+		// Add touch position listener
 		lcd.addTouchPositionListener(new BrickletLCD128x64.TouchPositionListener() {
 			public void touchPosition(int pressure, int x, int y, long age) {
 				System.out.println("Pressure: " + pressure);
@@ -28,7 +28,7 @@ public class ExampleTouch {
 			}
 		});
 
-		// Add touch_gesture listener
+		// Add touch gesture listener
 		lcd.addTouchGestureListener(new BrickletLCD128x64.TouchGestureListener() {
 			public void touchGesture(int gesture, long duration, int xStart, int xEnd,
 			                         int yStart, int yEnd, long age) {
@@ -43,10 +43,10 @@ public class ExampleTouch {
 			}
 		});
 
-		// Configure touch position callback with a period of 100ms
+		// Set period for touch position callback to 0.1s (100ms)
 		lcd.setTouchPositionCallbackConfiguration(100, true);
 
-		// Configure touch gesture callback with a period of 100ms
+		// Set period for touch gesture callback to 0.1s (100ms)
 		lcd.setTouchGestureCallbackConfiguration(100, true);
 
 		System.out.println("Press key to exit"); System.in.read();

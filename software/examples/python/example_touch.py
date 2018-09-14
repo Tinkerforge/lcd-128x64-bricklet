@@ -8,7 +8,7 @@ UID = "XYZ" # Change XYZ to the UID of your LCD 128x64 Bricklet
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_lcd_128x64 import BrickletLCD128x64
 
-# Callback function for touch_position callback
+# Callback function for touch position callback
 def cb_touch_position(pressure, x, y, age):
     print("Pressure: " + str(pressure))
     print("X: " + str(x))
@@ -16,7 +16,7 @@ def cb_touch_position(pressure, x, y, age):
     print("Age: " + str(age))
     print("")
 
-# Callback function for touch_gesture callback
+# Callback function for touch gesture callback
 def cb_touch_gesture(gesture, duration, x_start, x_end, y_start, y_end, age):
     print("Gesture: " + str(gesture))
     print("Duration: " + str(duration))
@@ -34,16 +34,16 @@ if __name__ == "__main__":
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
-    # Register touch_position callback to function cb_touch_position
+    # Register touch position callback to function cb_touch_position
     lcd.register_callback(lcd.CALLBACK_TOUCH_POSITION, cb_touch_position)
 
-    # Register touch_gesture callback to function cb_touch_gesture
+    # Register touch gesture callback to function cb_touch_gesture
     lcd.register_callback(lcd.CALLBACK_TOUCH_GESTURE, cb_touch_gesture)
 
-    # Configure touch position callback with a period of 100ms
+    # Set period for touch position callback to 0.1s (100ms)
     lcd.set_touch_position_callback_configuration(100, True)
 
-    # Configure touch gesture callback with a period of 100ms
+    # Set period for touch gesture callback to 0.1s (100ms)
     lcd.set_touch_gesture_callback_configuration(100, True)
 
     raw_input("Press key to exit\n") # Use input() in Python 3

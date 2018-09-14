@@ -29,7 +29,7 @@ const
 var
   e: TExample;
 
-{ Callback procedure for touch_position callback }
+{ Callback procedure for touch position callback }
 procedure TExample.TouchPositionCB(sender: TBrickletLCD128x64; const pressure: word;
                                    const x: word; const y: word; const age: longword);
 begin
@@ -40,7 +40,7 @@ begin
   WriteLn('');
 end;
 
-{ Callback procedure for touch_gesture callback }
+{ Callback procedure for touch gesture callback }
 procedure TExample.TouchGestureCB(sender: TBrickletLCD128x64; const gesture: byte;
                                   const duration: longword; const xStart: word;
                                   const xEnd: word; const yStart: word; const yEnd: word;
@@ -68,16 +68,16 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Register touch_position callback to procedure TouchPositionCB }
+  { Register touch position callback to procedure TouchPositionCB }
   lcd.OnTouchPosition := {$ifdef FPC}@{$endif}TouchPositionCB;
 
-  { Register touch_gesture callback to procedure TouchGestureCB }
+  { Register touch gesture callback to procedure TouchGestureCB }
   lcd.OnTouchGesture := {$ifdef FPC}@{$endif}TouchGestureCB;
 
-  { Configure touch position callback with a period of 100ms }
+  { Set period for touch position callback to 0.1s (100ms) }
   lcd.SetTouchPositionCallbackConfiguration(100, true);
 
-  { Configure touch gesture callback with a period of 100ms }
+  { Set period for touch gesture callback to 0.1s (100ms) }
   lcd.SetTouchGestureCallbackConfiguration(100, true);
 
   WriteLn('Press key to exit');

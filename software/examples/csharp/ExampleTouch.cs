@@ -7,7 +7,7 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change XYZ to the UID of your LCD 128x64 Bricklet
 
-	// Callback function for touch_position callback
+	// Callback function for touch position callback
 	static void TouchPositionCB(BrickletLCD128x64 sender, int pressure, int x, int y,
 	                            long age)
 	{
@@ -18,7 +18,7 @@ class Example
 		Console.WriteLine("");
 	}
 
-	// Callback function for touch_gesture callback
+	// Callback function for touch gesture callback
 	static void TouchGestureCB(BrickletLCD128x64 sender, byte gesture, long duration,
 	                           int xStart, int xEnd, int yStart, int yEnd, long age)
 	{
@@ -40,16 +40,16 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Register touch_position callback to function TouchPositionCB
+		// Register touch position callback to function TouchPositionCB
 		lcd.TouchPositionCallback += TouchPositionCB;
 
-		// Register touch_gesture callback to function TouchGestureCB
+		// Register touch gesture callback to function TouchGestureCB
 		lcd.TouchGestureCallback += TouchGestureCB;
 
-		// Configure touch position callback with a period of 100ms
+		// Set period for touch position callback to 0.1s (100ms)
 		lcd.SetTouchPositionCallbackConfiguration(100, true);
 
-		// Configure touch gesture callback with a period of 100ms
+		// Set period for touch gesture callback to 0.1s (100ms)
 		lcd.SetTouchGestureCallbackConfiguration(100, true);
 
 		Console.WriteLine("Press enter to exit");

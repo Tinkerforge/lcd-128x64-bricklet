@@ -18,25 +18,25 @@ Notebook[{
    RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for touch_position callback", "*)"}],
+   RowBox[{"(*", "Callback function for touch position callback", "*)"}],
    RowBox[{RowBox[{"TouchPositionCB", "[", RowBox[{"sender_", ",", "pressure_", ",", "x_", ",", "y_", ",", "age_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Pressure: \>\"", "<>", RowBox[{"ToString", "[", "pressure", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<X: \>\"", "<>", RowBox[{"ToString", "[", "x", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Y: \>\"", "<>", RowBox[{"ToString", "[", "y", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Age: \>\"", "<>", RowBox[{"ToString", "[", "age", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "TouchPositionCallback"}], ",", "TouchPositionCB"}], "]"}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for touch_gesture callback", "*)"}],
+   RowBox[{"(*", "Callback function for touch gesture callback", "*)"}],
    RowBox[{RowBox[{"TouchGestureCB", "[", RowBox[{"sender_", ",", "gesture_", ",", "duration_", ",", "xStart_", ",", "xEnd_", ",", "yStart_", ",", "yEnd_", ",", "age_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Gesture: \>\"", "<>", RowBox[{"ToString", "[", "gesture", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Duration: \>\"", "<>", RowBox[{"ToString", "[", "duration", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<X Start: \>\"", "<>", RowBox[{"ToString", "[", "xStart", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<X End: \>\"", "<>", RowBox[{"ToString", "[", "xEnd", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Y Start: \>\"", "<>", RowBox[{"ToString", "[", "yStart", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Y End: \>\"", "<>", RowBox[{"ToString", "[", "yEnd", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Age: \>\"", "<>", RowBox[{"ToString", "[", "age", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "TouchGestureCallback"}], ",", "TouchGestureCB"}], "]"}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Configure touch position callback with a period of 100ms", "*)"}],
+   RowBox[{"(*", "Set period for touch position callback to 0.1s (100ms)", "*)"}],
    RowBox[{"lcd", "@", RowBox[{"SetTouchPositionCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Configure touch gesture callback with a period of 100ms", "*)"}],
+   RowBox[{"(*", "Set period for touch gesture callback to 0.1s (100ms)", "*)"}],
    RowBox[{"lcd", "@", RowBox[{"SetTouchGestureCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],

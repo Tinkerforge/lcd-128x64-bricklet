@@ -44,10 +44,10 @@ Module ExampleTouch
         ' Register touch gesture callback to subroutine TouchGestureCB
         AddHandler lcd.TouchGestureCallback, AddressOf TouchGestureCB
 
-        ' Set period for touch_position callback to 0.1s (100ms)
+        ' Set period for touch position callback to 0.1s (100ms)
         lcd.SetTouchPositionCallbackConfiguration(100, True)
 
-        ' Set period for touch_gesture callback to 0.1s (100ms)
+        ' Set period for touch gesture callback to 0.1s (100ms)
         lcd.SetTouchGestureCallbackConfiguration(100, True)
 
         Console.WriteLine("Press key to exit")

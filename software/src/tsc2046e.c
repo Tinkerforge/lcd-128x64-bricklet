@@ -124,9 +124,10 @@ void tsc2046e_task_tick(void) {
 		uint16_t x =  ((spi.data[5] << 5) | (spi.data[6] >> 3)) & 0xFFF;
 		uint16_t y =  ((spi.data[7] << 5) | (spi.data[8] >> 3)) & 0xFFF;
 
-		int16_t pressure = 4096 - (x*z2/z1 - x);
-		if((spi.data[1] == 0) && (spi.data[3] == 127)) {
-			pressure = 0;
+		int32_t pressure = 0;
+
+		if((z1 != 0) && (spi.data[1] != 0) || (spi.data[3] != 127)) {
+			pressure = 4096 - (x*z2/z1 - x);
 		}
 
 		if(pressure < 0) {

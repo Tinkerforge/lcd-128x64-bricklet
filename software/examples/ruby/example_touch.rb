@@ -27,10 +27,12 @@ end
 
 # Register touch gesture callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_GESTURE) do |gesture, duration,
+                                                                     pressure_max,
                                                                      x_start, x_end,
                                                                      y_start, y_end, age|
   puts "Gesture: #{gesture}"
   puts "Duration: #{duration}"
+  puts "Pressure Max: #{pressure_max}"
   puts "X Start: #{x_start}"
   puts "X End: #{x_end}"
   puts "Y Start: #{y_start}"

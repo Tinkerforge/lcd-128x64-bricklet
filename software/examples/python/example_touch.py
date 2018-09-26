@@ -17,9 +17,11 @@ def cb_touch_position(pressure, x, y, age):
     print("")
 
 # Callback function for touch gesture callback
-def cb_touch_gesture(gesture, duration, x_start, x_end, y_start, y_end, age):
+def cb_touch_gesture(gesture, duration, pressure_max, x_start, x_end, y_start, y_end,
+                     age):
     print("Gesture: " + str(gesture))
     print("Duration: " + str(duration))
+    print("Pressure Max: " + str(pressure_max))
     print("X Start: " + str(x_start))
     print("X End: " + str(x_end))
     print("Y Start: " + str(y_start))

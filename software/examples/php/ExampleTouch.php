@@ -21,10 +21,12 @@ function cb_touchPosition($pressure, $x, $y, $age)
 }
 
 // Callback function for touch gesture callback
-function cb_touchGesture($gesture, $duration, $x_start, $x_end, $y_start, $y_end, $age)
+function cb_touchGesture($gesture, $duration, $pressure_max, $x_start, $x_end, $y_start,
+                         $y_end, $age)
 {
     echo "Gesture: $gesture\n";
     echo "Duration: $duration\n";
+    echo "Pressure Max: $pressure_max\n";
     echo "X Start: $x_start\n";
     echo "X End: $x_end\n";
     echo "Y Start: $y_start\n";

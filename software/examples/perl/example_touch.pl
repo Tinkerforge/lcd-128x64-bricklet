@@ -23,10 +23,12 @@ sub cb_touch_position
 # Callback subroutine for touch gesture callback
 sub cb_touch_gesture
 {
-    my ($gesture, $duration, $x_start, $x_end, $y_start, $y_end, $age) = @_;
+    my ($gesture, $duration, $pressure_max, $x_start, $x_end, $y_start, $y_end,
+        $age) = @_;
 
     print "Gesture: $gesture\n";
     print "Duration: $duration\n";
+    print "Pressure Max: $pressure_max\n";
     print "X Start: $x_start\n";
     print "X End: $x_end\n";
     print "Y Start: $y_start\n";

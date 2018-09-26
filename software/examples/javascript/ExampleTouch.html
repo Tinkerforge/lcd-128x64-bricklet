@@ -65,9 +65,10 @@
                 // Register touch gesture callback
                 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_GESTURE,
                     // Callback function for touch gesture callback
-                    function (gesture, duration, xStart, xEnd, yStart, yEnd, age) {
+                    function (gesture, duration, pressureMax, xStart, xEnd, yStart, yEnd, age) {
                         textArea.value += 'Gesture: ' + gesture + '\n';
                         textArea.value += 'Duration: ' + duration + '\n';
+                        textArea.value += 'Pressure Max: ' + pressureMax + '\n';
                         textArea.value += 'X Start: ' + xStart + '\n';
                         textArea.value += 'X End: ' + xEnd + '\n';
                         textArea.value += 'Y Start: ' + yStart + '\n';

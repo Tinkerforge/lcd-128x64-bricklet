@@ -30,10 +30,12 @@ public class ExampleTouch {
 
 		// Add touch gesture listener
 		lcd.addTouchGestureListener(new BrickletLCD128x64.TouchGestureListener() {
-			public void touchGesture(int gesture, long duration, int xStart, int xEnd,
-			                         int yStart, int yEnd, long age) {
+			public void touchGesture(int gesture, long duration, int pressureMax,
+			                         int xStart, int xEnd, int yStart, int yEnd,
+			                         long age) {
 				System.out.println("Gesture: " + gesture);
 				System.out.println("Duration: " + duration);
+				System.out.println("Pressure Max: " + pressureMax);
 				System.out.println("X Start: " + xStart);
 				System.out.println("X End: " + xEnd);
 				System.out.println("Y Start: " + yStart);

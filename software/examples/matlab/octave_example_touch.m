@@ -40,6 +40,7 @@ end
 function cb_touch_gesture(e)
     fprintf("Gesture: %d\n", e.gesture);
     fprintf("Duration: %d\n", java2int(e.duration));
+    fprintf("Pressure Max: %d\n", e.pressureMax);
     fprintf("X Start: %d\n", e.xStart);
     fprintf("X End: %d\n", e.xEnd);
     fprintf("Y Start: %d\n", e.yStart);

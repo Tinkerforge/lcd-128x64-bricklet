@@ -18,11 +18,13 @@ Module ExampleTouch
 
     ' Callback subroutine for touch gesture callback
     Sub TouchGestureCB(ByVal sender As BrickletLCD128x64, ByVal gesture As Byte, _
-                       ByVal duration As Long, ByVal xStart As Integer, _
-                       ByVal xEnd As Integer, ByVal yStart As Integer, _
-                       ByVal yEnd As Integer, ByVal age As Long)
+                       ByVal duration As Long, ByVal pressureMax As Integer, _
+                       ByVal xStart As Integer, ByVal xEnd As Integer, _
+                       ByVal yStart As Integer, ByVal yEnd As Integer, _
+                       ByVal age As Long)
         Console.WriteLine("Gesture: " + gesture.ToString())
         Console.WriteLine("Duration: " + duration.ToString())
+        Console.WriteLine("Pressure Max: " + pressureMax.ToString())
         Console.WriteLine("X Start: " + xStart.ToString())
         Console.WriteLine("X End: " + xEnd.ToString())
         Console.WriteLine("Y Start: " + yStart.ToString())

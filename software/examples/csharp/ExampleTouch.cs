@@ -20,10 +20,12 @@ class Example
 
 	// Callback function for touch gesture callback
 	static void TouchGestureCB(BrickletLCD128x64 sender, byte gesture, long duration,
-	                           int xStart, int xEnd, int yStart, int yEnd, long age)
+	                           int pressureMax, int xStart, int xEnd, int yStart,
+	                           int yEnd, long age)
 	{
 		Console.WriteLine("Gesture: " + gesture);
 		Console.WriteLine("Duration: " + duration);
+		Console.WriteLine("Pressure Max: " + pressureMax);
 		Console.WriteLine("X Start: " + xStart);
 		Console.WriteLine("X End: " + xEnd);
 		Console.WriteLine("Y Start: " + yStart);

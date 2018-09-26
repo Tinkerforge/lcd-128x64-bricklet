@@ -41,6 +41,7 @@ end
 function cb_touch_gesture(e)
     fprintf('Gesture: %i\n', e.gesture);
     fprintf('Duration: %i\n', e.duration);
+    fprintf('Pressure Max: %i\n', e.pressureMax);
     fprintf('X Start: %i\n', e.xStart);
     fprintf('X End: %i\n', e.xEnd);
     fprintf('Y Start: %i\n', e.yStart);

@@ -22,10 +22,11 @@ TouchPositionCB[sender_,pressure_,x_,y_,age_]:=
 AddEventHandler[lcd@TouchPositionCallback,TouchPositionCB]
 
 (*Callback function for touch gesture callback*)
-TouchGestureCB[sender_,gesture_,duration_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
+TouchGestureCB[sender_,gesture_,duration_,pressureMax_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
  Module[{},
   Print["Gesture: "<>ToString[gesture]];
   Print["Duration: "<>ToString[duration]];
+  Print["Pressure Max: "<>ToString[pressureMax]];
   Print["X Start: "<>ToString[xStart]];
   Print["X End: "<>ToString[xEnd]];
   Print["Y Start: "<>ToString[yStart]];

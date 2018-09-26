@@ -20,13 +20,14 @@ void cb_touch_position(uint16_t pressure, uint16_t x, uint16_t y, uint32_t age,
 }
 
 // Callback function for touch gesture callback
-void cb_touch_gesture(uint8_t gesture, uint32_t duration, uint16_t x_start,
-                      uint16_t x_end, uint16_t y_start, uint16_t y_end, uint32_t age,
-                      void *user_data) {
+void cb_touch_gesture(uint8_t gesture, uint32_t duration, uint16_t pressure_max,
+                      uint16_t x_start, uint16_t x_end, uint16_t y_start, uint16_t y_end,
+                      uint32_t age, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
 	printf("Gesture: %u\n", gesture);
 	printf("Duration: %u\n", duration);
+	printf("Pressure Max: %u\n", pressure_max);
 	printf("X Start: %u\n", x_start);
 	printf("X End: %u\n", x_end);
 	printf("Y Start: %u\n", y_start);

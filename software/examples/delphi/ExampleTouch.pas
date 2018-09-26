@@ -15,9 +15,9 @@ type
     procedure TouchPositionCB(sender: TBrickletLCD128x64; const pressure: word;
                               const x: word; const y: word; const age: longword);
     procedure TouchGestureCB(sender: TBrickletLCD128x64; const gesture: byte;
-                             const duration: longword; const xStart: word;
-                             const xEnd: word; const yStart: word; const yEnd: word;
-                             const age: longword);
+                             const duration: longword; const pressureMax: word;
+                             const xStart: word; const xEnd: word; const yStart: word;
+                             const yEnd: word; const age: longword);
     procedure Execute;
   end;
 
@@ -42,12 +42,14 @@ end;
 
 { Callback procedure for touch gesture callback }
 procedure TExample.TouchGestureCB(sender: TBrickletLCD128x64; const gesture: byte;
-                                  const duration: longword; const xStart: word;
-                                  const xEnd: word; const yStart: word; const yEnd: word;
+                                  const duration: longword; const pressureMax: word;
+                                  const xStart: word; const xEnd: word;
+                                  const yStart: word; const yEnd: word;
                                   const age: longword);
 begin
   WriteLn(Format('Gesture: %d', [gesture]));
   WriteLn(Format('Duration: %d', [duration]));
+  WriteLn(Format('Pressure Max: %d', [pressureMax]));
   WriteLn(Format('X Start: %d', [xStart]));
   WriteLn(Format('X End: %d', [xEnd]));
   WriteLn(Format('Y Start: %d', [yStart]));

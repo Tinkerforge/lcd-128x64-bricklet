@@ -130,8 +130,8 @@ void tsc2046e_task_tick(void) {
 			pressure = 4096 - (x*z2/z1 - x);
 		}
 
-		if(pressure < 0) {
-			pressure = 1;
+		if(pressure < 0 || pressure > 4200) {
+			pressure = 0;
 		}
 
 		if(pressure != 0) {

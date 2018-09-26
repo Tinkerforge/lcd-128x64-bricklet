@@ -119,10 +119,10 @@ void tsc2046e_task_tick(void) {
 
 		spi_task_transceive(data, sizeof(data), XMC_SPI_CH_SLAVE_SELECT_3);
 
-		uint16_t z1 = (spi.data[1] << 5) | (spi.data[2] >> 3);
-		uint16_t z2 = (spi.data[3] << 5) | (spi.data[4] >> 3);
-		uint16_t x =  (spi.data[5] << 5) | (spi.data[6] >> 3);
-		uint16_t y =  (spi.data[7] << 5) | (spi.data[8] >> 3);
+		uint16_t z1 = ((spi.data[1] << 5) | (spi.data[2] >> 3)) & 0xFFF;
+		uint16_t z2 = ((spi.data[3] << 5) | (spi.data[4] >> 3)) & 0xFFF;
+		uint16_t x =  ((spi.data[5] << 5) | (spi.data[6] >> 3)) & 0xFFF;
+		uint16_t y =  ((spi.data[7] << 5) | (spi.data[8] >> 3)) & 0xFFF;
 
 		int16_t pressure = 4096 - (x*z2/z1 - x);
 		if((spi.data[1] == 0) && (spi.data[3] == 127)) {

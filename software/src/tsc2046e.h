@@ -40,6 +40,7 @@ typedef struct {
 	uint16_t gesture_y_start;
 	uint16_t gesture_x_end;
 	uint16_t gesture_y_end;
+	uint16_t gesture_pressure_max;
 	uint32_t gesture_num;
 	uint32_t gesture_time_start;
 
@@ -51,6 +52,7 @@ typedef struct {
 	uint16_t gesture_api_y_start;
 	uint16_t gesture_api_x_end;
 	uint16_t gesture_api_y_end;
+	uint16_t gesture_api_pressure_max;
 	uint32_t gesture_api_duration;
 	uint32_t gesture_api_time;
 } TSC2046E;

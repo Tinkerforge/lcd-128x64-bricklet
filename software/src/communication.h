@@ -181,6 +181,7 @@ typedef struct {
 	TFPMessageHeader header;
 	uint8_t gesture;
 	uint32_t duration;
+	uint16_t pressure_max;
 	uint16_t x_start;
 	uint16_t y_start;
 	uint16_t x_end;
@@ -208,6 +209,7 @@ typedef struct {
 	TFPMessageHeader header;
 	uint8_t gesture;
 	uint32_t duration;
+	uint16_t pressure_max;
 	uint16_t x_start;
 	uint16_t y_start;
 	uint16_t x_end;

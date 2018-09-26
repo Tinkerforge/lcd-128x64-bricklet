@@ -280,6 +280,7 @@ BootloaderHandleMessageResponse get_touch_position_callback_configuration(const 
 BootloaderHandleMessageResponse get_touch_gesture(const GetTouchGesture *data, GetTouchGesture_Response *response) {
 	response->header.length = sizeof(GetTouchGesture_Response);
 	response->gesture       = tsc2046e.gesture_api_gesture;
+	response->pressure_max  = tsc2046e.gesture_api_pressure_max;
 	response->x_start       = tsc2046e.gesture_api_x_start;
 	response->y_start       = tsc2046e.gesture_api_y_start;
 	response->x_end         = tsc2046e.gesture_api_x_end;
@@ -358,6 +359,7 @@ bool handle_touch_gesture_callback(void) {
 	static TouchGesture_Callback cb;
 	static uint8_t last_gesture;
 	static uint32_t last_duration;
+	static uint16_t last_pressure_max;
 	static uint16_t last_x_start;
 	static uint16_t last_y_start;
 	static uint16_t last_x_end;
@@ -370,32 +372,35 @@ bool handle_touch_gesture_callback(void) {
 			return false;
 		}
 
-		if(tsc2046e.gesture_value_has_to_change          &&
-		   last_gesture  == tsc2046e.gesture_api_gesture &&
-		   last_x_start  == tsc2046e.gesture_api_x_start &&
-		   last_y_start  == tsc2046e.gesture_api_y_start &&
-		   last_x_end    == tsc2046e.gesture_api_x_end   &&
-		   last_y_end    == tsc2046e.gesture_api_y_end   &&
-		   last_duration == tsc2046e.gesture_api_duration) {
+		if(tsc2046e.gesture_value_has_to_change                    &&
+		   last_gesture       == tsc2046e.gesture_api_gesture      &&
+		   last_pressure_max  == tsc2046e.gesture_api_pressure_max &&
+		   last_x_start       == tsc2046e.gesture_api_x_start      &&
+		   last_y_start       == tsc2046e.gesture_api_y_start      &&
+		   last_x_end         == tsc2046e.gesture_api_x_end        &&
+		   last_y_end         == tsc2046e.gesture_api_y_end        &&
+		   last_duration      == tsc2046e.gesture_api_duration) {
 			return false;
 		}
 
 		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(TouchGesture_Callback), FID_CALLBACK_TOUCH_GESTURE);
 
-		cb.gesture    = tsc2046e.gesture_api_gesture;
-		cb.x_start    = tsc2046e.gesture_api_x_start;
-		cb.y_start    = tsc2046e.gesture_api_y_start;
-		cb.x_end      = tsc2046e.gesture_api_x_end;
-		cb.y_end      = tsc2046e.gesture_api_y_end;
-		cb.duration   = tsc2046e.gesture_api_duration;
-		cb.age        = system_timer_get_ms() - tsc2046e.gesture_api_time;
+		cb.gesture      = tsc2046e.gesture_api_gesture;
+		cb.pressure_max = tsc2046e.gesture_api_pressure_max;
+		cb.x_start      = tsc2046e.gesture_api_x_start;
+		cb.y_start      = tsc2046e.gesture_api_y_start;
+		cb.x_end        = tsc2046e.gesture_api_x_end;
+		cb.y_end        = tsc2046e.gesture_api_y_end;
+		cb.duration     = tsc2046e.gesture_api_duration;
+		cb.age          = system_timer_get_ms() - tsc2046e.gesture_api_time;
 
-		last_gesture  = tsc2046e.gesture_api_gesture;
-		last_x_start  = tsc2046e.gesture_api_x_start;
-		last_y_start  = tsc2046e.gesture_api_y_start;
-		last_x_end    = tsc2046e.gesture_api_x_end;
-		last_y_end    = tsc2046e.gesture_api_y_end;
-		last_duration = tsc2046e.gesture_api_duration;
+		last_gesture      = tsc2046e.gesture_api_gesture;
+		last_pressure_max = tsc2046e.gesture_api_pressure_max;
+		last_x_start      = tsc2046e.gesture_api_x_start;
+		last_y_start      = tsc2046e.gesture_api_y_start;
+		last_x_end        = tsc2046e.gesture_api_x_end;
+		last_y_end        = tsc2046e.gesture_api_y_end;
+		last_duration     = tsc2046e.gesture_api_duration;
 
 		last_time = system_timer_get_ms();
 	}

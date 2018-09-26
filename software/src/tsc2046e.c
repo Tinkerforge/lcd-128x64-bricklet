@@ -86,15 +86,17 @@ void tsc2046e_task_new_gesture(void) {
 			tsc2046e.gesture_api_y_start = tsc2046e.gesture_y_start;
 			tsc2046e.gesture_api_x_end = tsc2046e.gesture_x_end;
 			tsc2046e.gesture_api_y_end = tsc2046e.gesture_y_end;
+			tsc2046e.gesture_api_pressure_max = tsc2046e.gesture_pressure_max;
 			tsc2046e.gesture_api_time = system_timer_get_ms();
 			tsc2046e.gesture_api_duration = tsc2046e.gesture_api_time - tsc2046e.gesture_time_start;
 #if 0
-			uartbb_printf("gesture: %s, start: %d %d, end: %d %d, time %d\n\r",
+			uartbb_printf("gesture: %s, start: %d %d, end: %d %d, pressure-max: %d time: %d\n\r",
 						  TSC2046E_SWIPE_STRINGS[swipe],
 						  tsc2046e.gesture_x_start,
 						  tsc2046e.gesture_y_start,
 						  tsc2046e.gesture_x_end,
 						  tsc2046e.gesture_y_end,
+						  tsc2046e.gesture_pressure_max,
 						  system_timer_get_ms() - tsc2046e.gesture_time_start);
 #endif
 		}
@@ -166,7 +168,10 @@ void tsc2046e_task_tick(void) {
 				if(tsc2046e.gesture_num == 0) {
 					tsc2046e.gesture_x_start = tsc2046e.touch_x;
 					tsc2046e.gesture_y_start = tsc2046e.touch_y;
+					tsc2046e.gesture_pressure_max = tsc2046e.touch_pressure;
 					tsc2046e.gesture_time_start = system_timer_get_ms();
+				} else {
+					tsc2046e.gesture_pressure_max = MAX(tsc2046e.gesture_pressure_max, tsc2046e.touch_pressure);
 				}
 
 				tsc2046e.gesture_num++;

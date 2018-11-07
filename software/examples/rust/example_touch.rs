@@ -12,10 +12,10 @@ fn main() -> Result<(), Box<dyn Error>> {
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
                                           // Don't use device before ipcon is connected.
 
-    // Create receiver for touch position events.
-    let touch_position_receiver = lcd.get_touch_position_receiver();
+    let touch_position_receiver = lcd.get_touch_position_callback_receiver();
 
-    // Spawn thread to handle received events. This thread ends when the `lcd` object
+    // Spawn thread to handle received callback messages.
+    // This thread ends when the `lcd` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for touch_position in touch_position_receiver {
@@ -27,10 +27,10 @@ fn main() -> Result<(), Box<dyn Error>> {
         }
     });
 
-    // Create receiver for touch gesture events.
-    let touch_gesture_receiver = lcd.get_touch_gesture_receiver();
+    let touch_gesture_receiver = lcd.get_touch_gesture_callback_receiver();
 
-    // Spawn thread to handle received events. This thread ends when the `lcd` object
+    // Spawn thread to handle received callback messages.
+    // This thread ends when the `lcd` object
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for touch_gesture in touch_gesture_receiver {

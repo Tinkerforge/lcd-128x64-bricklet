@@ -160,7 +160,9 @@ BootloaderHandleMessageResponse clear_display(const ClearDisplay *data) {
 		}
 	}
 
-	uc1701.display_mask_changed = true;
+	if(uc1701.automatic_draw) {
+		uc1701.display_mask_changed = true;
+	}
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }

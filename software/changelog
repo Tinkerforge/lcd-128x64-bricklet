@@ -1,5 +1,5 @@
 2018-10-04: 2.0.0 (064b2c2)
 - Initial version
 
-2018-11-19: 2.0.1 (<unknown>)
+2018-11-19: 2.0.1 (a745ce1)
 - Make clear-display obey the automatic-draw config

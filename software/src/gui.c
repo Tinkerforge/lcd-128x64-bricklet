@@ -32,7 +32,7 @@ extern const uint8_t font[];
 
 GUI gui;
 
-void gui_draw_pixel(const uint8_t column, const uint8_t row, const bool value) {
+void gui_draw_pixel(const uint8_t column, const uint8_t row, const bool color) {
 	if(gui.use_global_bounding_box) {
 		if((gui.global_bounding_box_start_x > column) ||
 		   (gui.global_bounding_box_end_x   < column) ||
@@ -47,7 +47,7 @@ void gui_draw_pixel(const uint8_t column, const uint8_t row, const bool value) {
 	}
 
 	const uint8_t display_bit = row % 8;
-	if(value) {
+	if(color) {
 		if(!(uc1701.display[row/8][column] & (1 << display_bit))) {
 			uc1701.display[row/8][column] |= (1 << display_bit);
 			uc1701.display_mask[row/8][column] |= (1 << display_bit);
@@ -75,7 +75,7 @@ void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_l
 	}
 }
 
-void gui_draw_box(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end, bool fill, bool color) {
+void gui_draw_box(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end, const bool fill, const bool color) {
 	for(uint8_t x = x_start; x <= x_end; x++) {
 		for(uint8_t y = y_start; y <= y_end; y++) {
 			if(fill) {
@@ -92,19 +92,19 @@ void gui_draw_box(const uint8_t x_start, const uint8_t x_end, const uint8_t y_st
 	}
 }
 
-void gui_draw_line(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end) {
+void gui_draw_line(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end, const bool color) {
 	// https://stackoverflow.com/questions/35970872/function-to-draw-a-straight-line-in-c
 }
 
-void gui_draw_line_vertical(const uint8_t y_start, const uint8_t y_end, const uint8_t x_start) {
+void gui_draw_line_vertical(const uint8_t y_start, const uint8_t y_end, const uint8_t x_start, const bool color) {
 	for(uint8_t y = y_start; y <= y_end; y++) {
-		gui_draw_pixel(x_start, y, true);
+		gui_draw_pixel(x_start, y, color);
 	}	
 }
 
-void gui_draw_line_horizontal(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start) {
+void gui_draw_line_horizontal(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const bool color) {
 	for(uint8_t x = x_start; x <= x_end; x++) {
-		gui_draw_pixel(x, y_start, true);
+		gui_draw_pixel(x, y_start, color);
 	}
 }
 
@@ -156,9 +156,8 @@ void gui_draw_slider(uint8_t index) {
 		if(gui.slider[index].pressed) {
 			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1, false, true);
 		}
-		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2);
-		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2-1);
-
+		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2, true);
+		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2-1, true);
 	} else {
 		const uint8_t slider_start_x = gui.slider[index].position_x;
 		const uint8_t slider_end_x   = gui.slider[index].position_x + GUI_SLIDER_KNOB_WIDTH - 1;
@@ -175,8 +174,8 @@ void gui_draw_slider(uint8_t index) {
 		if(gui.slider[index].pressed) {
 			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1, false, true);
 		}
-		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2);
-		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2-1);
+		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2, true);
+		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2-1, true);
 	}
 
 	if(uc1701.automatic_draw) {

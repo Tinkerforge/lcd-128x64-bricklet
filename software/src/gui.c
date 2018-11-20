@@ -75,14 +75,18 @@ void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_l
 	}
 }
 
-void gui_draw_box(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end) {
+void gui_draw_box(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start, const uint8_t y_end, bool fill, bool color) {
 	for(uint8_t x = x_start; x <= x_end; x++) {
 		for(uint8_t y = y_start; y <= y_end; y++) {
-			if((x == x_start) || (y == y_start) ||
-			   (x == x_end)   || (y == y_end)) {
-				gui_draw_pixel(x, y, true);
+			if(fill) {
+				gui_draw_pixel(x, y, color);
 			} else {
-				gui_draw_pixel(x, y, false);
+				if((x == x_start) || (y == y_start) ||
+				   (x == x_end)   || (y == y_end)) {
+					gui_draw_pixel(x, y, color);
+				} else {
+					gui_draw_pixel(x, y, !color);
+				}
 			}
 		}
 	}
@@ -93,13 +97,13 @@ void gui_draw_line(const uint8_t x_start, const uint8_t x_end, const uint8_t y_s
 }
 
 void gui_draw_line_vertical(const uint8_t y_start, const uint8_t y_end, const uint8_t x_start) {
-	for(uint8_t y = y_start; y < y_end; y++) {
+	for(uint8_t y = y_start; y <= y_end; y++) {
 		gui_draw_pixel(x_start, y, true);
 	}	
 }
 
 void gui_draw_line_horizontal(const uint8_t x_start, const uint8_t x_end, const uint8_t y_start) {
-	for(uint8_t x = x_start; x < x_end; x++) {
+	for(uint8_t x = x_start; x <= x_end; x++) {
 		gui_draw_pixel(x, y_start, true);
 	}
 }
@@ -110,9 +114,9 @@ void gui_draw_button(uint8_t index) {
 	const uint8_t y_start = gui.button[index].position_y;
 	const uint8_t y_end   = gui.button[index].position_y + gui.button[index].height - 1;
 
-	gui_draw_box(x_start, x_end, y_start, y_end);
+	gui_draw_box(x_start, x_end, y_start, y_end, false, true);
 	if(gui.button[index].pressed) {
-		gui_draw_box(x_start+1, x_end-1, y_start+1, y_end-1);
+		gui_draw_box(x_start+1, x_end-1, y_start+1, y_end-1, false, true);
 	}
 
 	const uint8_t text_length        = strnlen(gui.button[index].text, GUI_BUTTON_TEXT_LENGTH_MAX);
@@ -141,33 +145,38 @@ void gui_draw_slider(uint8_t index) {
 		const uint8_t slider_end_x   = gui.slider[index].position_x + gui.slider[index].length - 1;
 		const uint8_t slider_start_y = gui.slider[index].position_y;
 		const uint8_t slider_end_y   = gui.slider[index].position_y + GUI_SLIDER_KNOB_WIDTH - 1;
-		gui_draw_box(slider_start_x, slider_end_x, slider_start_y, slider_end_y);
-		gui_draw_line_horizontal(slider_start_x, slider_end_x, slider_start_y + GUI_SLIDER_KNOB_WIDTH/2);
+		gui_draw_box(slider_start_x, slider_end_x, slider_start_y, slider_end_y, true, false);
+		gui_draw_box(slider_start_x+2, slider_end_x-2, slider_start_y+GUI_SLIDER_KNOB_WIDTH/2-1, slider_end_y-GUI_SLIDER_KNOB_WIDTH/2+1, false, true);
 
 		const uint8_t slider_knob_start_x = gui.slider[index].position_x + gui.slider[index].value;
 		const uint8_t slider_knob_end_x   = gui.slider[index].position_x + gui.slider[index].value + GUI_SLIDER_KNOB_LENGTH - 1;
 		const uint8_t slider_knob_start_y = gui.slider[index].position_y;
 		const uint8_t slider_knob_end_y   = gui.slider[index].position_y + GUI_SLIDER_KNOB_WIDTH - 1;
-		gui_draw_box(slider_knob_start_x, slider_knob_end_x, slider_knob_start_y, slider_knob_end_y);
+		gui_draw_box(slider_knob_start_x, slider_knob_end_x, slider_knob_start_y, slider_knob_end_y, false, true);
 		if(gui.slider[index].pressed) {
-			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1);
+			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1, false, true);
 		}
+		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2);
+		gui_draw_line_vertical(slider_knob_start_y+3, slider_knob_end_y-3, slider_knob_start_x + GUI_SLIDER_KNOB_LENGTH/2-1);
+
 	} else {
 		const uint8_t slider_start_x = gui.slider[index].position_x;
 		const uint8_t slider_end_x   = gui.slider[index].position_x + GUI_SLIDER_KNOB_WIDTH - 1;
 		const uint8_t slider_start_y = gui.slider[index].position_y;
 		const uint8_t slider_end_y   = gui.slider[index].position_y + gui.slider[index].length - 1;
-		gui_draw_box(slider_start_x, slider_end_x, slider_start_y, slider_end_y);
-		gui_draw_line_vertical(slider_start_y, slider_end_y, slider_start_x + GUI_SLIDER_KNOB_WIDTH/2);
+		gui_draw_box(slider_start_x, slider_end_x, slider_start_y, slider_end_y, true, false);
+		gui_draw_box(slider_start_x+GUI_SLIDER_KNOB_WIDTH/2-1, slider_end_x-GUI_SLIDER_KNOB_WIDTH/2+1, slider_start_y+2, slider_end_y-2, false, true);
 
 		const uint8_t slider_knob_start_x = gui.slider[index].position_x;
 		const uint8_t slider_knob_end_x   = gui.slider[index].position_x + GUI_SLIDER_KNOB_WIDTH - 1;
 		const uint8_t slider_knob_start_y = gui.slider[index].position_y + gui.slider[index].value;
 		const uint8_t slider_knob_end_y   = gui.slider[index].position_y  + gui.slider[index].value + GUI_SLIDER_KNOB_LENGTH - 1;
-		gui_draw_box(slider_knob_start_x, slider_knob_end_x, slider_knob_start_y, slider_knob_end_y);
+		gui_draw_box(slider_knob_start_x, slider_knob_end_x, slider_knob_start_y, slider_knob_end_y, false, true);
 		if(gui.slider[index].pressed) {
-			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1);
+			gui_draw_box(slider_knob_start_x+1, slider_knob_end_x-1, slider_knob_start_y+1, slider_knob_end_y-1, false, true);
 		}
+		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2);
+		gui_draw_line_horizontal(slider_knob_start_x+3, slider_knob_end_x-3, slider_knob_start_y + GUI_SLIDER_KNOB_LENGTH/2-1);
 	}
 
 	if(uc1701.automatic_draw) {

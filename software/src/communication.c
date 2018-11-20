@@ -337,7 +337,7 @@ BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data) {
 	gui.button[data->index].height      = data->height;
 	memcpy(gui.button[data->index].text, data->text, GUI_BUTTON_TEXT_LENGTH_MAX);
 
-	gui_draw_button(data->index);
+	gui_redraw();
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
@@ -430,7 +430,7 @@ BootloaderHandleMessageResponse set_gui_slider(const SetGUISlider *data) {
 	gui.slider[data->index].direction  = data->direction;
 	gui.slider[data->index].value      = data->value;
 
-	gui_draw_slider(data->index);
+	gui_redraw();
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }

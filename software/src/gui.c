@@ -184,6 +184,7 @@ void gui_draw_slider(uint8_t index) {
 }
 
 void gui_touch_check(void) {
+	bool redraw = false;
 	const bool touch = !system_timer_is_time_elapsed_ms(tsc2046e.touch_time, 50);
 
 	// Check button
@@ -196,12 +197,12 @@ void gui_touch_check(void) {
 			   ((gui.button[i].position_y + gui.button[i].height) >= tsc2046e.touch_y)) {
 				if(!gui.button[i].pressed) {
 					gui.button[i].pressed = true;
-					gui_draw_button(i);
+					redraw = true;
 				}
 			} else {
 				if(gui.button[i].pressed) {
 					gui.button[i].pressed = false;
-					gui_draw_button(i);
+					redraw = true;
 				}
 			}
 		}
@@ -226,7 +227,7 @@ void gui_touch_check(void) {
 						if((new_value != gui.slider[i].value) || !gui.slider[i].pressed) {
 							gui.slider[i].pressed = true;
 							gui.slider[i].value = new_value;
-							gui_draw_slider(i);
+							redraw = true;
 						}
 					}
 				} else {
@@ -244,16 +245,34 @@ void gui_touch_check(void) {
 						if((new_value != gui.slider[i].value) || !gui.slider[i].pressed) {
 							gui.slider[i].pressed = true;
 							gui.slider[i].value = new_value;
-							gui_draw_slider(i);
+							redraw = true;
 						}
 					}
 				}
 			} else {
 				if(gui.slider[i].pressed) {
 					gui.slider[i].pressed = false;
-					gui_draw_slider(i);
+					redraw = true;
 				}
 			}
+		}
+	}
+
+	if(redraw) {
+		gui_redraw();
+	}
+}
+
+void gui_redraw(void) {
+	for(uint8_t i = 0; i < GUI_SLIDER_NUM_MAX; i++) {
+		if(gui.slider[i].active) {
+			gui_draw_slider(i);
+		}
+	}
+
+	for(uint8_t i = 0; i < GUI_BUTTON_NUM_MAX; i++) {
+		if(gui.button[i].active) {
+			gui_draw_button(i);
 		}
 	}
 }

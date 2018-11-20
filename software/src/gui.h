@@ -70,6 +70,7 @@ typedef struct {
 
 extern GUI gui;
 
+void gui_redraw(void);
 void gui_draw_button(uint8_t index);
 void gui_draw_slider(uint8_t index);
 void gui_init(void);

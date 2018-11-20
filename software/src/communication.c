@@ -21,6 +21,8 @@
 
 #include "communication.h"
 
+#include <string.h>
+
 #include "bricklib2/utility/communication_callback.h"
 #include "bricklib2/utility/util_definitions.h"
 #include "bricklib2/protocols/tfp/tfp.h"
@@ -28,6 +30,7 @@
 
 #include "uc1701.h"
 #include "tsc2046e.h"
+#include "gui.h"
 
 #include "font.inc"
 
@@ -46,6 +49,18 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_TOUCH_GESTURE: return get_touch_gesture(message, response);
 		case FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION: return set_touch_gesture_callback_configuration(message);
 		case FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION: return get_touch_gesture_callback_configuration(message, response);
+		case FID_SET_GUI_BUTTON: return set_gui_button(message);
+		case FID_GET_GUI_BUTTON: return get_gui_button(message, response);
+		case FID_REMOVE_GUI_BUTTON: return remove_gui_button(message);
+		case FID_SET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION: return set_gui_button_pressed_callback_configuration(message);
+		case FID_GET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION: return get_gui_button_pressed_callback_configuration(message, response);
+		case FID_GET_GUI_BUTTON_PRESSED: return get_gui_button_pressed(message, response);
+		case FID_SET_GUI_SLIDER: return set_gui_slider(message);
+		case FID_GET_GUI_SLIDER: return get_gui_slider(message, response);
+		case FID_REMOVE_GUI_SLIDER: return remove_gui_slider(message);
+		case FID_SET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION: return set_gui_slider_value_callback_configuration(message);
+		case FID_GET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION: return get_gui_slider_value_callback_configuration(message, response);
+		case FID_GET_GUI_SLIDER_VALUE: return get_gui_slider_value(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -301,13 +316,176 @@ BootloaderHandleMessageResponse set_touch_gesture_callback_configuration(const S
 }
 
 BootloaderHandleMessageResponse get_touch_gesture_callback_configuration(const GetTouchGestureCallbackConfiguration *data, GetTouchGestureCallbackConfiguration_Response *response) {
-	response->header.length = sizeof(GetTouchGestureCallbackConfiguration_Response);
+	response->header.length       = sizeof(GetTouchGestureCallbackConfiguration_Response);
 	response->period              = tsc2046e.gesture_period;
 	response->value_has_to_change = tsc2046e.gesture_value_has_to_change;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data) {
+	if((data->position_x + data->width >= LCD_MAX_COLUMNS)   || 
+	   (data->position_y + data->height >= (LCD_MAX_ROWS*8)) || 
+	   (data->index >= GUI_BUTTON_NUM_MAX)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.button[data->index].active      = true;
+	gui.button[data->index].position_x  = data->position_x;
+	gui.button[data->index].position_y  = data->position_y;
+	gui.button[data->index].width       = data->width;
+	gui.button[data->index].height      = data->height;
+	memcpy(gui.button[data->index].text, data->text, GUI_BUTTON_TEXT_LENGTH_MAX);
+
+	gui_draw_button(data->index);
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_button(const GetGUIButton *data, GetGUIButton_Response *response) {
+	if(data->index > GUI_BUTTON_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	response->header.length = sizeof(GetGUIButton_Response);
+	memset(response->text, 0, GUI_BUTTON_TEXT_LENGTH_MAX);
+
+	if(gui.button[data->index].active) {
+		response->active      = true;
+		response->position_x  = gui.button[data->index].position_x;
+		response->position_y  = gui.button[data->index].position_y;
+		response->width       = gui.button[data->index].width;
+		response->height      = gui.button[data->index].height;
+		strncpy(response->text, gui.button[data->index].text, GUI_BUTTON_TEXT_LENGTH_MAX);
+	} else {
+		response->active      = false;
+		response->position_x  = 0;
+		response->position_y  = 0;
+		response->width       = 0;
+		response->height      = 0;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse remove_gui_button(const RemoveGUIButton *data) {
+	if(data->index > GUI_BUTTON_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.button[data->index].active = false;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse set_gui_button_pressed_callback_configuration(const SetGUIButtonPressedCallbackConfiguration *data) {
+	gui.button_cb_period              = data->period;
+	gui.button_cb_value_has_to_change = data->value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_button_pressed_callback_configuration(const GetGUIButtonPressedCallbackConfiguration *data, GetGUIButtonPressedCallbackConfiguration_Response *response) {
+	response->header.length       = sizeof(GetGUIButtonPressedCallbackConfiguration_Response);
+	response->period              = gui.button_cb_period;
+	response->value_has_to_change = gui.button_cb_value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse get_gui_button_pressed(const GetGUIButtonPressed *data, GetGUIButtonPressed_Response *response) {
+	if(data->index > GUI_BUTTON_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	response->header.length = sizeof(GetGUIButtonPressed_Response);
+	response->pressed       = gui.button[data->index].pressed;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse set_gui_slider(const SetGUISlider *data) {
+	if((data->index >= GUI_SLIDER_NUM_MAX) ||
+	   (data->direction > LCD_128X64_DIRECTION_VERTICAL) ||
+	   (data->value > (data->length - GUI_SLIDER_KNOB_LENGTH))) { 
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if((data->direction == LCD_128X64_DIRECTION_HORIZONTAL) && 
+	   ((data->position_x + data->length >= LCD_MAX_COLUMNS) ||
+	    (data->position_y + GUI_SLIDER_KNOB_WIDTH >= (LCD_MAX_ROWS*8)))) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if((data->direction == LCD_128X64_DIRECTION_VERTICAL) && 
+	   ((data->position_y + data->length >= (LCD_MAX_ROWS*8)) ||
+	    (data->position_x + GUI_SLIDER_KNOB_WIDTH >= LCD_MAX_COLUMNS))) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.slider[data->index].active     = true;
+	gui.slider[data->index].position_x = data->position_x;
+	gui.slider[data->index].position_y = data->position_y;
+	gui.slider[data->index].length     = data->length;
+	gui.slider[data->index].direction  = data->direction;
+	gui.slider[data->index].value      = data->value;
+
+	gui_draw_slider(data->index);
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_slider(const GetGUISlider *data, GetGUISlider_Response *response) {
+	if(data->index > GUI_SLIDER_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	response->header.length = sizeof(GetGUISlider_Response);
+	response->active        = gui.slider[data->index].active;
+	response->position_x    = gui.slider[data->index].position_x;
+	response->position_y    = gui.slider[data->index].position_y;
+	response->length        = gui.slider[data->index].length;
+	response->direction     = gui.slider[data->index].direction;
+	response->value         = gui.slider[data->index].value;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse remove_gui_slider(const RemoveGUISlider *data) {
+	if(data->index > GUI_SLIDER_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.slider[data->index].active = false;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse set_gui_slider_value_callback_configuration(const SetGUISliderValueCallbackConfiguration *data) {
+	gui.slider_cb_period              = data->period;
+	gui.slider_cb_value_has_to_change = data->value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_slider_value_callback_configuration(const GetGUISliderValueCallbackConfiguration *data, GetGUISliderValueCallbackConfiguration_Response *response) {
+	response->header.length       = sizeof(GetGUISliderValueCallbackConfiguration_Response);
+	response->period              = gui.slider_cb_period;
+	response->value_has_to_change = gui.slider_cb_value_has_to_change;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse get_gui_slider_value(const GetGUISliderValue *data, GetGUISliderValue_Response *response) {
+	if(data->index > GUI_SLIDER_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	response->header.length = sizeof(GetGUISliderValue_Response);
+	response->value         = gui.slider[data->index].value;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
 
 bool handle_touch_position_callback(void) {
 	static bool is_buffered = false;
@@ -418,6 +596,77 @@ bool handle_touch_gesture_callback(void) {
 	return false;
 }
 
+bool handle_gui_button_pressed_callback(void) {
+	static bool is_buffered = false;
+	static GUIButtonPressed_Callback cb;
+	static bool last_pressed[GUI_BUTTON_NUM_MAX] = {false};
+	static uint32_t last_time[GUI_BUTTON_NUM_MAX] = {0};
+	static uint8_t last_index = 0;
+
+	if(!is_buffered) {
+		last_index = (last_index+1) % GUI_BUTTON_NUM_MAX;
+		if((gui.button_cb_period == 0) || !system_timer_is_time_elapsed_ms(last_time[last_index], gui.button_cb_period)) {
+			return false;
+		}
+
+		if(gui.button_cb_value_has_to_change && (last_pressed[last_index] == gui.button[last_index].pressed)) {
+			return false;
+		}
+
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(GUIButtonPressed_Callback), FID_CALLBACK_GUI_BUTTON_PRESSED);
+		cb.index   = last_index;
+		cb.pressed = gui.button[last_index].pressed;
+
+		last_pressed[last_index] = cb.pressed;
+		last_time[last_index] = system_timer_get_ms();
+	}
+
+	if(bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
+		bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t*)&cb, sizeof(GUIButtonPressed_Callback));
+		is_buffered = false;
+		return true;
+	} else {
+		is_buffered = true;
+	}
+
+	return false;
+}
+
+bool handle_gui_slider_value_callback(void) {
+	static bool is_buffered = false;
+	static GUISliderValue_Callback cb;
+	static uint8_t last_value[GUI_SLIDER_NUM_MAX] = {0};
+	static uint32_t last_time[GUI_SLIDER_NUM_MAX] = {0};
+	static uint8_t last_index = 0;
+
+	if(!is_buffered) {
+		last_index = (last_index+1) % GUI_SLIDER_NUM_MAX;
+		if((gui.slider_cb_period == 0) || !system_timer_is_time_elapsed_ms(last_time[last_index], gui.slider_cb_period)) {
+			return false;
+		}
+
+		if(gui.slider_cb_value_has_to_change && (last_value[last_index] == gui.slider[last_index].value)) {
+			return false;
+		}
+
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(GUISliderValue_Callback), FID_CALLBACK_GUI_SLIDER_VALUE);
+		cb.index = last_index;
+		cb.value = gui.slider[last_index].value;
+
+		last_value[last_index] = cb.value;
+		last_time[last_index] = system_timer_get_ms();
+	}
+
+	if(bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
+		bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t*)&cb, sizeof(GUISliderValue_Callback));
+		is_buffered = false;
+		return true;
+	} else {
+		is_buffered = true;
+	}
+
+	return false;
+}
 
 void communication_tick(void) {
 	communication_callback_tick();

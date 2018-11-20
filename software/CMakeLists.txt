@@ -32,6 +32,7 @@ SET(SOURCES
 	"${PROJECT_SOURCE_DIR}/src/spi.c"
 	"${PROJECT_SOURCE_DIR}/src/uc1701.c"
 	"${PROJECT_SOURCE_DIR}/src/tsc2046e.c"
+	"${PROJECT_SOURCE_DIR}/src/gui.c"
 	
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/uartbb/uartbb.c"
 	"${PROJECT_SOURCE_DIR}/src/bricklib2/hal/system_timer/system_timer.c"

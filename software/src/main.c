@@ -30,6 +30,7 @@
 #include "communication.h"
 #include "uc1701.h"
 #include "tsc2046e.h"
+#include "gui.h"
 
 int main(void) {
 	logging_init();
@@ -38,11 +39,13 @@ int main(void) {
 	communication_init();
 	uc1701_init();
 	tsc2046e_init();
+	gui_init();
 
 	while(true) {
 		bootloader_tick();
 		communication_tick();
 		uc1701_tick();
 		tsc2046e_tick();
+		gui_tick();
 	}
 }

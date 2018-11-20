@@ -39,6 +39,9 @@ void communication_init(void);
 #define LCD_128X64_GESTURE_TOP_TO_BOTTOM 2
 #define LCD_128X64_GESTURE_BOTTOM_TO_TOP 3
 
+#define LCD_128X64_DIRECTION_HORIZONTAL 0
+#define LCD_128X64_DIRECTION_VERTICAL 1
+
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER 0
 #define LCD_128X64_BOOTLOADER_MODE_FIRMWARE 1
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -71,9 +74,23 @@ void communication_init(void);
 #define FID_GET_TOUCH_GESTURE 12
 #define FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 13
 #define FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 14
+#define FID_SET_GUI_BUTTON 16
+#define FID_GET_GUI_BUTTON 17
+#define FID_REMOVE_GUI_BUTTON 18
+#define FID_SET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 19
+#define FID_GET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 20
+#define FID_GET_GUI_BUTTON_PRESSED 21
+#define FID_SET_GUI_SLIDER 23
+#define FID_GET_GUI_SLIDER 24
+#define FID_REMOVE_GUI_SLIDER 25
+#define FID_SET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 26
+#define FID_GET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 27
+#define FID_GET_GUI_SLIDER_VALUE 28
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
+#define FID_CALLBACK_GUI_BUTTON_PRESSED 22
+#define FID_CALLBACK_GUI_SLIDER_VALUE 29
 
 typedef struct {
 	TFPMessageHeader header;
@@ -217,6 +234,130 @@ typedef struct {
 	uint32_t age;
 } __attribute__((__packed__)) TouchGesture_Callback;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t width;
+	uint8_t height;
+	char text[16];
+} __attribute__((__packed__)) SetGUIButton;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUIButton;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool active;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t width;
+	uint8_t height;
+	char text[16];
+} __attribute__((__packed__)) GetGUIButton_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) RemoveGUIButton;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) SetGUIButtonPressedCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetGUIButtonPressedCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) GetGUIButtonPressedCallbackConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUIButtonPressed;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool pressed;
+} __attribute__((__packed__)) GetGUIButtonPressed_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	bool pressed;
+} __attribute__((__packed__)) GUIButtonPressed_Callback;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t length;
+	uint8_t direction;
+	uint8_t value;
+} __attribute__((__packed__)) SetGUISlider;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUISlider;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool active;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t length;
+	uint8_t direction;
+	uint8_t value;
+} __attribute__((__packed__)) GetGUISlider_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) RemoveGUISlider;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) SetGUISliderValueCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetGUISliderValueCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) GetGUISliderValueCallbackConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUISliderValue;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t value;
+} __attribute__((__packed__)) GetGUISliderValue_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	uint8_t value;
+} __attribute__((__packed__)) GUISliderValue_Callback;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
@@ -232,16 +373,32 @@ BootloaderHandleMessageResponse get_touch_position_callback_configuration(const 
 BootloaderHandleMessageResponse get_touch_gesture(const GetTouchGesture *data, GetTouchGesture_Response *response);
 BootloaderHandleMessageResponse set_touch_gesture_callback_configuration(const SetTouchGestureCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_touch_gesture_callback_configuration(const GetTouchGestureCallbackConfiguration *data, GetTouchGestureCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data);
+BootloaderHandleMessageResponse get_gui_button(const GetGUIButton *data, GetGUIButton_Response *response);
+BootloaderHandleMessageResponse remove_gui_button(const RemoveGUIButton *data);
+BootloaderHandleMessageResponse set_gui_button_pressed_callback_configuration(const SetGUIButtonPressedCallbackConfiguration *data);
+BootloaderHandleMessageResponse get_gui_button_pressed_callback_configuration(const GetGUIButtonPressedCallbackConfiguration *data, GetGUIButtonPressedCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse get_gui_button_pressed(const GetGUIButtonPressed *data, GetGUIButtonPressed_Response *response);
+BootloaderHandleMessageResponse set_gui_slider(const SetGUISlider *data);
+BootloaderHandleMessageResponse get_gui_slider(const GetGUISlider *data, GetGUISlider_Response *response);
+BootloaderHandleMessageResponse remove_gui_slider(const RemoveGUISlider *data);
+BootloaderHandleMessageResponse set_gui_slider_value_callback_configuration(const SetGUISliderValueCallbackConfiguration *data);
+BootloaderHandleMessageResponse get_gui_slider_value_callback_configuration(const GetGUISliderValueCallbackConfiguration *data, GetGUISliderValueCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse get_gui_slider_value(const GetGUISliderValue *data, GetGUISliderValue_Response *response);
 
 // Callbacks
 bool handle_touch_position_callback(void);
 bool handle_touch_gesture_callback(void);
+bool handle_gui_button_pressed_callback(void);
+bool handle_gui_slider_value_callback(void);
 
 #define COMMUNICATION_CALLBACK_TICK_WAIT_MS 1
-#define COMMUNICATION_CALLBACK_HANDLER_NUM 2
+#define COMMUNICATION_CALLBACK_HANDLER_NUM 4
 #define COMMUNICATION_CALLBACK_LIST_INIT \
 	handle_touch_position_callback, \
 	handle_touch_gesture_callback, \
+	handle_gui_button_pressed_callback, \
+	handle_gui_slider_value_callback, \
 
 
 #endif

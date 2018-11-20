@@ -37,30 +37,31 @@ SPI spi;
 
 // Set pointers to read/write buffer
 // With this the compiler can properly optimize the access!
-uint8_t *spi_data_read = spi.data;
-uint8_t *spi_data_write = spi.data;
+uint8_t *spi_data_read      = spi.data;
+uint8_t *spi_data_write     = spi.data;
 uint8_t *spi_data_write_end = spi.data;
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) uc1701_rx_irq_handler(void) {
-	// Always read exactly 8 bytes.
-	// The FIFO is configured to call the IRQ only if at least 8 bytes are in it.
-	// By doing it this way with -03 as RAM code, it only takes 2.98us per 64 bit of data.
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
-	*spi_data_read = UC1701_USIC->OUTR;
-	spi_data_read++;
+	// Max fill level is 16.
+	const uint8_t num = XMC_USIC_CH_RXFIFO_GetLevel(UC1701_USIC);
+	switch(num) {
+		case 16: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 15: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 14: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 13: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 12: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 11: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 10: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 9:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 8:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 7:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 6:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 5:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 4:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 3:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 2:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 1:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+	}
 }
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) uc1701_tx_irq_handler(void) {

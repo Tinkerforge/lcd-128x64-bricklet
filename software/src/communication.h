@@ -42,6 +42,10 @@ void communication_init(void);
 #define LCD_128X64_DIRECTION_HORIZONTAL 0
 #define LCD_128X64_DIRECTION_VERTICAL 1
 
+#define LCD_128X64_CHANGE_TAB_ON_CLICK 1
+#define LCD_128X64_CHANGE_TAB_ON_SWIPE 2
+#define LCD_128X64_CHANGE_TAB_ON_CLICK_AND_SWIPE 3
+
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER 0
 #define LCD_128X64_BOOTLOADER_MODE_FIRMWARE 1
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -86,11 +90,21 @@ void communication_init(void);
 #define FID_SET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 26
 #define FID_GET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 27
 #define FID_GET_GUI_SLIDER_VALUE 28
+#define FID_SET_GUI_TAB_CONFIGURATION 30
+#define FID_GET_GUI_TAB_CONFIGURATION 31
+#define FID_SET_GUI_TAB_TEXT 32
+#define FID_GET_GUI_TAB_TEXT 33
+#define FID_REMOVE_GUI_TAB 34
+#define FID_SET_GUI_TAB_CURRENT 35
+#define FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 36
+#define FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 37
+#define FID_GET_GUI_TAB_CURRENT 38
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
 #define FID_CALLBACK_GUI_BUTTON_PRESSED 22
 #define FID_CALLBACK_GUI_SLIDER_VALUE 29
+#define FID_CALLBACK_GUI_TAB_CURRENT 39
 
 typedef struct {
 	TFPMessageHeader header;
@@ -358,6 +372,79 @@ typedef struct {
 	uint8_t value;
 } __attribute__((__packed__)) GUISliderValue_Callback;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t change_tab_config;
+	bool clear_gui;
+} __attribute__((__packed__)) SetGUITabConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetGUITabConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t change_tab_config;
+	bool clear_gui;
+} __attribute__((__packed__)) GetGUITabConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	char text[8];
+} __attribute__((__packed__)) SetGUITabText;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUITabText;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool active;
+	char text[8];
+} __attribute__((__packed__)) GetGUITabText_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) RemoveGUITab;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) SetGUITabCurrent;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) SetGUITabCurrentCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetGUITabCurrentCallbackConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint32_t period;
+	bool value_has_to_change;
+} __attribute__((__packed__)) GetGUITabCurrentCallbackConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetGUITabCurrent;
+
+typedef struct {
+	TFPMessageHeader header;
+	int8_t index;
+} __attribute__((__packed__)) GetGUITabCurrent_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	int8_t index;
+} __attribute__((__packed__)) GUITabCurrent_Callback;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
@@ -385,20 +472,31 @@ BootloaderHandleMessageResponse remove_gui_slider(const RemoveGUISlider *data);
 BootloaderHandleMessageResponse set_gui_slider_value_callback_configuration(const SetGUISliderValueCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_gui_slider_value_callback_configuration(const GetGUISliderValueCallbackConfiguration *data, GetGUISliderValueCallbackConfiguration_Response *response);
 BootloaderHandleMessageResponse get_gui_slider_value(const GetGUISliderValue *data, GetGUISliderValue_Response *response);
+BootloaderHandleMessageResponse set_gui_tab_configuration(const SetGUITabConfiguration *data);
+BootloaderHandleMessageResponse get_gui_tab_configuration(const GetGUITabConfiguration *data, GetGUITabConfiguration_Response *response);
+BootloaderHandleMessageResponse set_gui_tab_text(const SetGUITabText *data);
+BootloaderHandleMessageResponse get_gui_tab_text(const GetGUITabText *data, GetGUITabText_Response *response);
+BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data);
+BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data);
+BootloaderHandleMessageResponse set_gui_tab_current_callback_configuration(const SetGUITabCurrentCallbackConfiguration *data);
+BootloaderHandleMessageResponse get_gui_tab_current_callback_configuration(const GetGUITabCurrentCallbackConfiguration *data, GetGUITabCurrentCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse get_gui_tab_current(const GetGUITabCurrent *data, GetGUITabCurrent_Response *response);
 
 // Callbacks
 bool handle_touch_position_callback(void);
 bool handle_touch_gesture_callback(void);
 bool handle_gui_button_pressed_callback(void);
 bool handle_gui_slider_value_callback(void);
+bool handle_gui_tab_current_callback(void);
 
 #define COMMUNICATION_CALLBACK_TICK_WAIT_MS 1
-#define COMMUNICATION_CALLBACK_HANDLER_NUM 4
+#define COMMUNICATION_CALLBACK_HANDLER_NUM 5
 #define COMMUNICATION_CALLBACK_LIST_INIT \
 	handle_touch_position_callback, \
 	handle_touch_gesture_callback, \
 	handle_gui_button_pressed_callback, \
 	handle_gui_slider_value_callback, \
+	handle_gui_tab_current_callback, \
 
 
 #endif

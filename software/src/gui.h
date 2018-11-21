@@ -32,13 +32,23 @@
 #define GUI_SLIDER_KNOB_WIDTH 17
 #define GUI_SLIDER_KNOB_LENGTH 8
 
+#define GUI_TAB_NUM_MAX 10
+#define GUI_TAB_TEXT_LENGTH_MAX 8
+
+#define GUI_TAB_POS_Y  54
+#define GUI_TAB0_POS_X 2
+#define GUI_TAB1_POS_X 43
+#define GUI_TAB2_POS_X 84
+#define GUI_TAB3_POS_X 125
+#define GUI_TAB_WIDTH  41
+
 typedef struct {
     bool active;
 	uint8_t position_x;
 	uint8_t position_y;
 	uint8_t width;
 	uint8_t height;
-	char text[GUI_BUTTON_TEXT_LENGTH_MAX+1];
+	char text[GUI_BUTTON_TEXT_LENGTH_MAX];
     bool pressed;
 } GUIButton;
 
@@ -53,6 +63,11 @@ typedef struct {
 } GUISlider;
 
 typedef struct {
+    bool active;
+    char text[GUI_TAB_TEXT_LENGTH_MAX];
+} GUITab;
+
+typedef struct {
     GUIButton button[GUI_BUTTON_NUM_MAX];
 	uint32_t button_cb_period;
 	bool button_cb_value_has_to_change;
@@ -61,15 +76,32 @@ typedef struct {
 	uint32_t slider_cb_period;
 	bool slider_cb_value_has_to_change;
 
+    GUITab tab[GUI_TAB_NUM_MAX];
+    int8_t tab_current;
+	uint32_t tab_cb_period;
+	bool tab_cb_value_has_to_change;
+
+    uint8_t tab_change_tab_config;
+    bool tab_clear_gui;
+    
+    int8_t tabs[GUI_TAB_NUM_MAX]; // tab indexes from left to right
+    uint8_t tabs_count;
+    uint8_t tabs_current;
+    uint8_t tabs_open_lid;
+
     bool use_global_bounding_box;
     uint8_t global_bounding_box_start_x;
     uint8_t global_bounding_box_end_x;
     uint8_t global_bounding_box_start_y;
     uint8_t global_bounding_box_end_y;
+
+    uint32_t last_tab_gesture_time;
+    uint32_t last_tab_touch_time;
 } GUI;
 
 extern GUI gui;
 
+void gui_update_tabs(void);
 void gui_redraw(void);
 void gui_draw_button(uint8_t index);
 void gui_draw_slider(uint8_t index);

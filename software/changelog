@@ -3,3 +3,7 @@
 
 2018-11-19: 2.0.1 (a745ce1)
 - Make clear-display obey the automatic-draw config
+
+TBD: 2.0.2 (TBD)
+- Fix backlight PWM (value of zero is now completely off)
+- Add API for simple GUI elements with touch support

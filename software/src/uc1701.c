@@ -196,7 +196,7 @@ void uc1701_init(void) {
 	uc1701.display_configuration_invert    = false;
 	uc1701.automatic_draw                  = true;
 
-	ccu4_pwm_init(XMC_GPIO_PORT1, 0, 0, 100);
+	ccu4_pwm_init(XMC_GPIO_PORT1, 0, 0, 99);
 	ccu4_pwm_set_duty_cycle(0, 0);
 
 	coop_task_init(&uc1701_task, uc1701_task_tick);

@@ -6,4 +6,5 @@
 
 TBD: 2.0.2 (TBD)
 - Fix backlight PWM (value of zero is now completely off)
+- Use CIE 1931 lookup-table for backlight intensity correction
 - Add API for simple GUI elements with touch support

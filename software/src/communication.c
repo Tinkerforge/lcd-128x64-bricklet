@@ -70,6 +70,11 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION: return set_gui_tab_current_callback_configuration(message);
 		case FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION: return get_gui_tab_current_callback_configuration(message, response);
 		case FID_GET_GUI_TAB_CURRENT: return get_gui_tab_current(message, response);
+		case FID_SET_GUI_GRAPH_CONFIGURATION: return set_gui_graph_configuration(message);
+		case FID_GET_GUI_GRAPH_CONFIGURATION: return get_gui_graph_configuration(message, response);
+		case FID_SET_GUI_GRAPH_DATA_LOW_LEVEL: return set_gui_graph_data_low_level(message);
+		case FID_GET_GUI_GRAPH_DATA_LOW_LEVEL: return get_gui_graph_data_low_level(message, response);
+		case FID_REMOVE_GUI_GRAPH: return remove_gui_graph(message);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -610,8 +615,129 @@ BootloaderHandleMessageResponse get_gui_tab_current(const GetGUITabCurrent *data
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
+BootloaderHandleMessageResponse set_gui_graph_configuration(const SetGUIGraphConfiguration *data) {
+	if(data->index > GUI_GRAPH_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
 
+	if(gui.graph[data->index].graph_type > LCD_128X64_GRAPH_TYPE_BAR) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
 
+	if((gui.graph[data->index].position_x >= LCD_MAX_COLUMNS) ||
+	   (gui.graph[data->index].position_y >= LCD_MAX_ROWS*8)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if((gui.graph[data->index].width  > GUI_GRAPH_DATA_LENGTH_MAX) ||
+	   (gui.graph[data->index].height > 63)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.graph[data->index].active     = true;
+	gui.graph[data->index].graph_type = data->graph_type;
+	gui.graph[data->index].position_x = data->position_x;
+	gui.graph[data->index].position_y = data->position_y;
+	gui.graph[data->index].width      = data->width;
+	gui.graph[data->index].height     = data->height;
+	strncpy(gui.graph[data->index].text_x, data->text_x, GUI_GRAPH_TEXT_LENGTH_MAX);
+	strncpy(gui.graph[data->index].text_y, data->text_y, GUI_GRAPH_TEXT_LENGTH_MAX);
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_graph_configuration(const GetGUIGraphConfiguration *data, GetGUIGraphConfiguration_Response *response) {
+	if(data->index > GUI_GRAPH_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	memset(response->text_x, 0, GUI_GRAPH_TEXT_LENGTH_MAX);
+	memset(response->text_y, 0, GUI_GRAPH_TEXT_LENGTH_MAX);
+
+	response->header.length = sizeof(GetGUIGraphConfiguration_Response);
+	response->active        = gui.graph[data->index].active;
+	response->graph_type    = gui.graph[data->index].graph_type;
+	response->position_x    = gui.graph[data->index].position_x;
+	response->position_y    = gui.graph[data->index].position_y;
+	response->width         = gui.graph[data->index].width;
+	response->height        = gui.graph[data->index].height;
+	strncpy(response->text_x, gui.graph[data->index].text_x, GUI_GRAPH_TEXT_LENGTH_MAX);
+	strncpy(response->text_y, gui.graph[data->index].text_y, GUI_GRAPH_TEXT_LENGTH_MAX);
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse set_gui_graph_data_low_level(const SetGUIGraphDataLowLevel *data) {
+	static uint8_t first_chunk[GUI_GRAPH_NUM_MAX][GUI_GRAPH_DATA_LENGTH_MAX/2] = {{0}};
+
+	if(data->index > GUI_GRAPH_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if(gui.graph[data->index].data_length > GUI_GRAPH_DATA_LENGTH_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	bool ready = false;
+
+	if(data->data_chunk_offset == 0) {
+		if(data->data_length > GUI_GRAPH_DATA_LENGTH_MAX/2) {
+			memcpy(first_chunk[data->index], data->data_chunk_data, GUI_GRAPH_DATA_LENGTH_MAX/2);
+		} else {
+			memcpy(gui.graph[data->index].data, data->data_chunk_data, GUI_GRAPH_DATA_LENGTH_MAX/2);
+			ready = true;
+		}
+	} else {
+		memcpy(gui.graph[data->index].data, first_chunk[data->index], GUI_GRAPH_DATA_LENGTH_MAX/2);
+		memcpy(gui.graph[data->index].data + GUI_GRAPH_DATA_LENGTH_MAX/2, data->data_chunk_data, GUI_GRAPH_DATA_LENGTH_MAX/2);
+		ready = true;
+	}
+
+	if(ready) {
+		memset(gui.graph[data->index].data + data->data_length, 0, GUI_GRAPH_DATA_LENGTH_MAX - data->data_length);
+		gui.graph[data->index].data_length = data->data_length;
+		gui_redraw();
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_graph_data_low_level(const GetGUIGraphDataLowLevel *data, GetGUIGraphDataLowLevel_Response *response) {
+	if(data->index > GUI_GRAPH_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	static bool first[GUI_GRAPH_NUM_MAX] = {true, true, true, true};
+
+	response->header.length = sizeof(GetGUIGraphDataLowLevel_Response);
+	response->data_length   = gui.graph[data->index].data_length; 
+
+	if(first[data->index]) {
+		response->data_chunk_offset = 0;
+	} else {
+		response->data_chunk_offset = GUI_GRAPH_DATA_LENGTH_MAX/2;
+	}
+
+	memcpy(response->data_chunk_data, gui.graph[data->index].data + response->data_chunk_offset, GUI_GRAPH_DATA_LENGTH_MAX/2);
+
+	if(gui.graph[data->index].data_length > GUI_GRAPH_DATA_LENGTH_MAX/2) {
+		first[data->index] = !first[data->index];
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data) {
+	if(data->index > GUI_GRAPH_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if(gui.graph[data->index].active) {
+		gui_redraw();
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
 
 bool handle_touch_position_callback(void) {
 	static bool is_buffered = false;

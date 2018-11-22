@@ -46,6 +46,10 @@ void communication_init(void);
 #define LCD_128X64_CHANGE_TAB_ON_SWIPE 2
 #define LCD_128X64_CHANGE_TAB_ON_CLICK_AND_SWIPE 3
 
+#define LCD_128X64_GRAPH_TYPE_DOT 0
+#define LCD_128X64_GRAPH_TYPE_LINE 1
+#define LCD_128X64_GRAPH_TYPE_BAR 2
+
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER 0
 #define LCD_128X64_BOOTLOADER_MODE_FIRMWARE 1
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -99,6 +103,11 @@ void communication_init(void);
 #define FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 36
 #define FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 37
 #define FID_GET_GUI_TAB_CURRENT 38
+#define FID_SET_GUI_GRAPH_CONFIGURATION 40
+#define FID_GET_GUI_GRAPH_CONFIGURATION 41
+#define FID_SET_GUI_GRAPH_DATA_LOW_LEVEL 42
+#define FID_GET_GUI_GRAPH_DATA_LOW_LEVEL 43
+#define FID_REMOVE_GUI_GRAPH 44
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
@@ -445,6 +454,60 @@ typedef struct {
 	int8_t index;
 } __attribute__((__packed__)) GUITabCurrent_Callback;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	uint8_t graph_type;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t width;
+	uint8_t height;
+	char text_x[4];
+	char text_y[4];
+} __attribute__((__packed__)) SetGUIGraphConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUIGraphConfiguration;
+
+typedef struct {
+	TFPMessageHeader header;
+	bool active;
+	uint8_t graph_type;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t width;
+	uint8_t height;
+	char text_x[4];
+	char text_y[4];
+} __attribute__((__packed__)) GetGUIGraphConfiguration_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+	uint16_t data_length;
+	uint16_t data_chunk_offset;
+	uint8_t data_chunk_data[59];
+} __attribute__((__packed__)) SetGUIGraphDataLowLevel;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) GetGUIGraphDataLowLevel;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint16_t data_length;
+	uint16_t data_chunk_offset;
+	uint8_t data_chunk_data[59];
+} __attribute__((__packed__)) GetGUIGraphDataLowLevel_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t index;
+} __attribute__((__packed__)) RemoveGUIGraph;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
@@ -481,6 +544,11 @@ BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data
 BootloaderHandleMessageResponse set_gui_tab_current_callback_configuration(const SetGUITabCurrentCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_gui_tab_current_callback_configuration(const GetGUITabCurrentCallbackConfiguration *data, GetGUITabCurrentCallbackConfiguration_Response *response);
 BootloaderHandleMessageResponse get_gui_tab_current(const GetGUITabCurrent *data, GetGUITabCurrent_Response *response);
+BootloaderHandleMessageResponse set_gui_graph_configuration(const SetGUIGraphConfiguration *data);
+BootloaderHandleMessageResponse get_gui_graph_configuration(const GetGUIGraphConfiguration *data, GetGUIGraphConfiguration_Response *response);
+BootloaderHandleMessageResponse set_gui_graph_data_low_level(const SetGUIGraphDataLowLevel *data);
+BootloaderHandleMessageResponse get_gui_graph_data_low_level(const GetGUIGraphDataLowLevel *data, GetGUIGraphDataLowLevel_Response *response);
+BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data);
 
 // Callbacks
 bool handle_touch_position_callback(void);

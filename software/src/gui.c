@@ -313,6 +313,49 @@ void gui_draw_tabs(void) {
 	}
 }
 
+void gui_draw_graph(uint8_t index) {
+	gui_draw_box(gui.graph[index].position_x, 
+	             gui.graph[index].position_x + gui.graph[index].width, 
+				 gui.graph[index].position_y, 
+				 gui.graph[index].position_y + gui.graph[index].height, 
+				 true, false);
+
+	// Draw axis
+	gui_draw_line_vertical(gui.graph[index].position_y, 
+	                       gui.graph[index].position_y + gui.graph[index].height - 1, 
+						   gui.graph[index].position_x, 
+						   true);
+
+	gui_draw_line_horizontal(gui.graph[index].position_x + 1, 
+	                         gui.graph[index].position_x + gui.graph[index].width, 
+						     gui.graph[index].position_y + gui.graph[index].height, 
+						     true);
+
+	const uint8_t start_x = gui.graph[index].position_x + 1;
+	const uint8_t start_y = gui.graph[index].position_y + gui.graph[index].height - 1;
+
+	// Draw dots
+	for(uint8_t i = 0; i < gui.graph[index].width; i++) {
+		uint8_t value = gui.graph[index].data[i]*gui.graph[index].height/255;
+		gui_draw_pixel(start_x + i, start_y - value, true);
+	}
+
+	// Draw axis caption
+	const uint8_t text_length_x = strnlen(gui.graph[index].text_x, GUI_GRAPH_TEXT_LENGTH_MAX);
+	const uint8_t text_length_y = strnlen(gui.graph[index].text_y, GUI_GRAPH_TEXT_LENGTH_MAX);
+
+	if(text_length_x > 0) {
+		gui_draw_text(gui.graph[index].position_x + gui.graph[index].width - text_length_x*6 + 1, start_y + 1 - 8, text_length_x, gui.graph[index].text_x);
+	}
+	if(text_length_y > 0) {
+		gui_draw_text(gui.graph[index].position_x + 2, gui.graph[index].position_y, text_length_y, gui.graph[index].text_y);
+	}
+
+	if(uc1701.automatic_draw) {
+		uc1701.display_mask_changed = true;
+	}
+}
+
 void gui_remove_all(const bool buttons, const bool slider, const bool tabs) {
 	if(buttons) {
 		for(uint8_t i = 0; i < GUI_BUTTON_NUM_MAX; i++) {
@@ -490,6 +533,12 @@ void gui_redraw(void) {
 	for(uint8_t i = 0; i < GUI_BUTTON_NUM_MAX; i++) {
 		if(gui.button[i].active) {
 			gui_draw_button(i);
+		}
+	}
+
+	for(uint8_t i = 0; i < GUI_GRAPH_NUM_MAX; i++) {
+		if(gui.graph[i].active) {
+			gui_draw_graph(i);
 		}
 	}
 

@@ -42,6 +42,10 @@
 #define GUI_TAB3_POS_X 125
 #define GUI_TAB_WIDTH  41
 
+#define GUI_GRAPH_NUM_MAX 4
+#define GUI_GRAPH_TEXT_LENGTH_MAX 4
+#define GUI_GRAPH_DATA_LENGTH_MAX 118
+
 typedef struct {
     bool active;
 	uint8_t position_x;
@@ -66,6 +70,19 @@ typedef struct {
     bool active;
     char text[GUI_TAB_TEXT_LENGTH_MAX];
 } GUITab;
+
+typedef struct {
+    bool active;
+    uint8_t graph_type;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t width;
+	uint8_t height;
+	char text_x[GUI_GRAPH_TEXT_LENGTH_MAX];
+	char text_y[GUI_GRAPH_TEXT_LENGTH_MAX];
+	uint8_t data[GUI_GRAPH_DATA_LENGTH_MAX];
+    uint8_t data_length;
+} GUIGraph;
 
 typedef struct {
     GUIButton button[GUI_BUTTON_NUM_MAX];
@@ -97,6 +114,8 @@ typedef struct {
 
     uint32_t last_tab_gesture_time;
     uint32_t last_tab_touch_time;
+
+    GUIGraph graph[GUI_GRAPH_NUM_MAX];
 } GUI;
 
 extern GUI gui;

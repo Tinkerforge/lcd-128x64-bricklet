@@ -331,10 +331,44 @@ void gui_draw_graph(uint8_t index) {
 	const uint8_t start_x = gui.graph[index].position_x + 1;
 	const uint8_t start_y = gui.graph[index].position_y + gui.graph[index].height - 1;
 
-	// Draw dots
-	for(uint8_t i = 0; i < gui.graph[index].width; i++) {
-		uint8_t value = gui.graph[index].data[i]*gui.graph[index].height/255;
-		gui_draw_pixel(start_x + i, start_y - value, true);
+	// Draw dots, line or bar graph
+	switch(gui.graph[index].graph_type) {
+		case LCD_128X64_GRAPH_TYPE_DOT: {
+			for(uint8_t i = 0; i < gui.graph[index].width; i++) {
+				uint8_t value = gui.graph[index].data[i]*gui.graph[index].height/255;
+				gui_draw_pixel(start_x + i, start_y - value, true);
+			}
+			break;
+		}
+
+		case LCD_128X64_GRAPH_TYPE_LINE: {
+			for(uint8_t i = 0; i < gui.graph[index].width-1; i++) {
+				int32_t value0 = gui.graph[index].data[i]*gui.graph[index].height/255;
+				int32_t value1 = gui.graph[index].data[i+1]*gui.graph[index].height/255;
+				if(ABS(value0 - value1) < 2) {
+					gui_draw_pixel(start_x + i, start_y - value0, true);
+				} else {
+					if(value0 > value1) {
+						gui_draw_line_vertical(start_y - value0, start_y - (value1+1), start_x + i, true);
+					} else {
+						gui_draw_line_vertical(start_y - (value1-1), start_y - value0, start_x + i, true);
+					}
+				}
+			}
+
+			uint8_t last_index = gui.graph[index].width-1;
+			uint8_t value = gui.graph[index].data[last_index]*gui.graph[index].height/255;
+			gui_draw_pixel(start_x + last_index, start_y - value, true);
+			break;
+		}
+
+		case LCD_128X64_GRAPH_TYPE_BAR: {
+			for(uint8_t i = 0; i < gui.graph[index].width; i+= 2) {
+				int32_t value = gui.graph[index].data[i/2]*gui.graph[index].height/255;
+				gui_draw_line_vertical(start_y - value, start_y, start_x + i, true);
+			}
+			break;
+		}
 	}
 
 	// Draw axis caption
@@ -377,6 +411,11 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 			gui.tab[i].active = false;
 		}
 		gui_update_tabs();
+	}
+
+	uc1701.display_gui_changed = true;
+	if(uc1701.automatic_draw) {
+		uc1701.display_user_changed = true;
 	}
 }
 
@@ -528,6 +567,8 @@ void gui_touch_check(void) {
 }
 
 void gui_redraw(void) {
+	memset(uc1701.display_gui, 0, LCD_MAX_COLUMNS*LCD_MAX_ROWS);
+
 	for(uint8_t i = 0; i < GUI_SLIDER_NUM_MAX; i++) {
 		if(gui.slider[i].active) {
 			gui_draw_slider(i);

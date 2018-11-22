@@ -597,6 +597,7 @@ BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data
 
 	if(gui.tab[data->index].active) {
 		gui.tab_current = data->index;
+		gui_update_tabs();
 		gui_redraw();
 	}
 

@@ -65,6 +65,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_GUI_TAB_CONFIGURATION: return get_gui_tab_configuration(message, response);
 		case FID_SET_GUI_TAB_TEXT: return set_gui_tab_text(message);
 		case FID_GET_GUI_TAB_TEXT: return get_gui_tab_text(message, response);
+		case FID_SET_GUI_TAB_ICON: return set_gui_tab_icon(message);
+		case FID_GET_GUI_TAB_ICON: return get_gui_tab_icon(message, response);
 		case FID_REMOVE_GUI_TAB: return remove_gui_tab(message);
 		case FID_SET_GUI_TAB_CURRENT: return set_gui_tab_current(message);
 		case FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION: return set_gui_tab_current_callback_configuration(message);
@@ -533,7 +535,8 @@ BootloaderHandleMessageResponse set_gui_tab_text(const SetGUITabText *data) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	gui.tab[data->index].active = true;
+	gui.tab[data->index].active_text = true;
+	gui.tab[data->index].active_icon = false;
 	strncpy(gui.tab[data->index].text, data->text, GUI_TAB_TEXT_LENGTH_MAX);
 
 	if(gui.tab_current == -1) {
@@ -554,9 +557,46 @@ BootloaderHandleMessageResponse get_gui_tab_text(const GetGUITabText *data, GetG
 	response->header.length = sizeof(GetGUITabText_Response);
 	memset(response->text, 0, GUI_BUTTON_TEXT_LENGTH_MAX);
 
-	if(gui.tab[data->index].active) {
+	if(gui.tab[data->index].active_text) {
 		response->active = true;
 		strncpy(response->text, gui.tab[data->index].text, GUI_TAB_TEXT_LENGTH_MAX);
+	} else {
+		response->active = false;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse set_gui_tab_icon(const SetGUITabIcon *data) {
+	if(data->index > GUI_TAB_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	gui.tab[data->index].active_icon = true;
+	gui.tab[data->index].active_text = false;
+	memcpy(gui.tab[data->index].icon, data->icon, 28*6/8);
+
+	if(gui.tab_current == -1) {
+		gui.tab_current = data->index;
+	}
+
+	gui_update_tabs();
+	gui_redraw();	
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_gui_tab_icon(const GetGUITabIcon *data, GetGUITabIcon_Response *response) {
+	if(data->index > GUI_TAB_NUM_MAX) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	response->header.length = sizeof(GetGUITabIcon_Response);
+	memset(response->icon, 0, 28*6/8);
+
+	if(gui.tab[data->index].active_icon) {
+		response->active = true;
+		strncpy(response->icon, gui.tab[data->index].icon, 28*6/8);
 	} else {
 		response->active = false;
 	}
@@ -573,11 +613,12 @@ BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	gui.tab[data->index].active = false;
+	gui.tab[data->index].active_icon = false;
+	gui.tab[data->index].active_text = false;
 	if(gui.tab_current == data->index) {
 		gui.tab_current = -1;
 		for(uint8_t i = 0; i < GUI_TAB_NUM_MAX; i++) {
-			if(gui.tab[i].active) {
+			if(gui.tab[i].active_icon || gui.tab[i].active_text) {
 				gui.tab_current = i;
 				break;
 			}
@@ -595,7 +636,7 @@ BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	if(gui.tab[data->index].active) {
+	if(gui.tab[data->index].active_icon || gui.tab[data->index].active_text) {
 		gui.tab_current = data->index;
 		gui_update_tabs();
 		gui_redraw();

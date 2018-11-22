@@ -217,20 +217,30 @@ void gui_draw_tab(const uint8_t x, const uint8_t y, const int8_t index) {
 	gui_draw_pixel(x+5, y+8, true); gui_draw_pixel(xend-5, y+8, true);
 	gui_draw_line_horizontal(x+5, xend-5, LCD_MAX_ROWS*8-1, true);
 
-	if(index > -1) {
-		const uint8_t text_length        = strnlen(gui.tab[index].text, GUI_TAB_TEXT_LENGTH_MAX);
-		const uint8_t pixel_text_length  = text_length*6;
-		const uint8_t pixel_text_mid_x   = x + GUI_TAB_WIDTH/2;
-		const uint8_t pixel_text_start_x = MAX(0, ((int32_t)pixel_text_mid_x) - pixel_text_length/2 + 1);
-		const uint8_t pixel_text_start_y = y + 1;
+	if(index > -1) { 
+		if(gui.tab[index].active_text) {
+			const uint8_t text_length        = strnlen(gui.tab[index].text, GUI_TAB_TEXT_LENGTH_MAX);
+			const uint8_t pixel_text_length  = text_length*6;
+			const uint8_t pixel_text_mid_x   = x + GUI_TAB_WIDTH/2;
+			const uint8_t pixel_text_start_x = MAX(0, ((int32_t)pixel_text_mid_x) - pixel_text_length/2 + 1);
+			const uint8_t pixel_text_start_y = y + 1;
 
-		gui.use_global_bounding_box     = true;
-		gui.global_bounding_box_start_x = x    + 5 + 1;
-		gui.global_bounding_box_end_x   = xend - 5 - 1;
-		gui.global_bounding_box_start_y = y        + 1;
-		gui.global_bounding_box_end_y   = LCD_MAX_ROWS*8-1 - 1;
-		gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.tab[index].text);
-		gui.use_global_bounding_box     = false;
+			gui.use_global_bounding_box     = true;
+			gui.global_bounding_box_start_x = x    + 5 + 1;
+			gui.global_bounding_box_end_x   = xend - 5 - 1;
+			gui.global_bounding_box_start_y = y        + 1;
+			gui.global_bounding_box_end_y   = LCD_MAX_ROWS*8-1 - 1;
+			gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.tab[index].text);
+			gui.use_global_bounding_box     = false;
+		} else if(gui.tab[index].active_icon) {
+			for(uint8_t column = 0; column < 28; column++) {
+				for(uint8_t row = 0; row < 6; row++) {
+					const uint8_t icon_index = (row*28 + column) / 8;
+					const uint8_t icon_bit   = (row*28 + column) % 8;
+					gui_draw_pixel(column+x+7, row+y+2, gui.tab[index].icon[icon_index] & (1 << icon_bit));
+				}
+			}
+		}
 	}
 }
 
@@ -240,7 +250,7 @@ void gui_update_tabs(void) {
 	gui.tabs_count = 0;
 	gui.tabs_current = 0;
 	for(uint8_t i = 0; i < GUI_TAB_NUM_MAX; i++) {
-		if(gui.tab[i].active) {
+		if(gui.tab[i].active_text || gui.tab[i].active_icon) {
 			if(gui.tab_current == i) {
 				gui.tabs_current = gui.tabs_count;
 			}
@@ -408,7 +418,8 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 
 	if(tabs) {
 		for(uint8_t i = 0; i < GUI_TAB_NUM_MAX; i++) {
-			gui.tab[i].active = false;
+			gui.tab[i].active_text = false;
+			gui.tab[i].active_icon = false;
 		}
 		gui_update_tabs();
 	}

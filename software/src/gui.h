@@ -67,8 +67,10 @@ typedef struct {
 } GUISlider;
 
 typedef struct {
-    bool active;
+    bool active_text;
+    bool active_icon;
     char text[GUI_TAB_TEXT_LENGTH_MAX];
+    uint8_t icon[168/8];
 } GUITab;
 
 typedef struct {

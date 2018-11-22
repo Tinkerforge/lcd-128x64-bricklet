@@ -381,6 +381,10 @@ BootloaderHandleMessageResponse get_gui_button(const GetGUIButton *data, GetGUIB
 }
 
 BootloaderHandleMessageResponse remove_gui_button(const RemoveGUIButton *data) {
+	if(data->index == 255) {
+		gui_remove_all(true, false, false, false);
+	}
+
 	if(data->index > GUI_BUTTON_NUM_MAX) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
@@ -465,6 +469,10 @@ BootloaderHandleMessageResponse get_gui_slider(const GetGUISlider *data, GetGUIS
 }
 
 BootloaderHandleMessageResponse remove_gui_slider(const RemoveGUISlider *data) {
+	if(data->index == 255) {
+		gui_remove_all(false, true, false, false);
+	}
+
 	if(data->index > GUI_SLIDER_NUM_MAX) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
@@ -557,6 +565,10 @@ BootloaderHandleMessageResponse get_gui_tab_text(const GetGUITabText *data, GetG
 }
 
 BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data) {
+	if(data->index == 255) {
+		gui_remove_all(false, false, false, true);
+	}
+
 	if(data->index > GUI_TAB_NUM_MAX) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
@@ -726,6 +738,10 @@ BootloaderHandleMessageResponse get_gui_graph_data_low_level(const GetGUIGraphDa
 }
 
 BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data) {
+	if(data->index == 255) {
+		gui_remove_all(false, false, true, false);
+	}
+
 	if(data->index > GUI_GRAPH_NUM_MAX) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}

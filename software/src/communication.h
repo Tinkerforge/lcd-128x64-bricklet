@@ -108,6 +108,7 @@ void communication_init(void);
 #define FID_SET_GUI_GRAPH_DATA_LOW_LEVEL 42
 #define FID_GET_GUI_GRAPH_DATA_LOW_LEVEL 43
 #define FID_REMOVE_GUI_GRAPH 44
+#define FID_REMOVE_ALL_GUI 45
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
@@ -508,6 +509,10 @@ typedef struct {
 	uint8_t index;
 } __attribute__((__packed__)) RemoveGUIGraph;
 
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) RemoveAllGUI;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
@@ -549,6 +554,7 @@ BootloaderHandleMessageResponse get_gui_graph_configuration(const GetGUIGraphCon
 BootloaderHandleMessageResponse set_gui_graph_data_low_level(const SetGUIGraphDataLowLevel *data);
 BootloaderHandleMessageResponse get_gui_graph_data_low_level(const GetGUIGraphDataLowLevel *data, GetGUIGraphDataLowLevel_Response *response);
 BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data);
+BootloaderHandleMessageResponse remove_all_gui(const RemoveAllGUI *data);
 
 // Callbacks
 bool handle_touch_position_callback(void);

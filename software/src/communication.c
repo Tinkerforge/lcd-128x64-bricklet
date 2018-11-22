@@ -75,6 +75,7 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_GUI_GRAPH_DATA_LOW_LEVEL: return set_gui_graph_data_low_level(message);
 		case FID_GET_GUI_GRAPH_DATA_LOW_LEVEL: return get_gui_graph_data_low_level(message, response);
 		case FID_REMOVE_GUI_GRAPH: return remove_gui_graph(message);
+		case FID_REMOVE_ALL_GUI: return remove_all_gui(message);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -738,6 +739,13 @@ BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data) {
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
+
+BootloaderHandleMessageResponse remove_all_gui(const RemoveAllGUI *data) {
+	gui_remove_all(true, true, true, true);
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
 
 bool handle_touch_position_callback(void) {
 	static bool is_buffered = false;

@@ -232,7 +232,6 @@ void gui_draw_tab(const uint8_t x, const uint8_t y, const int8_t index) {
 		gui.global_bounding_box_start_y = y        + 1;
 		gui.global_bounding_box_end_y   = LCD_MAX_ROWS*8-1 - 1;
 		gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.tab[index].text);
-		uartbb_printf("draw: %d -> %s (%d %d %d)\n\r", index, gui.tab[index].text, pixel_text_start_x, pixel_text_start_y, text_length);
 		gui.use_global_bounding_box     = false;
 	}
 }
@@ -356,7 +355,7 @@ void gui_draw_graph(uint8_t index) {
 	}
 }
 
-void gui_remove_all(const bool buttons, const bool slider, const bool tabs) {
+void gui_remove_all(const bool buttons, const bool slider, const bool graphs, const bool tabs) {
 	if(buttons) {
 		for(uint8_t i = 0; i < GUI_BUTTON_NUM_MAX; i++) {
 			gui.button[i].active = false;
@@ -366,6 +365,12 @@ void gui_remove_all(const bool buttons, const bool slider, const bool tabs) {
 	if(slider) {
 		for(uint8_t i = 0; i < GUI_SLIDER_NUM_MAX; i++) {
 			gui.slider[i].active = false;
+		}
+	}
+
+	if(graphs) {
+		for(uint8_t i = 0; i < GUI_GRAPH_NUM_MAX; i++) {
+			gui.graph[i].active = false;
 		}
 	}
 
@@ -484,7 +489,7 @@ void gui_touch_check(void) {
 						gui.tab_current = gui.tabs[new_tabs_current];
 						redraw = true;
 						if(gui.tab_clear_gui) {
-							gui_remove_all(true, true, false);
+							gui_remove_all(true, true, true, false);
 						}
 					} 
 				}
@@ -501,7 +506,7 @@ void gui_touch_check(void) {
 						gui.tab_current = gui.tabs[gui.tabs_current];
 						redraw = true;
 						if(gui.tab_clear_gui) {
-							gui_remove_all(true, true, false);
+							gui_remove_all(true, true, true, false);
 						}
 					}
 				} else if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
@@ -510,7 +515,7 @@ void gui_touch_check(void) {
 						gui.tab_current = gui.tabs[gui.tabs_current];
 						redraw = true;
 						if(gui.tab_clear_gui) {
-							gui_remove_all(true, true, false);
+							gui_remove_all(true, true, true, false);
 						}
 					}
 				}

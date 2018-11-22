@@ -35,18 +35,21 @@ typedef struct {
 	bool new_backlight;
 	bool new_contrast;
 
-	uint8_t display[8][128];
-	uint8_t display_mask[8][128];
+	uint8_t display_user[LCD_MAX_ROWS][LCD_MAX_COLUMNS];
+	uint8_t display_user_save[LCD_MAX_ROWS][LCD_MAX_COLUMNS];
+	uint8_t display_gui[LCD_MAX_ROWS][LCD_MAX_COLUMNS];
 
-	uint8_t display_write[8][128];
-	uint8_t display_mask_write[8][128];
+	uint8_t display_write[LCD_MAX_ROWS][LCD_MAX_COLUMNS];
+	uint8_t display_mask_write[LCD_MAX_ROWS][LCD_MAX_COLUMNS];
 
-	bool display_mask_changed;
+	bool display_user_changed;
+	bool display_gui_changed;
 
 	uint8_t display_configuration_contrast;
 	uint8_t display_configuration_backlight;
 	bool display_configuration_invert;
 
+	bool redraw_all;
 	bool automatic_draw;
 
 	uint16_t read_chunk_offset;

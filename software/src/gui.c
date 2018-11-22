@@ -48,14 +48,12 @@ void gui_draw_pixel(const uint8_t column, const uint8_t row, const bool color) {
 
 	const uint8_t display_bit = row % 8;
 	if(color) {
-		if(!(uc1701.display[row/8][column] & (1 << display_bit))) {
-			uc1701.display[row/8][column] |= (1 << display_bit);
-			uc1701.display_mask[row/8][column] |= (1 << display_bit);
+		if(!(uc1701.display_gui[row/8][column] & (1 << display_bit))) {
+			uc1701.display_gui[row/8][column] |= (1 << display_bit);
 		}
 	} else {
-		if((uc1701.display[row/8][column] & (1 << display_bit))) {
-			uc1701.display[row/8][column] &= ~(1 << display_bit);
-			uc1701.display_mask[row/8][column] |= (1 << display_bit);
+		if((uc1701.display_gui[row/8][column] & (1 << display_bit))) {
+			uc1701.display_gui[row/8][column] &= ~(1 << display_bit);
 		}
 	}
 }
@@ -135,7 +133,7 @@ void gui_draw_button(uint8_t index) {
 	gui.use_global_bounding_box     = false;
 	
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 }
 
@@ -179,7 +177,7 @@ void gui_draw_slider(uint8_t index) {
 	}
 
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 }
 
@@ -308,7 +306,7 @@ void gui_draw_tabs(void) {
 	gui_draw_tab_open_lid(gui.tabs_open_lid);
 
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 }
 
@@ -351,7 +349,7 @@ void gui_draw_graph(uint8_t index) {
 	}
 
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 }
 
@@ -524,6 +522,7 @@ void gui_touch_check(void) {
 	}
 
 	if(redraw) {
+		uc1701.display_gui_changed = true;
 		gui_redraw();
 	}
 }

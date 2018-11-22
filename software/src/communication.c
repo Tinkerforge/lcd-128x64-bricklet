@@ -99,14 +99,12 @@ BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel
 			const uint8_t bit = counter % 8;
 			const uint8_t display_bit = row % 8;
 			if(data->pixels_chunk_data[index] & (1 << bit)) {
-				if(!(uc1701.display[row/8][column] & (1 << display_bit))) {
-					uc1701.display[row/8][column] |= (1 << display_bit);
-					uc1701.display_mask[row/8][column] |= (1 << display_bit);
+				if(!(uc1701.display_user[row/8][column] & (1 << display_bit))) {
+					uc1701.display_user[row/8][column] |= (1 << display_bit);
 				}
 			} else {
-				if((uc1701.display[row/8][column] & (1 << display_bit))) {
-					uc1701.display[row/8][column] &= ~(1 << display_bit);
-					uc1701.display_mask[row/8][column] |= (1 << display_bit);
+				if((uc1701.display_user[row/8][column] & (1 << display_bit))) {
+					uc1701.display_user[row/8][column] &= ~(1 << display_bit);
 				}
 			}
 
@@ -124,7 +122,7 @@ BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel
 
 	if(data->pixels_chunk_offset + length >= data->pixels_length) {
 		if(uc1701.automatic_draw) {
-			uc1701.display_mask_changed = true;
+			uc1701.display_user_changed = true;
 		}
 	}
 
@@ -158,7 +156,7 @@ BootloaderHandleMessageResponse read_pixels_low_level(const ReadPixelsLowLevel *
 		for(; column <= data->x_end; column++) {
 			const uint16_t data_index = counter / 8;
 			const uint16_t data_bit   = counter % 8;
-			if(uc1701.display[row_index][column] & (1 << row_bit)) {
+			if(uc1701.display_user[row_index][column] & (1 << row_bit)) {
 				response->pixels_chunk_data[data_index] |= (1 << data_bit);
 			}
 
@@ -185,13 +183,13 @@ BootloaderHandleMessageResponse read_pixels_low_level(const ReadPixelsLowLevel *
 BootloaderHandleMessageResponse clear_display(const ClearDisplay *data) {
 	for(uint8_t row = 0; row < LCD_MAX_ROWS; row++) {
 		for(uint8_t column = 0; column < LCD_MAX_COLUMNS; column++) {
-			uc1701.display_mask[row][column] = 0xFF;
-			uc1701.display[row][column] = 0;
+			uc1701.display_user[row][column] = 0;
 		}
 	}
 
+	uc1701.redraw_all = true;
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
@@ -240,7 +238,7 @@ BootloaderHandleMessageResponse write_line(const WriteLine *data) {
 	for(uint8_t i = 0; i < 21 - data->position; i++) {
 		if(data->text[i] == 0) {
 			if(uc1701.automatic_draw) {
-				uc1701.display_mask_changed = true;
+				uc1701.display_user_changed = true;
 			}
 			return HANDLE_MESSAGE_RESPONSE_EMPTY;
 		}
@@ -250,20 +248,19 @@ BootloaderHandleMessageResponse write_line(const WriteLine *data) {
 			uint8_t column = (data->position+i)*6 + j;
 			if(column >= LCD_MAX_COLUMNS) {
 				if(uc1701.automatic_draw) {
-					uc1701.display_mask_changed = true;
+					uc1701.display_user_changed = true;
 				}
 				return HANDLE_MESSAGE_RESPONSE_EMPTY;
 			}
 
-			if(uc1701.display[data->line][column] != new_data) {
-				uc1701.display_mask[data->line][column] = (uc1701.display[data->line][column] ^ new_data);
-				uc1701.display[data->line][column] = new_data;
+			if(uc1701.display_user[data->line][column] != new_data) {
+				uc1701.display_user[data->line][column] = new_data;
 			}
 		}
 	}
 
 	if(uc1701.automatic_draw) {
-		uc1701.display_mask_changed = true;
+		uc1701.display_user_changed = true;
 	}
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
@@ -271,10 +268,10 @@ BootloaderHandleMessageResponse write_line(const WriteLine *data) {
 
 BootloaderHandleMessageResponse draw_buffered_frame(const DrawBufferedFrame *data) {
 	if(data->force_complete_redraw) {
-		memset(uc1701.display_mask, 0xFF, LCD_MAX_COLUMNS*LCD_MAX_ROWS);
+		uc1701.redraw_all = true;
 	}
 
-	uc1701.display_mask_changed = true;
+	uc1701.display_user_changed = true;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }

@@ -94,6 +94,29 @@ void uc1701_task_set_cursor(uint8_t row, uint8_t column) {
 	uc1701_task_write_command(set_cursor_command, 3);
 }
 
+inline bool uc1701_set_bit(uint8_t column, uint8_t row, bool value, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
+	const uint8_t display_bit = row % 8;
+
+	if(value) {
+		if(!(data[row/8][column] & (1 << display_bit))) {
+			data[row/8][column] |= (1 << display_bit);
+			return true;
+		}
+	} else {
+		if((data[row/8][column] & (1 << display_bit))) {
+			data[row/8][column] &= ~(1 << display_bit);
+			return true;
+		}
+	}
+
+	return false;
+}
+
+inline bool uc1701_get_bit(uint8_t column, uint8_t row, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
+	const uint8_t display_bit = row % 8;
+	return data[row/8][column] & (1 << display_bit);
+}
+
 void uc1701_task_tick(void) {
 	while(true) {
 		if(uc1701.reset) {
@@ -135,13 +158,33 @@ void uc1701_task_tick(void) {
 			ccu4_pwm_set_duty_cycle(0, 65535 - cie1931[uc1701.display_configuration_backlight]);
 		}
 
-		if(uc1701.display_mask_changed) {
-			// Write display and mask to double buffer
-			// This way the user can already change the display again while we are still writing to it
-			memcpy(uc1701.display_write, uc1701.display, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
-			memcpy(uc1701.display_mask_write, uc1701.display_mask, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
-			memset(uc1701.display_mask, 0, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
-			uc1701.display_mask_changed = false;
+		if(uc1701.display_user_changed || uc1701.display_gui_changed) {
+			// If only the gui changed (this means a button was pressed or slider was moved)
+			// We update the old saved user display with the updated GUI and write it to the display
+			// If there is a user change (new GUI element or other drawing from user),
+			// we first copy the new user data to the user save buffer
+			if(uc1701.display_user_changed) {
+				memcpy(uc1701.display_user_save, uc1701.display_user, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
+			}
+
+			for(uint8_t row = 0; row < LCD_MAX_ROWS*8; row++) {
+				for(uint8_t column = 0; column < LCD_MAX_COLUMNS; column++) {
+					bool bit_new   = uc1701_get_bit(column, row, uc1701.display_user_save) | uc1701_get_bit(column, row, uc1701.display_gui);
+					bool bit_write = uc1701_get_bit(column, row, uc1701.display_write);
+
+					if(bit_new != bit_write) {
+						uc1701_set_bit(column, row, bit_new, uc1701.display_write);
+						uc1701_set_bit(column, row, true, uc1701.display_mask_write);
+					}
+				}
+			}
+
+			uc1701.display_user_changed = false;
+			uc1701.display_gui_changed = false;
+			if(uc1701.redraw_all) {
+				memset(uc1701.display_mask_write, 0xFF, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
+				uc1701.redraw_all = false;
+			}
 
 			for(uint8_t row = 0; row < LCD_MAX_ROWS; row++) {
 				bool start_found = false;
@@ -162,6 +205,8 @@ void uc1701_task_tick(void) {
 					uc1701_task_write_data(&uc1701.display_write[row][column_start], column_end - column_start + 1);
 				}
 			}
+
+			memset(uc1701.display_mask_write, 0, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
 		}
 
 		coop_task_yield();
@@ -188,11 +233,12 @@ void uc1701_init(void) {
 
 	uc1701.reset                = true;
 	uc1701.initialize           = true;
-	uc1701.display_mask_changed = true;
+	uc1701.display_user_changed = true;
+	uc1701.display_gui_changed  = true;
+	uc1701.redraw_all           = true;
 	uc1701.new_contrast         = true;
 	uc1701.new_backlight        = true;
 
-	memset(uc1701.display_mask, 0xff, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
 	uc1701.display_configuration_contrast  = 14;
 	uc1701.display_configuration_backlight = 100;
 	uc1701.display_configuration_invert    = false;

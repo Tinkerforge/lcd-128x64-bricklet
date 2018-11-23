@@ -430,6 +430,40 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 	}
 }
 
+bool gui_point_in_slider(uint8_t x, uint8_t y) {
+	for(uint8_t i = 0; i < GUI_SLIDER_NUM_MAX; i++) {
+		if(!gui.slider[i].active) {
+			continue;
+		}
+
+		uint8_t slider_start_x;
+		uint8_t slider_end_x;
+		uint8_t slider_start_y;
+		uint8_t slider_end_y;
+
+		// Get bounding box of slider
+		if(gui.slider[i].direction == LCD_128X64_DIRECTION_HORIZONTAL) {
+			slider_start_x = gui.slider[i].position_x;
+			slider_end_x   = gui.slider[i].position_x + gui.slider[i].length - 1;
+			slider_start_y = gui.slider[i].position_y;
+			slider_end_y   = gui.slider[i].position_y + GUI_SLIDER_KNOB_WIDTH - 1;
+		} else {
+			slider_start_x = gui.slider[i].position_x;
+			slider_end_x   = gui.slider[i].position_x + GUI_SLIDER_KNOB_WIDTH - 1;
+			slider_start_y = gui.slider[i].position_y;
+			slider_end_y   = gui.slider[i].position_y + gui.slider[i].length - 1;
+		}
+		if((slider_start_x <= x) &&
+		   (slider_end_x   >= x) &&
+		   (slider_start_y <= y) &&
+		   (slider_end_y   >= y)) {
+			return true;
+		}
+	}
+
+	return false;
+}
+
 void gui_touch_check(void) {
 	bool redraw = false;
 	const bool touch = !system_timer_is_time_elapsed_ms(tsc2046e.touch_time, 50);
@@ -547,23 +581,28 @@ void gui_touch_check(void) {
 		// Gesture
 		if(gui.tab_change_tab_config & LCD_128X64_CHANGE_TAB_ON_SWIPE) {
 			if(gui.last_tab_gesture_time + 250 < tsc2046e.gesture_api_time) {
-				gui.last_tab_gesture_time = system_timer_get_ms();
-				if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
-					if((gui.tabs_current != (gui.tabs_count-1)) && (gui.tabs[gui.tabs_current+1] != -1)) {
-						gui.tabs_current++;
-						gui.tab_current = gui.tabs[gui.tabs_current];
-						redraw = true;
-						if(gui.tab_clear_gui) {
-							gui_remove_all(true, true, true, false);
+				// Make sure this gesture is not made during moving of a slider.
+				// In this case we ignore it.
+				if(!gui_point_in_slider(tsc2046e.gesture_api_x_start, tsc2046e.gesture_api_y_start) &&
+				   !gui_point_in_slider(tsc2046e.gesture_api_x_end, tsc2046e.gesture_api_y_end)) {
+					gui.last_tab_gesture_time = system_timer_get_ms();
+					if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
+						if((gui.tabs_current != (gui.tabs_count-1)) && (gui.tabs[gui.tabs_current+1] != -1)) {
+							gui.tabs_current++;
+							gui.tab_current = gui.tabs[gui.tabs_current];
+							redraw = true;
+							if(gui.tab_clear_gui) {
+								gui_remove_all(true, true, true, false);
+							}
 						}
-					}
-				} else if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
-					if((gui.tabs_current != 0) && (gui.tabs[gui.tabs_current-1] != -1)) {
-						gui.tabs_current--;
-						gui.tab_current = gui.tabs[gui.tabs_current];
-						redraw = true;
-						if(gui.tab_clear_gui) {
-							gui_remove_all(true, true, true, false);
+					} else if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
+						if((gui.tabs_current != 0) && (gui.tabs[gui.tabs_current-1] != -1)) {
+							gui.tabs_current--;
+							gui.tab_current = gui.tabs[gui.tabs_current];
+							redraw = true;
+							if(gui.tab_clear_gui) {
+								gui_remove_all(true, true, true, false);
+							}
 						}
 					}
 				}

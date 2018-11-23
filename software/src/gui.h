@@ -124,7 +124,7 @@ typedef struct {
 
 extern GUI gui;
 
-void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_length, const char *text);
+void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_length, const char *text, const uint8_t font_type, const bool color);
 void gui_draw_box(const uint8_t x_start, const uint8_t y_start, const uint8_t x_end, const uint8_t y_end, const bool fill, const bool color);
 void gui_draw_line(const uint8_t x_start, const uint8_t y_start, const uint8_t x_end, const uint8_t y_end, const bool color);
 

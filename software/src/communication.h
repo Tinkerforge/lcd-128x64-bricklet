@@ -42,8 +42,16 @@ void communication_init(void);
 #define LCD_128X64_COLOR_WHITE False
 #define LCD_128X64_COLOR_BLACK True
 
-#define LCD_128X64_FONT_8 0
-#define LCD_128X64_FONT_16 1
+#define LCD_128X64_FONT_6X8 0
+#define LCD_128X64_FONT_6X16 1
+#define LCD_128X64_FONT_6X24 2
+#define LCD_128X64_FONT_6X32 3
+#define LCD_128X64_FONT_12X16 4
+#define LCD_128X64_FONT_12X24 5
+#define LCD_128X64_FONT_12X32 6
+#define LCD_128X64_FONT_18X24 7
+#define LCD_128X64_FONT_18X32 8
+#define LCD_128X64_FONT_24X32 9
 
 #define LCD_128X64_DIRECTION_HORIZONTAL 0
 #define LCD_128X64_DIRECTION_VERTICAL 1
@@ -294,7 +302,7 @@ typedef struct {
 	uint8_t position_y;
 	uint8_t font;
 	bool color;
-	char text[20];
+	char text[22];
 } __attribute__((__packed__)) DrawText;
 
 typedef struct {

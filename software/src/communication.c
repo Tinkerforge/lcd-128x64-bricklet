@@ -192,7 +192,6 @@ BootloaderHandleMessageResponse clear_display(const ClearDisplay *data) {
 		}
 	}
 
-	uc1701.redraw_all = true;
 	if(uc1701.automatic_draw) {
 		uc1701.display_user_changed = true;
 	}
@@ -341,6 +340,13 @@ BootloaderHandleMessageResponse get_touch_gesture_callback_configuration(const G
 }
 
 BootloaderHandleMessageResponse draw_line(const DrawLine *data) {
+	if((data->position_x_start >= LCD_MAX_COLUMNS) ||
+	   (data->position_x_end >= LCD_MAX_COLUMNS) ||
+	   (data->position_y_start >= LCD_MAX_ROWS*8) ||
+	   (data->position_y_end >= LCD_MAX_ROWS*8)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
 	gui.draw_to_user_display = true;
 	gui_draw_line(data->position_x_start, data->position_y_start, data->position_x_end, data->position_y_end, data->color);
 	gui.draw_to_user_display = false;
@@ -353,6 +359,13 @@ BootloaderHandleMessageResponse draw_line(const DrawLine *data) {
 }
 
 BootloaderHandleMessageResponse draw_box(const DrawBox *data) {
+	if((data->position_x_start >= LCD_MAX_COLUMNS) ||
+	   (data->position_x_end >= LCD_MAX_COLUMNS) ||
+	   (data->position_y_start >= LCD_MAX_ROWS*8) ||
+	   (data->position_y_end >= LCD_MAX_ROWS*8)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
 	gui.draw_to_user_display = true;
 	gui_draw_box(data->position_x_start, data->position_y_start, data->position_x_end, data->position_y_end, data->fill, data->color);
 	gui.draw_to_user_display = false;
@@ -365,8 +378,33 @@ BootloaderHandleMessageResponse draw_box(const DrawBox *data) {
 }
 
 BootloaderHandleMessageResponse draw_text(const DrawText *data) {
+	if((data->position_x >= LCD_MAX_COLUMNS) ||
+	   (data->position_y >= LCD_MAX_ROWS*8)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	if(data->font > LCD_128X64_FONT_24X32) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	uint8_t char_width = 6;
+	switch(data->font) {
+		case LCD_128X64_FONT_6X8:   char_width = 6;  break;
+		case LCD_128X64_FONT_6X16:  char_width = 6;  break;
+		case LCD_128X64_FONT_6X24:  char_width = 6;  break;
+		case LCD_128X64_FONT_6X32:  char_width = 6;  break;
+		case LCD_128X64_FONT_12X16: char_width = 12; break;
+		case LCD_128X64_FONT_12X24: char_width = 12; break;
+		case LCD_128X64_FONT_12X32: char_width = 12; break;
+		case LCD_128X64_FONT_18X24: char_width = 18; break;
+		case LCD_128X64_FONT_18X32: char_width = 18; break;
+		case LCD_128X64_FONT_24X32: char_width = 24; break;
+	}
+
+	uint8_t max_chars = ((LCD_MAX_COLUMNS - data->position_x + char_width - 1) / char_width) + 1;
+
 	gui.draw_to_user_display = true;
-	gui_draw_text(data->position_x, data->position_y, strnlen(data->text, 20), data->text);
+	gui_draw_text(data->position_x, data->position_y, MIN(max_chars, strnlen(data->text, 22)), data->text, data->font, data->color);
 	gui.draw_to_user_display = false;
 
 	if(uc1701.automatic_draw) {

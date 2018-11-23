@@ -70,16 +70,35 @@ void gui_draw_pixel(const uint8_t column, const uint8_t row, const bool color) {
 	}
 }
 
-void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_length, const char *text) {
+void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_length, const char *text, const uint8_t font_type, const bool color) {
+	uint8_t col_mul = 1;
+	uint8_t row_mul = 1;
+	switch(font_type) {
+		case LCD_128X64_FONT_6X8:   col_mul = 1; row_mul = 1; break;
+		case LCD_128X64_FONT_6X16:  col_mul = 1; row_mul = 2; break;
+		case LCD_128X64_FONT_6X24:  col_mul = 1; row_mul = 3; break;
+		case LCD_128X64_FONT_6X32:  col_mul = 1; row_mul = 4; break;
+		case LCD_128X64_FONT_12X16: col_mul = 2; row_mul = 2; break;
+		case LCD_128X64_FONT_12X24: col_mul = 2; row_mul = 3; break;
+		case LCD_128X64_FONT_12X32: col_mul = 2; row_mul = 4; break;
+		case LCD_128X64_FONT_18X24: col_mul = 3; row_mul = 3; break;
+		case LCD_128X64_FONT_18X32: col_mul = 3; row_mul = 4; break;
+		case LCD_128X64_FONT_24X32: col_mul = 4; row_mul = 4; break;
+	}
+
 	for(uint8_t i = 0; i < text_length; i++) {
 		for(uint8_t j = 0; j < 6; j++) {
 			const uint8_t data = ((j == 5) ? 0 : font[(uint8_t)text[i]*5 + j]);
 			for(uint8_t k = 0; k < 8; k++) {
-				const bool    pixel_value  = data & (1 << k);
-				const uint8_t pixel_column = j+column + i*6;
-				const uint8_t pixel_row    = k+row;
+				const bool    pixel_value  = (data & (1 << k)) ? color : !color;
+				const uint8_t pixel_column = j*col_mul + column + i*6*col_mul;
+				const uint8_t pixel_row    = k*row_mul+row;
 
-				gui_draw_pixel(pixel_column, pixel_row, pixel_value);
+				if((row_mul == 1) && (col_mul == 1)) {
+					gui_draw_pixel(pixel_column, pixel_row, pixel_value);
+				} else {
+					gui_draw_box(pixel_column, pixel_row, pixel_column+col_mul-1, pixel_row+row_mul-1, true, pixel_value);
+				}
 			}
 		}
 	}
@@ -203,7 +222,7 @@ void gui_draw_button(const uint8_t index) {
 	gui.global_bounding_box_end_x   = x_end   - 1;
 	gui.global_bounding_box_start_y = y_start + 1;
 	gui.global_bounding_box_end_y   = y_end   - 1;
-	gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.button[index].text);
+	gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.button[index].text, 0, true);
 	gui.use_global_bounding_box     = false;
 	
 	if(uc1701.automatic_draw) {
@@ -304,7 +323,7 @@ void gui_draw_tab(const uint8_t x, const uint8_t y, const int8_t index) {
 			gui.global_bounding_box_end_x   = xend - 5 - 1;
 			gui.global_bounding_box_start_y = y        + 1;
 			gui.global_bounding_box_end_y   = LCD_MAX_ROWS*8-1 - 1;
-			gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.tab[index].text);
+			gui_draw_text(pixel_text_start_x, pixel_text_start_y, text_length, gui.tab[index].text, 0, true);
 			gui.use_global_bounding_box     = false;
 		} else if(gui.tab[index].active_icon) {
 			for(uint8_t column = 0; column < 28; column++) {
@@ -460,10 +479,10 @@ void gui_draw_graph(const uint8_t index) {
 	const uint8_t text_length_y = strnlen(gui.graph[index].text_y, GUI_GRAPH_TEXT_LENGTH_MAX);
 
 	if(text_length_x > 0) {
-		gui_draw_text(gui.graph[index].position_x + gui.graph[index].width - text_length_x*6 + 1, start_y + 1 - 8, text_length_x, gui.graph[index].text_x);
+		gui_draw_text(gui.graph[index].position_x + gui.graph[index].width - text_length_x*6 + 1, start_y + 1 - 8, text_length_x, gui.graph[index].text_x, 0, true);
 	}
 	if(text_length_y > 0) {
-		gui_draw_text(gui.graph[index].position_x + 2, gui.graph[index].position_y, text_length_y, gui.graph[index].text_y);
+		gui_draw_text(gui.graph[index].position_x + 2, gui.graph[index].position_y, text_length_y, gui.graph[index].text_y, 0, true);
 	}
 
 	if(uc1701.automatic_draw) {

@@ -509,7 +509,7 @@ void gui_touch_check(void) {
 	if(gui.tabs_count > 0) {
 		// Click
 		if(gui.tab_change_tab_config & LCD_128X64_CHANGE_TAB_ON_CLICK) {
-			if(gui.last_tab_touch_time + 250 < tsc2046e.touch_time) {
+			if((gui.last_tab_touch_time + 250 < tsc2046e.touch_time) && !touch) {
 				if(tsc2046e.touch_y >= GUI_TAB_POS_Y) {
 					gui.last_tab_touch_time = system_timer_get_ms();
 					int8_t new_tabs_current = -1;

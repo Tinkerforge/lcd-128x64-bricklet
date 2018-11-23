@@ -118,9 +118,15 @@ typedef struct {
     uint32_t last_tab_touch_time;
 
     GUIGraph graph[GUI_GRAPH_NUM_MAX];
+
+    bool draw_to_user_display;
 } GUI;
 
 extern GUI gui;
+
+void gui_draw_text(const uint8_t column, const uint8_t row, const uint8_t text_length, const char *text);
+void gui_draw_box(const uint8_t x_start, const uint8_t y_start, const uint8_t x_end, const uint8_t y_end, const bool fill, const bool color);
+void gui_draw_line(const uint8_t x_start, const uint8_t y_start, const uint8_t x_end, const uint8_t y_end, const bool color);
 
 void gui_remove_all(const bool buttons, const bool slider, const bool graphs, const bool tabs);
 void gui_update_tabs(void);

@@ -49,6 +49,9 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_TOUCH_GESTURE: return get_touch_gesture(message, response);
 		case FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION: return set_touch_gesture_callback_configuration(message);
 		case FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION: return get_touch_gesture_callback_configuration(message, response);
+		case FID_DRAW_LINE: return draw_line(message);
+		case FID_DRAW_BOX: return draw_box(message);
+		case FID_DRAW_TEXT: return draw_text(message);
 		case FID_SET_GUI_BUTTON: return set_gui_button(message);
 		case FID_GET_GUI_BUTTON: return get_gui_button(message, response);
 		case FID_REMOVE_GUI_BUTTON: return remove_gui_button(message);
@@ -335,6 +338,42 @@ BootloaderHandleMessageResponse get_touch_gesture_callback_configuration(const G
 	response->value_has_to_change = tsc2046e.gesture_value_has_to_change;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
+
+BootloaderHandleMessageResponse draw_line(const DrawLine *data) {
+	gui.draw_to_user_display = true;
+	gui_draw_line(data->position_x_start, data->position_y_start, data->position_x_end, data->position_y_end, data->color);
+	gui.draw_to_user_display = false;
+
+	if(uc1701.automatic_draw) {
+		uc1701.display_user_changed = true;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse draw_box(const DrawBox *data) {
+	gui.draw_to_user_display = true;
+	gui_draw_box(data->position_x_start, data->position_y_start, data->position_x_end, data->position_y_end, data->fill, data->color);
+	gui.draw_to_user_display = false;
+
+	if(uc1701.automatic_draw) {
+		uc1701.display_user_changed = true;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse draw_text(const DrawText *data) {
+	gui.draw_to_user_display = true;
+	gui_draw_text(data->position_x, data->position_y, strnlen(data->text, 20), data->text);
+	gui.draw_to_user_display = false;
+
+	if(uc1701.automatic_draw) {
+		uc1701.display_user_changed = true;
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data) {

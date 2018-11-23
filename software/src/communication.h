@@ -39,6 +39,12 @@ void communication_init(void);
 #define LCD_128X64_GESTURE_TOP_TO_BOTTOM 2
 #define LCD_128X64_GESTURE_BOTTOM_TO_TOP 3
 
+#define LCD_128X64_COLOR_WHITE False
+#define LCD_128X64_COLOR_BLACK True
+
+#define LCD_128X64_FONT_8 0
+#define LCD_128X64_FONT_16 1
+
 #define LCD_128X64_DIRECTION_HORIZONTAL 0
 #define LCD_128X64_DIRECTION_VERTICAL 1
 
@@ -82,41 +88,44 @@ void communication_init(void);
 #define FID_GET_TOUCH_GESTURE 12
 #define FID_SET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 13
 #define FID_GET_TOUCH_GESTURE_CALLBACK_CONFIGURATION 14
-#define FID_SET_GUI_BUTTON 16
-#define FID_GET_GUI_BUTTON 17
-#define FID_REMOVE_GUI_BUTTON 18
-#define FID_SET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 19
-#define FID_GET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 20
-#define FID_GET_GUI_BUTTON_PRESSED 21
-#define FID_SET_GUI_SLIDER 23
-#define FID_GET_GUI_SLIDER 24
-#define FID_REMOVE_GUI_SLIDER 25
-#define FID_SET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 26
-#define FID_GET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 27
-#define FID_GET_GUI_SLIDER_VALUE 28
-#define FID_SET_GUI_TAB_CONFIGURATION 30
-#define FID_GET_GUI_TAB_CONFIGURATION 31
-#define FID_SET_GUI_TAB_TEXT 32
-#define FID_GET_GUI_TAB_TEXT 33
-#define FID_SET_GUI_TAB_ICON 34
-#define FID_GET_GUI_TAB_ICON 35
-#define FID_REMOVE_GUI_TAB 36
-#define FID_SET_GUI_TAB_CURRENT 37
-#define FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 38
-#define FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 39
-#define FID_GET_GUI_TAB_CURRENT 40
-#define FID_SET_GUI_GRAPH_CONFIGURATION 42
-#define FID_GET_GUI_GRAPH_CONFIGURATION 43
-#define FID_SET_GUI_GRAPH_DATA_LOW_LEVEL 44
-#define FID_GET_GUI_GRAPH_DATA_LOW_LEVEL 45
-#define FID_REMOVE_GUI_GRAPH 46
-#define FID_REMOVE_ALL_GUI 47
+#define FID_DRAW_LINE 16
+#define FID_DRAW_BOX 17
+#define FID_DRAW_TEXT 18
+#define FID_SET_GUI_BUTTON 19
+#define FID_GET_GUI_BUTTON 20
+#define FID_REMOVE_GUI_BUTTON 21
+#define FID_SET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 22
+#define FID_GET_GUI_BUTTON_PRESSED_CALLBACK_CONFIGURATION 23
+#define FID_GET_GUI_BUTTON_PRESSED 24
+#define FID_SET_GUI_SLIDER 26
+#define FID_GET_GUI_SLIDER 27
+#define FID_REMOVE_GUI_SLIDER 28
+#define FID_SET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 29
+#define FID_GET_GUI_SLIDER_VALUE_CALLBACK_CONFIGURATION 30
+#define FID_GET_GUI_SLIDER_VALUE 31
+#define FID_SET_GUI_TAB_CONFIGURATION 33
+#define FID_GET_GUI_TAB_CONFIGURATION 34
+#define FID_SET_GUI_TAB_TEXT 35
+#define FID_GET_GUI_TAB_TEXT 36
+#define FID_SET_GUI_TAB_ICON 37
+#define FID_GET_GUI_TAB_ICON 38
+#define FID_REMOVE_GUI_TAB 39
+#define FID_SET_GUI_TAB_CURRENT 40
+#define FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 41
+#define FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 42
+#define FID_GET_GUI_TAB_CURRENT 43
+#define FID_SET_GUI_GRAPH_CONFIGURATION 45
+#define FID_GET_GUI_GRAPH_CONFIGURATION 46
+#define FID_SET_GUI_GRAPH_DATA_LOW_LEVEL 47
+#define FID_GET_GUI_GRAPH_DATA_LOW_LEVEL 48
+#define FID_REMOVE_GUI_GRAPH 49
+#define FID_REMOVE_ALL_GUI 50
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
-#define FID_CALLBACK_GUI_BUTTON_PRESSED 22
-#define FID_CALLBACK_GUI_SLIDER_VALUE 29
-#define FID_CALLBACK_GUI_TAB_CURRENT 41
+#define FID_CALLBACK_GUI_BUTTON_PRESSED 25
+#define FID_CALLBACK_GUI_SLIDER_VALUE 32
+#define FID_CALLBACK_GUI_TAB_CURRENT 44
 
 typedef struct {
 	TFPMessageHeader header;
@@ -259,6 +268,34 @@ typedef struct {
 	uint16_t y_end;
 	uint32_t age;
 } __attribute__((__packed__)) TouchGesture_Callback;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t position_x_start;
+	uint8_t position_y_start;
+	uint8_t position_x_end;
+	uint8_t position_y_end;
+	bool color;
+} __attribute__((__packed__)) DrawLine;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t position_x_start;
+	uint8_t position_y_start;
+	uint8_t position_x_end;
+	uint8_t position_y_end;
+	bool fill;
+	bool color;
+} __attribute__((__packed__)) DrawBox;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t position_x;
+	uint8_t position_y;
+	uint8_t font;
+	bool color;
+	char text[20];
+} __attribute__((__packed__)) DrawText;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -547,6 +584,9 @@ BootloaderHandleMessageResponse get_touch_position_callback_configuration(const 
 BootloaderHandleMessageResponse get_touch_gesture(const GetTouchGesture *data, GetTouchGesture_Response *response);
 BootloaderHandleMessageResponse set_touch_gesture_callback_configuration(const SetTouchGestureCallbackConfiguration *data);
 BootloaderHandleMessageResponse get_touch_gesture_callback_configuration(const GetTouchGestureCallbackConfiguration *data, GetTouchGestureCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse draw_line(const DrawLine *data);
+BootloaderHandleMessageResponse draw_box(const DrawBox *data);
+BootloaderHandleMessageResponse draw_text(const DrawText *data);
 BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data);
 BootloaderHandleMessageResponse get_gui_button(const GetGUIButton *data, GetGUIButton_Response *response);
 BootloaderHandleMessageResponse remove_gui_button(const RemoveGUIButton *data);

@@ -596,7 +596,7 @@ BootloaderHandleMessageResponse get_gui_tab_icon(const GetGUITabIcon *data, GetG
 
 	if(gui.tab[data->index].active_icon) {
 		response->active = true;
-		strncpy(response->icon, gui.tab[data->index].icon, 28*6/8);
+		memcpy(response->icon, gui.tab[data->index].icon, 28*6/8);
 	} else {
 		response->active = false;
 	}

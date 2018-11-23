@@ -25,10 +25,10 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define GUI_BUTTON_NUM_MAX 10
+#define GUI_BUTTON_NUM_MAX 12
 #define GUI_BUTTON_TEXT_LENGTH_MAX 16
 
-#define GUI_SLIDER_NUM_MAX 10
+#define GUI_SLIDER_NUM_MAX 6
 #define GUI_SLIDER_KNOB_WIDTH 17
 #define GUI_SLIDER_KNOB_LENGTH 8
 

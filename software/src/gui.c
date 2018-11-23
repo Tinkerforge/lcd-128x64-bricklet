@@ -106,7 +106,7 @@ void gui_draw_line_horizontal(const uint8_t x_start, const uint8_t x_end, const 
 	}
 }
 
-void gui_draw_button(uint8_t index) {
+void gui_draw_button(const uint8_t index) {
 	const uint8_t x_start = gui.button[index].position_x;
 	const uint8_t x_end   = gui.button[index].position_x + gui.button[index].width - 1;
 	const uint8_t y_start = gui.button[index].position_y;
@@ -137,7 +137,7 @@ void gui_draw_button(uint8_t index) {
 	}
 }
 
-void gui_draw_slider(uint8_t index) {
+void gui_draw_slider(const uint8_t index) {
 	if(gui.slider[index].direction == LCD_128X64_DIRECTION_HORIZONTAL) {
 		const uint8_t slider_start_x = gui.slider[index].position_x;
 		const uint8_t slider_end_x   = gui.slider[index].position_x + gui.slider[index].length - 1;
@@ -320,7 +320,7 @@ void gui_draw_tabs(void) {
 	}
 }
 
-void gui_draw_graph(uint8_t index) {
+void gui_draw_graph(const uint8_t index) {
 	gui_draw_box(gui.graph[index].position_x, 
 	             gui.graph[index].position_x + gui.graph[index].width, 
 				 gui.graph[index].position_y, 
@@ -430,7 +430,7 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 	}
 }
 
-bool gui_point_in_slider(uint8_t x, uint8_t y) {
+bool gui_point_in_slider(const uint8_t x, const uint8_t y) {
 	for(uint8_t i = 0; i < GUI_SLIDER_NUM_MAX; i++) {
 		if(!gui.slider[i].active) {
 			continue;

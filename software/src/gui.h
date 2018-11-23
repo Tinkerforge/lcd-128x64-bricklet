@@ -125,8 +125,8 @@ extern GUI gui;
 void gui_remove_all(const bool buttons, const bool slider, const bool graphs, const bool tabs);
 void gui_update_tabs(void);
 void gui_redraw(void);
-void gui_draw_button(uint8_t index);
-void gui_draw_slider(uint8_t index);
+void gui_draw_button(const uint8_t index);
+void gui_draw_slider(const uint8_t index);
 void gui_init(void);
 void gui_tick(void);
 

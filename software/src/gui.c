@@ -558,6 +558,16 @@ bool gui_point_in_slider(const uint8_t x, const uint8_t y) {
 }
 
 void gui_touch_check(void) {
+	// Do gui touch check only every fifth loop.
+	// If we have lots of stuff to draw it can happen that we check again before the
+	// touch was detected, resulting in false-positive touch releases.
+	static uint8_t count = 0;
+	count++;
+	if(count < 5) {
+		return;
+	}
+	count = 0;
+
 	bool redraw = false;
 	const bool touch = !system_timer_is_time_elapsed_ms(tsc2046e.touch_time, 50);
 

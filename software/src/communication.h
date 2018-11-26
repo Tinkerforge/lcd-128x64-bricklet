@@ -123,10 +123,10 @@ void communication_init(void);
 #define FID_SET_GUI_TAB_ICON 37
 #define FID_GET_GUI_TAB_ICON 38
 #define FID_REMOVE_GUI_TAB 39
-#define FID_SET_GUI_TAB_CURRENT 40
-#define FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 41
-#define FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION 42
-#define FID_GET_GUI_TAB_CURRENT 43
+#define FID_SET_GUI_TAB_SELECTED 40
+#define FID_SET_GUI_TAB_SELECTED_CALLBACK_CONFIGURATION 41
+#define FID_GET_GUI_TAB_SELECTED_CALLBACK_CONFIGURATION 42
+#define FID_GET_GUI_TAB_SELECTED 43
 #define FID_SET_GUI_GRAPH_CONFIGURATION 45
 #define FID_GET_GUI_GRAPH_CONFIGURATION 46
 #define FID_SET_GUI_GRAPH_DATA_LOW_LEVEL 47
@@ -140,7 +140,7 @@ void communication_init(void);
 #define FID_CALLBACK_TOUCH_GESTURE 15
 #define FID_CALLBACK_GUI_BUTTON_PRESSED 25
 #define FID_CALLBACK_GUI_SLIDER_VALUE 32
-#define FID_CALLBACK_GUI_TAB_CURRENT 44
+#define FID_CALLBACK_GUI_TAB_SELECTED 44
 
 typedef struct {
 	TFPMessageHeader header;
@@ -494,37 +494,37 @@ typedef struct {
 typedef struct {
 	TFPMessageHeader header;
 	uint8_t index;
-} __attribute__((__packed__)) SetGUITabCurrent;
+} __attribute__((__packed__)) SetGUITabSelected;
 
 typedef struct {
 	TFPMessageHeader header;
 	uint32_t period;
 	bool value_has_to_change;
-} __attribute__((__packed__)) SetGUITabCurrentCallbackConfiguration;
+} __attribute__((__packed__)) SetGUITabSelectedCallbackConfiguration;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetGUITabCurrentCallbackConfiguration;
+} __attribute__((__packed__)) GetGUITabSelectedCallbackConfiguration;
 
 typedef struct {
 	TFPMessageHeader header;
 	uint32_t period;
 	bool value_has_to_change;
-} __attribute__((__packed__)) GetGUITabCurrentCallbackConfiguration_Response;
+} __attribute__((__packed__)) GetGUITabSelectedCallbackConfiguration_Response;
 
 typedef struct {
 	TFPMessageHeader header;
-} __attribute__((__packed__)) GetGUITabCurrent;
-
-typedef struct {
-	TFPMessageHeader header;
-	int8_t index;
-} __attribute__((__packed__)) GetGUITabCurrent_Response;
+} __attribute__((__packed__)) GetGUITabSelected;
 
 typedef struct {
 	TFPMessageHeader header;
 	int8_t index;
-} __attribute__((__packed__)) GUITabCurrent_Callback;
+} __attribute__((__packed__)) GetGUITabSelected_Response;
+
+typedef struct {
+	TFPMessageHeader header;
+	int8_t index;
+} __attribute__((__packed__)) GUITabSelected_Callback;
 
 typedef struct {
 	TFPMessageHeader header;
@@ -635,10 +635,10 @@ BootloaderHandleMessageResponse get_gui_tab_text(const GetGUITabText *data, GetG
 BootloaderHandleMessageResponse set_gui_tab_icon(const SetGUITabIcon *data);
 BootloaderHandleMessageResponse get_gui_tab_icon(const GetGUITabIcon *data, GetGUITabIcon_Response *response);
 BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data);
-BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data);
-BootloaderHandleMessageResponse set_gui_tab_current_callback_configuration(const SetGUITabCurrentCallbackConfiguration *data);
-BootloaderHandleMessageResponse get_gui_tab_current_callback_configuration(const GetGUITabCurrentCallbackConfiguration *data, GetGUITabCurrentCallbackConfiguration_Response *response);
-BootloaderHandleMessageResponse get_gui_tab_current(const GetGUITabCurrent *data, GetGUITabCurrent_Response *response);
+BootloaderHandleMessageResponse set_gui_tab_selected(const SetGUITabSelected *data);
+BootloaderHandleMessageResponse set_gui_tab_selected_callback_configuration(const SetGUITabSelectedCallbackConfiguration *data);
+BootloaderHandleMessageResponse get_gui_tab_selected_callback_configuration(const GetGUITabSelectedCallbackConfiguration *data, GetGUITabSelectedCallbackConfiguration_Response *response);
+BootloaderHandleMessageResponse get_gui_tab_selected(const GetGUITabSelected *data, GetGUITabSelected_Response *response);
 BootloaderHandleMessageResponse set_gui_graph_configuration(const SetGUIGraphConfiguration *data);
 BootloaderHandleMessageResponse get_gui_graph_configuration(const GetGUIGraphConfiguration *data, GetGUIGraphConfiguration_Response *response);
 BootloaderHandleMessageResponse set_gui_graph_data_low_level(const SetGUIGraphDataLowLevel *data);
@@ -653,7 +653,7 @@ bool handle_touch_position_callback(void);
 bool handle_touch_gesture_callback(void);
 bool handle_gui_button_pressed_callback(void);
 bool handle_gui_slider_value_callback(void);
-bool handle_gui_tab_current_callback(void);
+bool handle_gui_tab_selected_callback(void);
 
 #define COMMUNICATION_CALLBACK_TICK_WAIT_MS 1
 #define COMMUNICATION_CALLBACK_HANDLER_NUM 5
@@ -662,7 +662,7 @@ bool handle_gui_tab_current_callback(void);
 	handle_touch_gesture_callback, \
 	handle_gui_button_pressed_callback, \
 	handle_gui_slider_value_callback, \
-	handle_gui_tab_current_callback, \
+	handle_gui_tab_selected_callback, \
 
 
 #endif

@@ -344,7 +344,7 @@ void gui_update_tabs(void) {
 	gui.tabs_current = 0;
 	for(uint8_t i = 0; i < GUI_TAB_NUM_MAX; i++) {
 		if(gui.tab[i].active_text || gui.tab[i].active_icon) {
-			if(gui.tab_current == i) {
+			if(gui.tab_selected == i) {
 				gui.tabs_current = gui.tabs_count;
 			}
 
@@ -355,7 +355,7 @@ void gui_update_tabs(void) {
 }
 
 void gui_draw_tabs(void) {
-	if((gui.tab_current == -1) || (gui.tabs_count == 0)) {
+	if((gui.tab_selected == -1) || (gui.tabs_count == 0)) {
 		return;
 	}
 
@@ -671,7 +671,7 @@ void gui_touch_check(void) {
 					}
 					if((new_tabs_current >= 0) && (new_tabs_current < gui.tabs_count) && (gui.tabs[new_tabs_current] != -1)) {
 						gui.tabs_current = new_tabs_current;
-						gui.tab_current = gui.tabs[new_tabs_current];
+						gui.tab_selected = gui.tabs[new_tabs_current];
 						redraw = true;
 						if(gui.tab_clear_gui) {
 							gui_remove_all(true, true, true, false);
@@ -692,7 +692,7 @@ void gui_touch_check(void) {
 					if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
 						if((gui.tabs_current != (gui.tabs_count-1)) && (gui.tabs[gui.tabs_current+1] != -1)) {
 							gui.tabs_current++;
-							gui.tab_current = gui.tabs[gui.tabs_current];
+							gui.tab_selected = gui.tabs[gui.tabs_current];
 							redraw = true;
 							if(gui.tab_clear_gui) {
 								gui_remove_all(true, true, true, false);
@@ -701,7 +701,7 @@ void gui_touch_check(void) {
 					} else if(tsc2046e.gesture_api_gesture == LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
 						if((gui.tabs_current != 0) && (gui.tabs[gui.tabs_current-1] != -1)) {
 							gui.tabs_current--;
-							gui.tab_current = gui.tabs[gui.tabs_current];
+							gui.tab_selected = gui.tabs[gui.tabs_current];
 							redraw = true;
 							if(gui.tab_clear_gui) {
 								gui_remove_all(true, true, true, false);
@@ -746,7 +746,7 @@ void gui_redraw(void) {
 void gui_init(void) {
 	memset(&gui, 0, sizeof(GUI));
 
-	gui.tab_current = -1;
+	gui.tab_selected = -1;
 	gui.tab_clear_gui = false;
 	gui.tab_change_tab_config = LCD_128X64_CHANGE_TAB_ON_CLICK_AND_SWIPE;
 }

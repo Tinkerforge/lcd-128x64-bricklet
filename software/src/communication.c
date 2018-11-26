@@ -73,10 +73,10 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_SET_GUI_TAB_ICON: return set_gui_tab_icon(message);
 		case FID_GET_GUI_TAB_ICON: return get_gui_tab_icon(message, response);
 		case FID_REMOVE_GUI_TAB: return remove_gui_tab(message);
-		case FID_SET_GUI_TAB_CURRENT: return set_gui_tab_current(message);
-		case FID_SET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION: return set_gui_tab_current_callback_configuration(message);
-		case FID_GET_GUI_TAB_CURRENT_CALLBACK_CONFIGURATION: return get_gui_tab_current_callback_configuration(message, response);
-		case FID_GET_GUI_TAB_CURRENT: return get_gui_tab_current(message, response);
+		case FID_SET_GUI_TAB_SELECTED: return set_gui_tab_selected(message);
+		case FID_SET_GUI_TAB_SELECTED_CALLBACK_CONFIGURATION: return set_gui_tab_selected_callback_configuration(message);
+		case FID_GET_GUI_TAB_SELECTED_CALLBACK_CONFIGURATION: return get_gui_tab_selected_callback_configuration(message, response);
+		case FID_GET_GUI_TAB_SELECTED: return get_gui_tab_selected(message, response);
 		case FID_SET_GUI_GRAPH_CONFIGURATION: return set_gui_graph_configuration(message);
 		case FID_GET_GUI_GRAPH_CONFIGURATION: return get_gui_graph_configuration(message, response);
 		case FID_SET_GUI_GRAPH_DATA_LOW_LEVEL: return set_gui_graph_data_low_level(message);
@@ -419,6 +419,10 @@ BootloaderHandleMessageResponse draw_text(const DrawText *data) {
 }
 
 BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data) {
+	if((data->width == 0) || (data->height == 0)) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
 	if((data->position_x + data->width >= LCD_MAX_COLUMNS)   || 
 	   (data->position_y + data->height >= (LCD_MAX_ROWS*8)) || 
 	   (data->index >= GUI_BUTTON_NUM_MAX)) {
@@ -620,8 +624,8 @@ BootloaderHandleMessageResponse set_gui_tab_text(const SetGUITabText *data) {
 	gui.tab[data->index].active_icon = false;
 	strncpy(gui.tab[data->index].text, data->text, GUI_TAB_TEXT_LENGTH_MAX);
 
-	if(gui.tab_current == -1) {
-		gui.tab_current = data->index;
+	if(gui.tab_selected == -1) {
+		gui.tab_selected = data->index;
 	}
 
 	gui_update_tabs();
@@ -657,8 +661,8 @@ BootloaderHandleMessageResponse set_gui_tab_icon(const SetGUITabIcon *data) {
 	gui.tab[data->index].active_text = false;
 	memcpy(gui.tab[data->index].icon, data->icon, 28*6/8);
 
-	if(gui.tab_current == -1) {
-		gui.tab_current = data->index;
+	if(gui.tab_selected == -1) {
+		gui.tab_selected = data->index;
 	}
 
 	gui_update_tabs();
@@ -696,11 +700,11 @@ BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data) {
 
 	gui.tab[data->index].active_icon = false;
 	gui.tab[data->index].active_text = false;
-	if(gui.tab_current == data->index) {
-		gui.tab_current = -1;
+	if(gui.tab_selected == data->index) {
+		gui.tab_selected = -1;
 		for(uint8_t i = 0; i < GUI_TAB_NUM_MAX; i++) {
 			if(gui.tab[i].active_icon || gui.tab[i].active_text) {
-				gui.tab_current = i;
+				gui.tab_selected = i;
 				break;
 			}
 		}
@@ -712,13 +716,13 @@ BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data) {
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data) {
+BootloaderHandleMessageResponse set_gui_tab_selected(const SetGUITabSelected *data) {
 	if(data->index > GUI_TAB_NUM_MAX) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
 	if(gui.tab[data->index].active_icon || gui.tab[data->index].active_text) {
-		gui.tab_current = data->index;
+		gui.tab_selected = data->index;
 		gui_update_tabs();
 		gui_redraw();
 	}
@@ -726,24 +730,24 @@ BootloaderHandleMessageResponse set_gui_tab_current(const SetGUITabCurrent *data
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse set_gui_tab_current_callback_configuration(const SetGUITabCurrentCallbackConfiguration *data) {
+BootloaderHandleMessageResponse set_gui_tab_selected_callback_configuration(const SetGUITabSelectedCallbackConfiguration *data) {
 	gui.tab_cb_period              = data->period;
 	gui.tab_cb_value_has_to_change = data->value_has_to_change;
 
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
-BootloaderHandleMessageResponse get_gui_tab_current_callback_configuration(const GetGUITabCurrentCallbackConfiguration *data, GetGUITabCurrentCallbackConfiguration_Response *response) {
-	response->header.length       = sizeof(GetGUITabCurrentCallbackConfiguration_Response);
+BootloaderHandleMessageResponse get_gui_tab_selected_callback_configuration(const GetGUITabSelectedCallbackConfiguration *data, GetGUITabSelectedCallbackConfiguration_Response *response) {
+	response->header.length       = sizeof(GetGUITabSelectedCallbackConfiguration_Response);
 	response->period              = gui.tab_cb_period;
 	response->value_has_to_change = gui.tab_cb_value_has_to_change;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
 
-BootloaderHandleMessageResponse get_gui_tab_current(const GetGUITabCurrent *data, GetGUITabCurrent_Response *response) {
-	response->header.length = sizeof(GetGUITabCurrent_Response);
-	response->index         = gui.tab_current;
+BootloaderHandleMessageResponse get_gui_tab_selected(const GetGUITabSelected *data, GetGUITabSelected_Response *response) {
+	response->header.length = sizeof(GetGUITabSelected_Response);
+	response->index         = gui.tab_selected;
 
 	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
 }
@@ -1094,34 +1098,34 @@ bool handle_gui_slider_value_callback(void) {
 	return false;
 }
 
-bool handle_gui_tab_current_callback(void) {
+bool handle_gui_tab_selected_callback(void) {
 	static bool is_buffered = false;
-	static GUITabCurrent_Callback cb;
+	static GUITabSelected_Callback cb;
 	static uint32_t last_time = 0;
-	static int8_t last_current = 0;
+	static int8_t last_selected = 0;
 
 	if(!is_buffered) {
 		if((gui.tab_cb_period == 0) || !system_timer_is_time_elapsed_ms(last_time, gui.tab_cb_period)) {
 			return false;
 		}
 
-		if(gui.tab_cb_value_has_to_change && (last_current == gui.tab_current)) {
+		if(gui.tab_cb_value_has_to_change && (last_selected == gui.tab_selected)) {
 			return false;
 		}
 
-		last_current = gui.tab_current;
-		if(last_current == -1) {
+		last_selected = gui.tab_selected;
+		if(last_selected == -1) {
 			return false;
 		}
 
-		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(GUITabCurrent_Callback), FID_CALLBACK_GUI_TAB_CURRENT);
-		cb.index = gui.tab_current;
+		tfp_make_default_header(&cb.header, bootloader_get_uid(), sizeof(GUITabSelected_Callback), FID_CALLBACK_GUI_TAB_SELECTED);
+		cb.index = gui.tab_selected;
 
 		last_time = system_timer_get_ms();
 	}
 
 	if(bootloader_spitfp_is_send_possible(&bootloader_status.st)) {
-		bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t*)&cb, sizeof(GUITabCurrent_Callback));
+		bootloader_spitfp_send_ack_and_message(&bootloader_status, (uint8_t*)&cb, sizeof(GUITabSelected_Callback));
 		is_buffered = false;
 		return true;
 	} else {

@@ -96,7 +96,7 @@ typedef struct {
 	bool slider_cb_value_has_to_change;
 
     GUITab tab[GUI_TAB_NUM_MAX];
-    int8_t tab_current;
+    int8_t tab_selected;
 	uint32_t tab_cb_period;
 	bool tab_cb_value_has_to_change;
 

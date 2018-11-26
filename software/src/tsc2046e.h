@@ -55,6 +55,8 @@ typedef struct {
 	uint16_t gesture_api_pressure_max;
 	uint32_t gesture_api_duration;
 	uint32_t gesture_api_time;
+
+	bool use_old_led_pin;
 } TSC2046E;
 
 extern TSC2046E tsc2046e;

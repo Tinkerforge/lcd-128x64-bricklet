@@ -52,6 +52,7 @@
 
 #define TSC2046E_PENIRQ_PIN           P1_1
 #define TSC2046E_BUSY_PIN             P0_6
-#define TSC2046E_LED_PIN              P2_1
+#define TSC2046E_LED_PIN              P2_10
+#define TSC2046E_LED_PIN_OLD          P2_1
 
 #endif

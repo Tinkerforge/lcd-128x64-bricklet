@@ -161,8 +161,12 @@ void tsc2046e_task_tick(void) {
 				}
 
 				tsc2046e.touch_time = system_timer_get_ms();
-
-				XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN);
+				
+				if(tsc2046e.use_old_led_pin) {
+					XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN_OLD);
+				} else {
+					XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN);
+				}
 
 				tsc2046e.gesture_x_end = tsc2046e.touch_x;
 				tsc2046e.gesture_y_end = tsc2046e.touch_y;
@@ -185,10 +189,18 @@ void tsc2046e_task_tick(void) {
 			}
 
 			last_measure_ok = false;
-			XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN);
+			if(tsc2046e.use_old_led_pin) {
+				XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN_OLD);
+			} else {
+				XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN);
+			}
 		}
 		coop_task_yield();
 	}
+}
+
+bool tsc2046e_init_is_output(XMC_GPIO_PORT_t *const port, const uint8_t pin) {
+	return port->IOCR[pin >> 2U] & (uint32_t)XMC_GPIO_MODE_OUTPUT_PUSH_PULL << (PORT_IOCR_PC_Size * (pin & 0x3U));
 }
 
 void tsc2046e_init(void) {
@@ -209,9 +221,17 @@ void tsc2046e_init(void) {
 		.output_level     = XMC_GPIO_OUTPUT_LEVEL_HIGH
 	};
 
-	// Configure led
-	XMC_GPIO_Init(TSC2046E_LED_PIN, &pin_high_config);
-
+	// Configure led:
+	// First we check if the led pin is already set to output, in this case we use the old
+	// LED pin. There was a bug in an early version of the bootloader, that used the touch
+	// LED as the status LED. If the Brickelt uses one of those old bootloaders, we use the
+	// status LED as touch LED (since we can't change the status LED pin in the bootloader).
+	if(tsc2046e_init_is_output(TSC2046E_LED_PIN)) {
+		tsc2046e.use_old_led_pin = true;
+		XMC_GPIO_Init(TSC2046E_LED_PIN_OLD, &pin_high_config);
+	} else {
+		XMC_GPIO_Init(TSC2046E_LED_PIN, &pin_high_config);
+	}
 
 	const XMC_GPIO_CONFIG_t pin_config_input = {
 		.mode             = XMC_GPIO_MODE_INPUT_TRISTATE,

@@ -25,6 +25,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include "bricklib2/utility/led_flicker.h"
+
 #define TSC2046E_GESTURE_LIST_LENGTH 1024
 
 typedef struct {
@@ -57,6 +59,7 @@ typedef struct {
 	uint32_t gesture_api_time;
 
 	bool use_old_led_pin;
+	LEDFlickerState led_state;
 } TSC2046E;
 
 extern TSC2046E tsc2046e;

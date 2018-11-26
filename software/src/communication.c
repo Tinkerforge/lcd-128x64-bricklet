@@ -28,6 +28,8 @@
 #include "bricklib2/protocols/tfp/tfp.h"
 #include "bricklib2/hal/system_timer/system_timer.h"
 
+#include "configs/config_tsc2046e.h"
+
 #include "uc1701.h"
 #include "tsc2046e.h"
 #include "gui.h"
@@ -81,6 +83,8 @@ BootloaderHandleMessageResponse handle_message(const void *message, void *respon
 		case FID_GET_GUI_GRAPH_DATA_LOW_LEVEL: return get_gui_graph_data_low_level(message, response);
 		case FID_REMOVE_GUI_GRAPH: return remove_gui_graph(message);
 		case FID_REMOVE_ALL_GUI: return remove_all_gui(message);
+		case FID_SET_TOUCH_LED_CONFIG: return set_touch_led_config(message);
+		case FID_GET_TOUCH_LED_CONFIG: return get_touch_led_config(message, response);
 		default: return HANDLE_MESSAGE_RESPONSE_NOT_SUPPORTED;
 	}
 }
@@ -878,6 +882,36 @@ BootloaderHandleMessageResponse remove_all_gui(const RemoveAllGUI *data) {
 	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
+BootloaderHandleMessageResponse set_touch_led_config(const SetTouchLEDConfig *data) {
+	if(data->config > LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH) {
+		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
+	}
+
+	tsc2046e.led_state.config = data->config == LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH ? LED_FLICKER_CONFIG_EXTERNAL : data->config;
+	// Set LED according to value
+	if((tsc2046e.led_state.config == LED_FLICKER_CONFIG_OFF) || (tsc2046e.led_state.config == LED_FLICKER_CONFIG_EXTERNAL)) {
+		if(tsc2046e.use_old_led_pin) {
+			XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN_OLD);
+		} else {
+			XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN);
+		}
+	} else {
+		if(tsc2046e.use_old_led_pin) {
+			XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN_OLD);
+		} else {
+			XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN);
+		}
+	}
+
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
+}
+
+BootloaderHandleMessageResponse get_touch_led_config(const GetTouchLEDConfig *data, GetTouchLEDConfig_Response *response) {
+	response->header.length = sizeof(GetTouchLEDConfig_Response);
+	response->config        = tsc2046e.led_state.config == LED_FLICKER_CONFIG_EXTERNAL ? LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH : tsc2046e.led_state.config;
+
+	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+}
 
 bool handle_touch_position_callback(void) {
 	static bool is_buffered = false;

@@ -64,6 +64,11 @@ void communication_init(void);
 #define LCD_128X64_GRAPH_TYPE_LINE 1
 #define LCD_128X64_GRAPH_TYPE_BAR 2
 
+#define LCD_128X64_TOUCH_LED_CONFIG_OFF 0
+#define LCD_128X64_TOUCH_LED_CONFIG_ON 1
+#define LCD_128X64_TOUCH_LED_CONFIG_SHOW_HEARTBEAT 2
+#define LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH 3
+
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER 0
 #define LCD_128X64_BOOTLOADER_MODE_FIRMWARE 1
 #define LCD_128X64_BOOTLOADER_MODE_BOOTLOADER_WAIT_FOR_REBOOT 2
@@ -128,6 +133,8 @@ void communication_init(void);
 #define FID_GET_GUI_GRAPH_DATA_LOW_LEVEL 48
 #define FID_REMOVE_GUI_GRAPH 49
 #define FID_REMOVE_ALL_GUI 50
+#define FID_SET_TOUCH_LED_CONFIG 51
+#define FID_GET_TOUCH_LED_CONFIG 52
 
 #define FID_CALLBACK_TOUCH_POSITION 11
 #define FID_CALLBACK_TOUCH_GESTURE 15
@@ -448,7 +455,7 @@ typedef struct {
 typedef struct {
 	TFPMessageHeader header;
 	uint8_t index;
-	char text[8];
+	char text[5];
 } __attribute__((__packed__)) SetGUITabText;
 
 typedef struct {
@@ -459,7 +466,7 @@ typedef struct {
 typedef struct {
 	TFPMessageHeader header;
 	bool active;
-	char text[8];
+	char text[5];
 } __attribute__((__packed__)) GetGUITabText_Response;
 
 typedef struct {
@@ -577,6 +584,20 @@ typedef struct {
 	TFPMessageHeader header;
 } __attribute__((__packed__)) RemoveAllGUI;
 
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t config;
+} __attribute__((__packed__)) SetTouchLEDConfig;
+
+typedef struct {
+	TFPMessageHeader header;
+} __attribute__((__packed__)) GetTouchLEDConfig;
+
+typedef struct {
+	TFPMessageHeader header;
+	uint8_t config;
+} __attribute__((__packed__)) GetTouchLEDConfig_Response;
+
 
 // Function prototypes
 BootloaderHandleMessageResponse write_pixels_low_level(const WritePixelsLowLevel *data);
@@ -624,6 +645,8 @@ BootloaderHandleMessageResponse set_gui_graph_data_low_level(const SetGUIGraphDa
 BootloaderHandleMessageResponse get_gui_graph_data_low_level(const GetGUIGraphDataLowLevel *data, GetGUIGraphDataLowLevel_Response *response);
 BootloaderHandleMessageResponse remove_gui_graph(const RemoveGUIGraph *data);
 BootloaderHandleMessageResponse remove_all_gui(const RemoveAllGUI *data);
+BootloaderHandleMessageResponse set_touch_led_config(const SetTouchLEDConfig *data);
+BootloaderHandleMessageResponse get_touch_led_config(const GetTouchLEDConfig *data, GetTouchLEDConfig_Response *response);
 
 // Callbacks
 bool handle_touch_position_callback(void);

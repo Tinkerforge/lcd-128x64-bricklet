@@ -162,10 +162,12 @@ void tsc2046e_task_tick(void) {
 
 				tsc2046e.touch_time = system_timer_get_ms();
 				
-				if(tsc2046e.use_old_led_pin) {
-					XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN_OLD);
-				} else {
-					XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN);
+				if(tsc2046e.led_state.config == LED_FLICKER_CONFIG_EXTERNAL) {
+					if(tsc2046e.use_old_led_pin) {
+						XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN_OLD);
+					} else {
+						XMC_GPIO_SetOutputLow(TSC2046E_LED_PIN);
+					}
 				}
 
 				tsc2046e.gesture_x_end = tsc2046e.touch_x;
@@ -189,10 +191,12 @@ void tsc2046e_task_tick(void) {
 			}
 
 			last_measure_ok = false;
-			if(tsc2046e.use_old_led_pin) {
-				XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN_OLD);
-			} else {
-				XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN);
+			if(tsc2046e.led_state.config == LED_FLICKER_CONFIG_EXTERNAL) {
+				if(tsc2046e.use_old_led_pin) {
+					XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN_OLD);
+				} else {
+					XMC_GPIO_SetOutputHigh(TSC2046E_LED_PIN);
+				}
 			}
 		}
 		coop_task_yield();
@@ -241,9 +245,20 @@ void tsc2046e_init(void) {
 	XMC_GPIO_Init(TSC2046E_BUSY_PIN, &pin_config_input);
 	XMC_GPIO_Init(TSC2046E_PENIRQ_PIN, &pin_config_input);
 
+	tsc2046e.led_state.config  = LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH;
+	tsc2046e.led_state.counter = 0;
+	tsc2046e.led_state.start   = 0;
+
 	coop_task_init(&tsc2046e_task, tsc2046e_task_tick);
 }
 
 void tsc2046e_tick(void) {
+	if(tsc2046e.led_state.config != LED_FLICKER_CONFIG_EXTERNAL) {
+		if(tsc2046e.use_old_led_pin) {
+			led_flicker_tick(&tsc2046e.led_state, system_timer_get_ms(), TSC2046E_LED_PIN_OLD);
+		} else {
+			led_flicker_tick(&tsc2046e.led_state, system_timer_get_ms(), TSC2046E_LED_PIN);
+		}
+	}
 	coop_task_tick(&tsc2046e_task);
 }

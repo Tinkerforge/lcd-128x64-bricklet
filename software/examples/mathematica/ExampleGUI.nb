@@ -1,0 +1,85 @@
+Notebook[{
+ Cell[
+  BoxData[{
+   RowBox[{"Needs", "[", "\"\<NETLink`\>\"", "]"}],
+   RowBox[{"LoadNETAssembly", "[", RowBox[{"\"\<Tinkerforge\>\"", ",", RowBox[{RowBox[{"NotebookDirectory", "[", "]"}], "<>", "\"\<../../..\>\""}]}], "]"}]
+  }], "Input"
+ ],
+ Cell[
+  BoxData[{
+   RowBox[{"host", "=", "\"\<localhost\>\""}],
+   RowBox[{"port", "=", "4223"}],
+   RowBox[{"uid", "=", "\"\<XYZ\>\"", RowBox[{"(*", "Change XYZ to the UID of your LCD 128x64 Bricklet", "*)"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Create IPConnection and device object", "*)"}],
+   RowBox[{"ipcon", "=", RowBox[{"NETNew", "[", "\"\<Tinkerforge.IPConnection\>\"", "]"}]}],
+   RowBox[{"lcd", "=", RowBox[{"NETNew", "[", RowBox[{"\"\<Tinkerforge.BrickletLCD128x64\>\"", ",", "uid", ",", "ipcon"}], "]"}]}],
+   RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Callback function for gui button pressed callback", "*)"}],
+   RowBox[{RowBox[{"GUIButtonPressedCB", "[", RowBox[{"sender_", ",", "index_", ",", "pressed_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Pressed: \>\"", "<>", RowBox[{"ToString", "[", "pressed", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUIButtonPressedCallback"}], ",", "GUIButtonPressedCB"}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Callback function for gui slider value callback", "*)"}],
+   RowBox[{RowBox[{"GUISliderValueCB", "[", RowBox[{"sender_", ",", "index_", ",", "value_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Value: \>\"", "<>", RowBox[{"ToString", "[", "value", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUISliderValueCallback"}], ",", "GUISliderValueCB"}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Callback function for gui tab selected callback", "*)"}],
+   RowBox[{RowBox[{"GUITabSelectedCB", "[", RowBox[{"sender_", ",", "index_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}]}],
+   RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUITabSelectedCallback"}], ",", "GUITabSelectedCB"}], "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Clear display", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"ClearDisplay", "[", "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"RemoveAllGUI", "[", "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Add GUI elements: Button, Slider and Graph with 60 data points", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUIButton", "[", RowBox[{"0", ",", "0", ",", "0", ",", "60", ",", "20", ",", "\"\<button\>\""}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUISlider", "[", RowBox[{"0", ",", "0", ",", "30", ",", "60", ",", "Tinkerforge`BrickletLCD128x64`DIRECTIONUHORIZONTAL", ",", "50"}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUIGraphConfiguration", "[", RowBox[{"0", ",", "Tinkerforge`BrickletLCD128x64`GRAPHUTYPEULINE", ",", "62", ",", "0", ",", "60", ",", "52", ",", RowBox[{"\[IndentingNewLine]", "\"\<X\>\""}], ",", "\"\<Y\>\""}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Add a few data points (the remaining points will be 0)", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUIGraphData", "[", RowBox[{"0", ",", RowBox[{"{", RowBox[{"20", ",", "40", ",", "60", ",", "80", ",", "100", ",", "120", ",", "140", ",", "160", ",", "180", ",", "200", ",", "220", ",", "240"}], "}"}]}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Add 5 text tabs without and configure it for click and swipe without auto-redraw", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabConfiguration", "[", RowBox[{"Tinkerforge`BrickletLCD128x64`CHANGEUTABUONUCLICKUANDUSWIPE", ",", RowBox[{"\[IndentingNewLine]", "False"}]}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"0", ",", "\"\<Tab A\>\""}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"1", ",", "\"\<Tab B\>\""}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"2", ",", "\"\<Tab C\>\""}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"3", ",", "\"\<Tab D\>\""}], "]"}]}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"4", ",", "\"\<Tab E\>\""}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Set period for gui button pressed callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUIButtonPressedCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Set period for gui slider value callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUISliderValueCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Set period for gui tab selected callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"lcd", "@", RowBox[{"SetGUITabSelectedCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
+   RowBox[{"
+"}],
+   RowBox[{"Input", "[", "\"\<Click OK to exit\>\"", "]"}],
+   RowBox[{"
+"}],
+   RowBox[{"(*", "Clean up", "*)"}],
+   RowBox[{"ipcon", "@", RowBox[{"Disconnect", "[", "]"}]}],
+   RowBox[{"ReleaseNETObject", "[", "lcd", "]"}],
+   RowBox[{"ReleaseNETObject", "[", "ipcon", "]"}]
+  }], "Input"
+ ]
+}]

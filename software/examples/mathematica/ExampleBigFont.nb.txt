@@ -1,0 +1,23 @@
+Needs["NETLink`"]
+LoadNETAssembly["Tinkerforge",NotebookDirectory[]<>"../../.."]
+
+host="localhost"
+port=4223
+uid="XYZ"(*Change XYZ to the UID of your LCD 128x64 Bricklet*)
+
+(*Create IPConnection and device object*)
+ipcon=NETNew["Tinkerforge.IPConnection"]
+lcd=NETNew["Tinkerforge.BrickletLCD128x64",uid,ipcon]
+ipcon@Connect[host,port]
+
+(*Clear display*)
+lcd@ClearDisplay[]
+
+(*Write "Hello World" with big 24x32 font*)
+lcd@DrawText[0,0,Tinkerforge`BrickletLCD128x64`FONTU24X32,
+             Tinkerforge`BrickletLCD128x64`COLORUBLACK,"24x32"]
+
+(*Clean up*)
+ipcon@Disconnect[]
+ReleaseNETObject[lcd]
+ReleaseNETObject[ipcon]

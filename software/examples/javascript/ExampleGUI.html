@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <head>
+        <title>Tinkerforge | JavaScript Example</title>
+    </head>
+    <body>
+        <div style="text-align:center;">
+            <h1>LCD 128x64 Bricklet GUI Example</h1>
+            <p>
+                <input value="localhost" id="host" type="text" size="20">:
+                <input value="4280" id="port" type="text" size="5">,
+                <input value="uid" id="uid" type="text" size="5">
+                <input value="Start Example" id="start" type="button" onclick="startExample();">
+            </p>
+            <p>
+                <textarea readonly id="text" cols="80" rows="24" style="resize:none;"
+                          >Press "Start Example" to begin ...</textarea>
+            </p>
+        </div>
+        <script src="./Tinkerforge.js" type='text/javascript'></script>
+        <script type='text/javascript'>
+            var ipcon;
+            var textArea = document.getElementById("text");
+            function startExample() {
+                textArea.value = "";
+                var HOST = document.getElementById("host").value;
+                var PORT = parseInt(document.getElementById("port").value);
+                var UID = document.getElementById("uid").value;
+                if(ipcon !== undefined) {
+                    ipcon.disconnect();
+                }
+                ipcon = new Tinkerforge.IPConnection(); // Create IP connection
+                var lcd = new Tinkerforge.BrickletLCD128x64(UID, ipcon); // Create device object
+                ipcon.connect(HOST, PORT,
+                    function(error) {
+                        textArea.value += 'Error: ' + error + '\n';
+                    }
+                ); // Connect to brickd
+                // Don't use device before ipcon is connected
+
+                ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
+                    function (connectReason) {
+                        // Clear display
+                        lcd.clearDisplay();
+                        lcd.removeAllGUI();
+
+                        // Add GUI elements: Button, Slider and Graph with 60 data points
+                        lcd.setGUIButton(0, 0, 0, 60, 20, 'button');
+                        lcd.setGUISlider(0, 0, 30, 60,
+                                         Tinkerforge.BrickletLCD128x64.DIRECTION_HORIZONTAL, 50);
+                        lcd.setGUIGraphConfiguration(0, Tinkerforge.BrickletLCD128x64.GRAPH_TYPE_LINE,
+                                                     62, 0, 60, 52, 'X', 'Y');
+
+                        // Add a few data points (the remaining points will be 0)
+                        lcd.setGUIGraphData(0, [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240]);
+
+                        // Add 5 text tabs without and configure it for click and swipe without auto-redraw
+                        lcd.setGUITabConfiguration(Tinkerforge.BrickletLCD128x64.CHANGE_TAB_ON_CLICK_AND_SWIPE,
+                                                   false);
+                        lcd.setGUITabText(0, 'Tab A');
+                        lcd.setGUITabText(1, 'Tab B');
+                        lcd.setGUITabText(2, 'Tab C');
+                        lcd.setGUITabText(3, 'Tab D');
+                        lcd.setGUITabText(4, 'Tab E');
+
+                        // Set period for gui button pressed callback to 0.1s (100ms)
+                        lcd.setGUIButtonPressedCallbackConfiguration(100, true);
+
+                        // Set period for gui slider value callback to 0.1s (100ms)
+                        lcd.setGUISliderValueCallbackConfiguration(100, true);
+
+                        // Set period for gui tab selected callback to 0.1s (100ms)
+                        lcd.setGUITabSelectedCallbackConfiguration(100, true);
+                    }
+                );
+
+                // Register gui button pressed callback
+                lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_BUTTON_PRESSED,
+                    // Callback function for gui button pressed callback
+                    function (index, pressed) {
+                        textArea.value += 'Index: ' + index + '\n';
+                        textArea.value += 'Pressed: ' + pressed + '\n';
+                        textArea.value += '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+
+                // Register gui slider value callback
+                lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_SLIDER_VALUE,
+                    // Callback function for gui slider value callback
+                    function (index, value) {
+                        textArea.value += 'Index: ' + index + '\n';
+                        textArea.value += 'Value: ' + value + '\n';
+                        textArea.value += '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+
+                // Register gui tab selected callback
+                lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_TAB_SELECTED,
+                    // Callback function for gui tab selected callback
+                    function (index) {
+                        textArea.value += 'Index: ' + index + '\n';
+                        textArea.scrollTop = textArea.scrollHeight;
+                    }
+                );
+            }
+        </script>
+    </body>
+</html>

@@ -10,3 +10,6 @@
 - Fix Status/Touch LED mixup
 - Add Set/GetTouchLEDConfig API
 - Add API for simple GUI elements with touch support
+
+TBD: 2.0.3 (TBD)
+- Fix off-by-one in GUI graph height calcultion

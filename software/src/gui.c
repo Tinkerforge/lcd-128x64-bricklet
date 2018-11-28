@@ -438,7 +438,7 @@ void gui_draw_graph(const uint8_t index) {
 	switch(gui.graph[index].graph_type) {
 		case LCD_128X64_GRAPH_TYPE_DOT: {
 			for(uint8_t i = 0; i < gui.graph[index].width; i++) {
-				uint8_t value = gui.graph[index].data[i]*gui.graph[index].height/255;
+				uint8_t value = gui.graph[index].data[i]*(gui.graph[index].height-1)/255;
 				gui_draw_pixel(start_x + i, start_y - value, true);
 			}
 			break;
@@ -446,8 +446,8 @@ void gui_draw_graph(const uint8_t index) {
 
 		case LCD_128X64_GRAPH_TYPE_LINE: {
 			for(uint8_t i = 0; i < gui.graph[index].width-1; i++) {
-				int32_t value0 = gui.graph[index].data[i]*gui.graph[index].height/255;
-				int32_t value1 = gui.graph[index].data[i+1]*gui.graph[index].height/255;
+				int32_t value0 = gui.graph[index].data[i]*(gui.graph[index].height-1)/255;
+				int32_t value1 = gui.graph[index].data[i+1]*(gui.graph[index].height-1)/255;
 				if(ABS(value0 - value1) < 2) {
 					gui_draw_pixel(start_x + i, start_y - value0, true);
 				} else {
@@ -460,14 +460,14 @@ void gui_draw_graph(const uint8_t index) {
 			}
 
 			uint8_t last_index = gui.graph[index].width-1;
-			uint8_t value = gui.graph[index].data[last_index]*gui.graph[index].height/255;
+			uint8_t value = gui.graph[index].data[last_index]*(gui.graph[index].height-1)/255;
 			gui_draw_pixel(start_x + last_index, start_y - value, true);
 			break;
 		}
 
 		case LCD_128X64_GRAPH_TYPE_BAR: {
 			for(uint8_t i = 0; i < gui.graph[index].width; i+= 2) {
-				int32_t value = gui.graph[index].data[i/2]*gui.graph[index].height/255;
+				int32_t value = gui.graph[index].data[i/2]*(gui.graph[index].height-1)/255;
 				gui_draw_line_vertical(start_y - value, start_y, start_x + i, true);
 			}
 			break;

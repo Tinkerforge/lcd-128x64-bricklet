@@ -11,6 +11,6 @@
 - Add Set/GetTouchLEDConfig API
 - Add API for simple GUI elements with touch support
 
-2018-11-28: 2.0.3 (TBD)
+2018-11-28: 2.0.3 (fc2b654)
 - Fix off-by-one in GUI graph height calcultion
 - Fix bug in GUI remove functions

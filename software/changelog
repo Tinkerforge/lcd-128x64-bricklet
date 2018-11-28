@@ -13,3 +13,4 @@
 
 TBD: 2.0.3 (TBD)
 - Fix off-by-one in GUI graph height calcultion
+- Fix bug in GUI remove functions

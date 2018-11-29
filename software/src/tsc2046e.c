@@ -245,7 +245,7 @@ void tsc2046e_init(void) {
 	XMC_GPIO_Init(TSC2046E_BUSY_PIN, &pin_config_input);
 	XMC_GPIO_Init(TSC2046E_PENIRQ_PIN, &pin_config_input);
 
-	tsc2046e.led_state.config  = LCD_128X64_TOUCH_LED_CONFIG_SHOW_TOUCH;
+	tsc2046e.led_state.config  = LED_FLICKER_CONFIG_EXTERNAL;
 	tsc2046e.led_state.counter = 0;
 	tsc2046e.led_state.start   = 0;
 

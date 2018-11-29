@@ -14,3 +14,6 @@
 2018-11-28: 2.0.3 (fc2b654)
 - Fix off-by-one in GUI graph height calcultion
 - Fix bug in GUI remove functions
+
+2018-11-29: 2.0.4 (TBD)
+- Fix wrong initialization of touch LED

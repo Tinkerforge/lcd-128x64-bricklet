@@ -17,3 +17,6 @@
 
 2018-11-29: 2.0.4 (a16f850)
 - Fix wrong initialization of touch LED
+
+2018-11-29: 2.0.5 (TBD)
+- Make sure display is updated on GUI remove-event

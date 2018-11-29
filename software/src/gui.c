@@ -518,6 +518,7 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 	}
 
 	uc1701.display_gui_changed = true;
+	gui_redraw();
 	if(uc1701.automatic_draw) {
 		uc1701.display_user_changed = true;
 	}

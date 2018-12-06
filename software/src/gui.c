@@ -515,6 +515,7 @@ void gui_remove_all(const bool buttons, const bool slider, const bool graphs, co
 			gui.tab[i].active_icon = false;
 		}
 		gui_update_tabs();
+		gui.tab_selected = -1;
 	}
 
 	uc1701.display_gui_changed = true;

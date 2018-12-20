@@ -40,7 +40,19 @@ lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_POSITION,
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_GESTURE,
     // Callback function for touch gesture callback
     function (gesture, duration, pressureMax, xStart, xEnd, yStart, yEnd, age) {
-        console.log('Gesture: ' + gesture);
+        if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT) {
+            console.log('Gesture: Left To Right');
+        }
+        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT) {
+            console.log('Gesture: Right To Left');
+        }
+        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM) {
+            console.log('Gesture: Top To Bottom');
+        }
+        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP) {
+            console.log('Gesture: Bottom To Top');
+        }
+
         console.log('Duration: ' + duration);
         console.log('Pressure Max: ' + pressureMax);
         console.log('X Start: ' + xStart);

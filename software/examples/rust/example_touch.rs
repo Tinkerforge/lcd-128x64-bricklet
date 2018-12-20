@@ -34,7 +34,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     // is dropped, so there is no need for manual cleanup.
     thread::spawn(move || {
         for touch_gesture in touch_gesture_receiver {
-            println!("Gesture: {}", touch_gesture.gesture);
+            if touch_gesture.gesture == LCD_128X64_BRICKLET_GESTURE_LEFT_TO_RIGHT {
+                println!("Gesture: Left To Right");
+            } else if touch_gesture.gesture == LCD_128X64_BRICKLET_GESTURE_RIGHT_TO_LEFT {
+                println!("Gesture: Right To Left");
+            } else if touch_gesture.gesture == LCD_128X64_BRICKLET_GESTURE_TOP_TO_BOTTOM {
+                println!("Gesture: Top To Bottom");
+            } else if touch_gesture.gesture == LCD_128X64_BRICKLET_GESTURE_BOTTOM_TO_TOP {
+                println!("Gesture: Bottom To Top");
+            }
+
             println!("Duration: {}", touch_gesture.duration);
             println!("Pressure Max: {}", touch_gesture.pressure_max);
             println!("X Start: {}", touch_gesture.x_start);

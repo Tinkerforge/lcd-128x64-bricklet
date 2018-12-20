@@ -23,7 +23,7 @@ Module ExampleGUI
     End Sub
 
     ' Callback subroutine for gui tab selected callback
-    Sub GUITabSelectedCB(ByVal sender As BrickletLCD128x64, ByVal index As Byte)
+    Sub GUITabSelectedCB(ByVal sender As BrickletLCD128x64, ByVal index As Short)
         Console.WriteLine("Index: " + index.ToString())
     End Sub
 

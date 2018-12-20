@@ -47,7 +47,19 @@ procedure TExample.TouchGestureCB(sender: TBrickletLCD128x64; const gesture: byt
                                   const yStart: word; const yEnd: word;
                                   const age: longword);
 begin
-  WriteLn(Format('Gesture: %d', [gesture]));
+  if (gesture = BRICKLET_LCD_128X64_GESTURE_LEFT_TO_RIGHT) then begin
+    WriteLn('Gesture: Left To Right');
+  end
+  else if (gesture = BRICKLET_LCD_128X64_GESTURE_RIGHT_TO_LEFT) then begin
+    WriteLn('Gesture: Right To Left');
+  end
+  else if (gesture = BRICKLET_LCD_128X64_GESTURE_TOP_TO_BOTTOM) then begin
+    WriteLn('Gesture: Top To Bottom');
+  end
+  else if (gesture = BRICKLET_LCD_128X64_GESTURE_BOTTOM_TO_TOP) then begin
+    WriteLn('Gesture: Bottom To Top');
+  end;
+
   WriteLn(Format('Duration: %d', [duration]));
   WriteLn(Format('Pressure Max: %d', [pressureMax]));
   WriteLn(Format('X Start: %d', [xStart]));

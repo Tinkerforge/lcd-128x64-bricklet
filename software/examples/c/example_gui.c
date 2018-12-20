@@ -26,10 +26,10 @@ void cb_gui_slider_value(uint8_t index, uint8_t value, void *user_data) {
 }
 
 // Callback function for gui tab selected callback
-void cb_gui_tab_selected(uint8_t index, void *user_data) {
+void cb_gui_tab_selected(int8_t index, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Index: %u\n", index);
+	printf("Index: %d\n", index);
 }
 
 int main(void) {

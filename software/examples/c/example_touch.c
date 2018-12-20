@@ -25,7 +25,16 @@ void cb_touch_gesture(uint8_t gesture, uint32_t duration, uint16_t pressure_max,
                       uint32_t age, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
-	printf("Gesture: %u\n", gesture);
+	if(gesture == LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
+		printf("Gesture: Left To Right\n");
+	} else if(gesture == LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
+		printf("Gesture: Right To Left\n");
+	} else if(gesture == LCD_128X64_GESTURE_TOP_TO_BOTTOM) {
+		printf("Gesture: Top To Bottom\n");
+	} else if(gesture == LCD_128X64_GESTURE_BOTTOM_TO_TOP) {
+		printf("Gesture: Bottom To Top\n");
+	}
+
 	printf("Duration: %u\n", duration);
 	printf("Pressure Max: %u\n", pressure_max);
 	printf("X Start: %u\n", x_start);

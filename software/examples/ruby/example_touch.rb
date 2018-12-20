@@ -30,7 +30,16 @@ lcd.register_callback(BrickletLCD128x64::CALLBACK_TOUCH_GESTURE) do |gesture, du
                                                                      pressure_max,
                                                                      x_start, x_end,
                                                                      y_start, y_end, age|
-  puts "Gesture: #{gesture}"
+  if gesture == BrickletLCD128x64::GESTURE_LEFT_TO_RIGHT
+    puts "Gesture: Left To Right"
+  elsif gesture == BrickletLCD128x64::GESTURE_RIGHT_TO_LEFT
+    puts "Gesture: Right To Left"
+  elsif gesture == BrickletLCD128x64::GESTURE_TOP_TO_BOTTOM
+    puts "Gesture: Top To Bottom"
+  elsif gesture == BrickletLCD128x64::GESTURE_BOTTOM_TO_TOP
+    puts "Gesture: Bottom To Top"
+  end
+
   puts "Duration: #{duration}"
   puts "Pressure Max: #{pressure_max}"
   puts "X Start: #{x_start}"

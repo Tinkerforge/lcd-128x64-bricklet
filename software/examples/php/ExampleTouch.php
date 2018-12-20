@@ -24,7 +24,16 @@ function cb_touchPosition($pressure, $x, $y, $age)
 function cb_touchGesture($gesture, $duration, $pressure_max, $x_start, $x_end, $y_start,
                          $y_end, $age)
 {
-    echo "Gesture: $gesture\n";
+    if ($gesture == BrickletLCD128x64::GESTURE_LEFT_TO_RIGHT) {
+        echo "Gesture: Left To Right\n";
+    } elseif ($gesture == BrickletLCD128x64::GESTURE_RIGHT_TO_LEFT) {
+        echo "Gesture: Right To Left\n";
+    } elseif ($gesture == BrickletLCD128x64::GESTURE_TOP_TO_BOTTOM) {
+        echo "Gesture: Top To Bottom\n";
+    } elseif ($gesture == BrickletLCD128x64::GESTURE_BOTTOM_TO_TOP) {
+        echo "Gesture: Bottom To Top\n";
+    }
+
     echo "Duration: $duration\n";
     echo "Pressure Max: $pressure_max\n";
     echo "X Start: $x_start\n";

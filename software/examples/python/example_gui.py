@@ -49,8 +49,8 @@ if __name__ == "__main__":
     lcd.set_gui_slider(0, 0, 30, 60, lcd.DIRECTION_HORIZONTAL, 50)
     lcd.set_gui_graph_configuration(0, lcd.GRAPH_TYPE_LINE, 62, 0, 60, 52, "X", "Y")
 
-    # Add example data points
-    lcd.set_gui_graph_data(0, list(range(0, 255, 4)))
+    # Add a few data points (the remaining points will be 0)
+    lcd.set_gui_graph_data(0, [20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240])
 
     # Add 5 text tabs without and configure it for click and swipe without auto-redraw
     lcd.set_gui_tab_configuration(lcd.CHANGE_TAB_ON_CLICK_AND_SWIPE, False)

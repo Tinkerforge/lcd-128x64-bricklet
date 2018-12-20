@@ -24,7 +24,7 @@ class Example
 	}
 
 	// Callback function for gui tab selected callback
-	static void GUITabSelectedCB(BrickletLCD128x64 sender, byte index)
+	static void GUITabSelectedCB(BrickletLCD128x64 sender, short index)
 	{
 		Console.WriteLine("Index: " + index);
 	}

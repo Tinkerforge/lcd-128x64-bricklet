@@ -39,7 +39,16 @@ end
 
 % Callback function for touch gesture callback
 function cb_touch_gesture(e)
-    fprintf('Gesture: %i\n', e.gesture);
+    if e.gesture == com.tinkerforge.BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT
+        fprintf('Gesture: Left To Right\n');
+    elseif e.gesture == com.tinkerforge.BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT
+        fprintf('Gesture: Right To Left\n');
+    elseif e.gesture == com.tinkerforge.BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM
+        fprintf('Gesture: Top To Bottom\n');
+    elseif e.gesture == com.tinkerforge.BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP
+        fprintf('Gesture: Bottom To Top\n');
+    end
+
     fprintf('Duration: %i\n', e.duration);
     fprintf('Pressure Max: %i\n', e.pressureMax);
     fprintf('X Start: %i\n', e.xStart);

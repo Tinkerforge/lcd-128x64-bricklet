@@ -38,7 +38,16 @@ end
 
 % Callback function for touch gesture callback
 function cb_touch_gesture(e)
-    fprintf("Gesture: %d\n", e.gesture);
+    if e.gesture == 0
+        fprintf("Gesture: Left To Right\n");
+    elseif e.gesture == 1
+        fprintf("Gesture: Right To Left\n");
+    elseif e.gesture == 2
+        fprintf("Gesture: Top To Bottom\n");
+    elseif e.gesture == 3
+        fprintf("Gesture: Bottom To Top\n");
+    end
+
     fprintf("Duration: %d\n", java2int(e.duration));
     fprintf("Pressure Max: %d\n", e.pressureMax);
     fprintf("X Start: %d\n", e.xStart);

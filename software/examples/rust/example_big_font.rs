@@ -1,8 +1,6 @@
-use std::{io, error::Error};
+use std::{error::Error, io};
 
-use tinkerforge::{ip_connection::IpConnection, 
-                  lcd_128x64_bricklet::*};
-
+use tinkerforge::{ip_connection::IpConnection, lcd_128x64_bricklet::*};
 
 const HOST: &str = "localhost";
 const PORT: u16 = 4223;
@@ -13,14 +11,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     let lcd = Lcd128x64Bricklet::new(UID, &ipcon); // Create device object.
 
     ipcon.connect((HOST, PORT)).recv()??; // Connect to brickd.
-    // Don't use device before ipcon is connected.
+                                          // Don't use device before ipcon is connected.
 
-		// Clear display
-		lcd.clear_display();
+    // Clear display
+    lcd.clear_display();
 
-		// Write "Hello World" with big 24x32 font
-		lcd.draw_text(0, 0, LCD_128X64_BRICKLET_FONT_24X32,
-         LCD_128X64_BRICKLET_COLOR_BLACK, "24x32".to_string());
+    // Write "Hello World" with big 24x32 font
+    lcd.draw_text(0, 0, LCD_128X64_BRICKLET_FONT_24X32, LCD_128X64_BRICKLET_COLOR_BLACK, "24x32".to_string());
 
     println!("Press enter to exit.");
     let mut _input = String::new();

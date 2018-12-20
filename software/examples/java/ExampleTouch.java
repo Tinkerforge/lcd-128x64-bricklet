@@ -33,7 +33,16 @@ public class ExampleTouch {
 			public void touchGesture(int gesture, long duration, int pressureMax,
 			                         int xStart, int xEnd, int yStart, int yEnd,
 			                         long age) {
-				System.out.println("Gesture: " + gesture);
+				if(gesture == BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT) {
+					System.out.println("Gesture: Left To Right");
+				} else if(gesture == BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT) {
+					System.out.println("Gesture: Right To Left");
+				} else if(gesture == BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM) {
+					System.out.println("Gesture: Top To Bottom");
+				} else if(gesture == BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP) {
+					System.out.println("Gesture: Bottom To Top");
+				}
+
 				System.out.println("Duration: " + duration);
 				System.out.println("Pressure Max: " + pressureMax);
 				System.out.println("X Start: " + xStart);

@@ -26,7 +26,23 @@ sub cb_touch_gesture
     my ($gesture, $duration, $pressure_max, $x_start, $x_end, $y_start, $y_end,
         $age) = @_;
 
-    print "Gesture: $gesture\n";
+    if ($gesture == Tinkerforge::BrickletLCD128x64->GESTURE_LEFT_TO_RIGHT)
+    {
+        print "Gesture: Left To Right\n";
+    }
+    elsif ($gesture == Tinkerforge::BrickletLCD128x64->GESTURE_RIGHT_TO_LEFT)
+    {
+        print "Gesture: Right To Left\n";
+    }
+    elsif ($gesture == Tinkerforge::BrickletLCD128x64->GESTURE_TOP_TO_BOTTOM)
+    {
+        print "Gesture: Top To Bottom\n";
+    }
+    elsif ($gesture == Tinkerforge::BrickletLCD128x64->GESTURE_BOTTOM_TO_TOP)
+    {
+        print "Gesture: Bottom To Top\n";
+    }
+
     print "Duration: $duration\n";
     print "Pressure Max: $pressure_max\n";
     print "X Start: $x_start\n";

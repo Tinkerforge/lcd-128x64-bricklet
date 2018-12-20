@@ -24,7 +24,10 @@ AddEventHandler[lcd@TouchPositionCallback,TouchPositionCB]
 (*Callback function for touch gesture callback*)
 TouchGestureCB[sender_,gesture_,duration_,pressureMax_,xStart_,xEnd_,yStart_,yEnd_,age_]:=
  Module[{},
-  Print["Gesture: "<>ToString[gesture]];
+  If[gesture==Tinkerforge`BrickletLCD128x64`GESTUREULEFTUTOURIGHT,Print["Gesture: Left To Right"]];
+  If[gesture==Tinkerforge`BrickletLCD128x64`GESTUREURIGHTUTOULEFT,Print["Gesture: Right To Left"]];
+  If[gesture==Tinkerforge`BrickletLCD128x64`GESTUREUTOPUTOUBOTTOM,Print["Gesture: Top To Bottom"]];
+  If[gesture==Tinkerforge`BrickletLCD128x64`GESTUREUBOTTOMUTOUTOP,Print["Gesture: Bottom To Top"]];
   Print["Duration: "<>ToString[duration]];
   Print["Pressure Max: "<>ToString[pressureMax]];
   Print["X Start: "<>ToString[xStart]];

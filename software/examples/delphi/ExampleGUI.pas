@@ -16,7 +16,7 @@ type
                                  const pressed: boolean);
     procedure GUISliderValueCB(sender: TBrickletLCD128x64; const index: byte;
                                const value: byte);
-    procedure GUITabSelectedCB(sender: TBrickletLCD128x64; const index: byte);
+    procedure GUITabSelectedCB(sender: TBrickletLCD128x64; const index: shortint);
     procedure Execute;
   end;
 
@@ -47,7 +47,7 @@ begin
 end;
 
 { Callback procedure for gui tab selected callback }
-procedure TExample.GUITabSelectedCB(sender: TBrickletLCD128x64; const index: byte);
+procedure TExample.GUITabSelectedCB(sender: TBrickletLCD128x64; const index: shortint);
 begin
   WriteLn(Format('Index: %d', [index]));
 end;

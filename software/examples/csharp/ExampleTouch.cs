@@ -23,7 +23,23 @@ class Example
 	                           int pressureMax, int xStart, int xEnd, int yStart,
 	                           int yEnd, long age)
 	{
-		Console.WriteLine("Gesture: " + gesture);
+		if(gesture == BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT)
+		{
+			Console.WriteLine("Gesture: Left To Right");
+		}
+		else if(gesture == BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT)
+		{
+			Console.WriteLine("Gesture: Right To Left");
+		}
+		else if(gesture == BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM)
+		{
+			Console.WriteLine("Gesture: Top To Bottom");
+		}
+		else if(gesture == BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP)
+		{
+			Console.WriteLine("Gesture: Bottom To Top");
+		}
+
 		Console.WriteLine("Duration: " + duration);
 		Console.WriteLine("Pressure Max: " + pressureMax);
 		Console.WriteLine("X Start: " + xStart);

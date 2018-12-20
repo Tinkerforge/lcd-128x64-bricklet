@@ -22,7 +22,16 @@ Module ExampleTouch
                        ByVal xStart As Integer, ByVal xEnd As Integer, _
                        ByVal yStart As Integer, ByVal yEnd As Integer, _
                        ByVal age As Long)
-        Console.WriteLine("Gesture: " + gesture.ToString())
+        If gesture = BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT Then
+            Console.WriteLine("Gesture: Left To Right")
+        Else If gesture = BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT Then
+            Console.WriteLine("Gesture: Right To Left")
+        Else If gesture = BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM Then
+            Console.WriteLine("Gesture: Top To Bottom")
+        Else If gesture = BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP Then
+            Console.WriteLine("Gesture: Bottom To Top")
+        End If
+
         Console.WriteLine("Duration: " + duration.ToString())
         Console.WriteLine("Pressure Max: " + pressureMax.ToString())
         Console.WriteLine("X Start: " + xStart.ToString())

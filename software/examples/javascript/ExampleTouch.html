@@ -66,7 +66,19 @@
                 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_TOUCH_GESTURE,
                     // Callback function for touch gesture callback
                     function (gesture, duration, pressureMax, xStart, xEnd, yStart, yEnd, age) {
-                        textArea.value += 'Gesture: ' + gesture + '\n';
+                        if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_LEFT_TO_RIGHT) {
+                            textArea.value += 'Gesture: Left To Right\n';
+                        }
+                        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_RIGHT_TO_LEFT) {
+                            textArea.value += 'Gesture: Right To Left\n';
+                        }
+                        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_TOP_TO_BOTTOM) {
+                            textArea.value += 'Gesture: Top To Bottom\n';
+                        }
+                        else if(gesture === Tinkerforge.BrickletLCD128x64.GESTURE_BOTTOM_TO_TOP) {
+                            textArea.value += 'Gesture: Bottom To Top\n';
+                        }
+
                         textArea.value += 'Duration: ' + duration + '\n';
                         textArea.value += 'Pressure Max: ' + pressureMax + '\n';
                         textArea.value += 'X Start: ' + xStart + '\n';

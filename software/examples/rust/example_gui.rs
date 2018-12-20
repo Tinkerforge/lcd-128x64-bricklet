@@ -56,7 +56,16 @@ fn main() -> Result<(), Box<dyn Error>> {
     // Add GUI elements: Button, Slider and Graph with 60 data points
     lcd.set_gui_button(0, 0, 0, 60, 20, "button".to_string());
     lcd.set_gui_slider(0, 0, 30, 60, LCD_128X64_BRICKLET_DIRECTION_HORIZONTAL, 50);
-    lcd.set_gui_graph_configuration(0, LCD_128X64_BRICKLET_GRAPH_TYPE_LINE, 62, 0, 60, 52, "X".to_string(), "Y".to_string());
+    lcd.set_gui_graph_configuration(
+        0,
+        LCD_128X64_BRICKLET_GRAPH_TYPE_LINE,
+        62,
+        0,
+        60,
+        52,
+        "X".to_string(),
+        "Y".to_string(),
+    );
 
     // Add a few data points (the remaining points will be 0)
     lcd.set_gui_graph_data(0, &[20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240]);

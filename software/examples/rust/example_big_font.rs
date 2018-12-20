@@ -17,7 +17,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     lcd.clear_display();
 
     // Write "Hello World" with big 24x32 font
-    lcd.draw_text(0, 0, LCD_128X64_BRICKLET_FONT_24X32, LCD_128X64_BRICKLET_COLOR_BLACK, "24x32".to_string());
+    lcd.draw_text(
+        0,
+        0,
+        LCD_128X64_BRICKLET_FONT_24X32,
+        LCD_128X64_BRICKLET_COLOR_BLACK,
+        "24x32".to_string(),
+    );
 
     println!("Press enter to exit.");
     let mut _input = String::new();

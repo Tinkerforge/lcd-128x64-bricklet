@@ -20,3 +20,6 @@
 
 2018-11-29: 2.0.5 (caa4554)
 - Make sure display is updated on GUI remove-event
+
+2019-01-04: 2.0.6 (TBD)
+- Fix off-by-one in button and slider bounding box check

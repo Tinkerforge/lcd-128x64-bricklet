@@ -423,8 +423,8 @@ BootloaderHandleMessageResponse set_gui_button(const SetGUIButton *data) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
-	if((data->position_x + data->width >= LCD_MAX_COLUMNS)   || 
-	   (data->position_y + data->height >= (LCD_MAX_ROWS*8)) || 
+	if((data->position_x + data->width > LCD_MAX_COLUMNS)   ||
+	   (data->position_y + data->height > (LCD_MAX_ROWS*8)) ||
 	   (data->index >= GUI_BUTTON_NUM_MAX)) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
@@ -517,14 +517,14 @@ BootloaderHandleMessageResponse set_gui_slider(const SetGUISlider *data) {
 	}
 
 	if((data->direction == LCD_128X64_DIRECTION_HORIZONTAL) && 
-	   ((data->position_x + data->length >= LCD_MAX_COLUMNS) ||
-	    (data->position_y + GUI_SLIDER_KNOB_WIDTH >= (LCD_MAX_ROWS*8)))) {
+	   ((data->position_x + data->length > LCD_MAX_COLUMNS) ||
+	    (data->position_y + GUI_SLIDER_KNOB_WIDTH > (LCD_MAX_ROWS*8)))) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 
 	if((data->direction == LCD_128X64_DIRECTION_VERTICAL) && 
-	   ((data->position_y + data->length >= (LCD_MAX_ROWS*8)) ||
-	    (data->position_x + GUI_SLIDER_KNOB_WIDTH >= LCD_MAX_COLUMNS))) {
+	   ((data->position_y + data->length > (LCD_MAX_ROWS*8)) ||
+	    (data->position_x + GUI_SLIDER_KNOB_WIDTH > LCD_MAX_COLUMNS))) {
 		return HANDLE_MESSAGE_RESPONSE_INVALID_PARAMETER;
 	}
 

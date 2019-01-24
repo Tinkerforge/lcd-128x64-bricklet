@@ -4,31 +4,48 @@ setup:
 	# Handle incoming gui button pressed callbacks
 	subscribe to tinkerforge/callback/lcd_128x64_bricklet/XYZ/gui_button_pressed
 	publish '{"register": true}' to tinkerforge/register/lcd_128x64_bricklet/XYZ/gui_button_pressed # Register gui_button_pressed callback
+	
 	# Handle incoming gui slider value callbacks
 	subscribe to tinkerforge/callback/lcd_128x64_bricklet/XYZ/gui_slider_value
 	publish '{"register": true}' to tinkerforge/register/lcd_128x64_bricklet/XYZ/gui_slider_value # Register gui_slider_value callback
+	
 	# Handle incoming gui tab selected callbacks
 	subscribe to tinkerforge/callback/lcd_128x64_bricklet/XYZ/gui_tab_selected
 	publish '{"register": true}' to tinkerforge/register/lcd_128x64_bricklet/XYZ/gui_tab_selected # Register gui_tab_selected callback
+	
 	# Clear display
 	publish '' to tinkerforge/request/lcd_128x64_bricklet/XYZ/clear_display 
+	
 	publish '' to tinkerforge/request/lcd_128x64_bricklet/XYZ/remove_all_gui 
+	
 	# Add GUI elements: Button, Slider and Graph with 60 data points
 	publish '{"index": 0, "position_x": 0, "position_y": 0, "width": 60, "height": 20, "text": "button"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_button 
+	
 	publish '{"index": 0, "position_x": 0, "position_y": 30, "length": 60, "direction": "horizontal", "value": 50}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_slider 
+	
 	publish '{"index": 0, "graph_type": "line", "position_x": 62, "position_y": 0, "width": 60, "height": 52, "text_x": "X", "text_y": "Y"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_graph_configuration 
+	
 	# Add a few data points (the remaining points will be 0)
 	publish '{"index": 0, "data_length": [20,40,60,80,100,120,140,160,180,200,220,240]}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_graph_data 
+	
 	# Add 5 text tabs without and configure it for click and swipe without auto-redraw
 	publish '{"change_tab_config": "click_and_swipe", "clear_gui": false}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_configuration 
+	
 	publish '{"index": 0, "text": "Tab A"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
+	
 	publish '{"index": 1, "text": "Tab B"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
+	
 	publish '{"index": 2, "text": "Tab C"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
+	
 	publish '{"index": 3, "text": "Tab D"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
+	
 	publish '{"index": 4, "text": "Tab E"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
+	
 	# Set period for gui button pressed callback to 0.1s (100ms)
 	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_button_pressed_callback_configuration 
+	
 	# Set period for gui slider value callback to 0.1s (100ms)
 	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_slider_value_callback_configuration 
+	
 	# Set period for gui tab selected callback to 0.1s (100ms)
 	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_selected_callback_configuration 

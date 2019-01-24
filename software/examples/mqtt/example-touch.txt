@@ -1,0 +1,15 @@
+
+
+# Change XYZ to the UID of your LCD 128x64 Bricklet
+
+setup:
+	# Handle incoming touch position callbacks
+	subscribe to tinkerforge/callback/lcd_128x64_bricklet/XYZ/touch_position
+	publish '{"register": true}' to tinkerforge/register/lcd_128x64_bricklet/XYZ/touch_position # Register touch_position callback
+	# Handle incoming touch gesture callbacks
+	subscribe to tinkerforge/callback/lcd_128x64_bricklet/XYZ/touch_gesture
+	publish '{"register": true}' to tinkerforge/register/lcd_128x64_bricklet/XYZ/touch_gesture # Register touch_gesture callback
+	# Set period for touch position callback to 0.1s (100ms)
+	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_touch_position_callback_configuration 
+	# Set period for touch gesture callback to 0.1s (100ms)
+	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_touch_gesture_callback_configuration 

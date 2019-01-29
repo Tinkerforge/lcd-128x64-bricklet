@@ -78,7 +78,7 @@ int main(void) {
 
 	// Add a few data points (the remaining points will be 0)
 	lcd_128x64_set_gui_graph_data(&lcd, 0,
-	                              (uint8_t[]){20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240});
+	                              (uint8_t[]){20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240}, 12);
 
 	// Add 5 text tabs without and configure it for click and swipe without auto-redraw
 	lcd_128x64_set_gui_tab_configuration(&lcd, LCD_128X64_CHANGE_TAB_ON_CLICK_AND_SWIPE,

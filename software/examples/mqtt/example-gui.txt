@@ -26,7 +26,7 @@ setup:
 	publish '{"index": 0, "graph_type": "line", "position_x": 62, "position_y": 0, "width": 60, "height": 52, "text_x": "X", "text_y": "Y"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_graph_configuration 
 	
 	# Add a few data points (the remaining points will be 0)
-	publish '{"index": 0, "data_length": [20,40,60,80,100,120,140,160,180,200,220,240]}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_graph_data 
+	publish '{"index": 0, "data": [20,40,60,80,100,120,140,160,180,200,220,240]}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_graph_data 
 	
 	# Add 5 text tabs without and configure it for click and swipe without auto-redraw
 	publish '{"change_tab_config": "click_and_swipe", "clear_gui": false}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_configuration 
@@ -42,10 +42,10 @@ setup:
 	publish '{"index": 4, "text": "Tab E"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_text 
 	
 	# Set period for gui button pressed callback to 0.1s (100ms)
-	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_button_pressed_callback_configuration 
+	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_button_pressed_callback_configuration
 	
 	# Set period for gui slider value callback to 0.1s (100ms)
-	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_slider_value_callback_configuration 
+	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_slider_value_callback_configuration
 	
 	# Set period for gui tab selected callback to 0.1s (100ms)
-	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_selected_callback_configuration 
+	publish '{"period": 100, "value_has_to_change": true}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/set_gui_tab_selected_callback_configuration

@@ -35,6 +35,10 @@ SPI spi;
 #define uc1701_rx_irq_handler IRQ_Hdlr_11
 #define uc1701_tx_irq_handler IRQ_Hdlr_12
 
+// Use local pointer to save the time for accessing the struct
+volatile const uint32_t *UC1701_USIC_OUTR_PTR = &UC1701_USIC->OUTR;
+volatile uint32_t       *UC1701_USIC_IN_PTR   =  UC1701_USIC->IN;
+
 // Set pointers to read/write buffer
 // With this the compiler can properly optimize the access!
 uint8_t *spi_data_read      = spi.data;
@@ -45,45 +49,48 @@ void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) uc
 	// Max fill level is 16.
 	const uint8_t num = XMC_USIC_CH_RXFIFO_GetLevel(UC1701_USIC);
 	switch(num) {
-		case 16: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 15: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 14: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 13: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 12: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 11: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 10: *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 9:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 8:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 7:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 6:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 5:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 4:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 3:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 2:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
-		case 1:  *spi_data_read = UC1701_USIC->OUTR; spi_data_read++;
+		case 16: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 15: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 14: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 13: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 12: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 11: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 10: *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 9:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 8:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 7:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 6:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 5:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 4:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 3:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 2:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
+		case 1:  *spi_data_read = *UC1701_USIC_OUTR_PTR; spi_data_read++;
 	}
 }
 
 void __attribute__((optimize("-O3"))) __attribute__ ((section (".ram_code"))) uc1701_tx_irq_handler(void) {
 	// Max fill level is 16.
-	const uint8_t num = MIN(16-XMC_USIC_CH_TXFIFO_GetLevel(UC1701_USIC), spi_data_write_end - spi_data_write);
+	const uint8_t to_send    = spi_data_write_end - spi_data_write;
+	const uint8_t fifo_level = 16 - XMC_USIC_CH_TXFIFO_GetLevel(UC1701_USIC);
+	const uint8_t num        = MIN(to_send, fifo_level);
+
 	switch(num) {
-		case 16: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 15: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 14: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 13: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 12: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 11: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 10: UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 9:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 8:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 7:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 6:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 5:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 4:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 3:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 2:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
-		case 1:  UC1701_USIC->IN[0] = *spi_data_write; spi_data_write++;
+		case 16: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 15: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 14: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 13: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 12: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 11: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 10: UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 9:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 8:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 7:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 6:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 5:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 4:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 3:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 2:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
+		case 1:  UC1701_USIC_IN_PTR[0] = *spi_data_write; spi_data_write++;
 	}
 
 	if(spi_data_write >= spi_data_write_end) {
@@ -119,7 +126,7 @@ void spi_task_transceive(const uint8_t *data, const uint32_t length, XMC_SPI_CH_
 		// hand as possible.
 		XMC_USIC_CH_TXFIFO_DisableEvent(UC1701_USIC, XMC_USIC_CH_TXFIFO_EVENT_CONF_STANDARD);
 		while((!XMC_USIC_CH_TXFIFO_IsFull(UC1701_USIC)) && (spi_data_write < spi_data_write_end)) {
-			UC1701_USIC->IN[0] = *spi_data_write;
+			UC1701_USIC_IN_PTR[0] = *spi_data_write;
 			spi_data_write++;
 		}
 		NVIC_ClearPendingIRQ(UC1701_IRQ_TX);
@@ -138,7 +145,7 @@ void spi_task_transceive(const uint8_t *data, const uint32_t length, XMC_SPI_CH_
 		// more bytes are in the FIFO).
 		NVIC_DisableIRQ(UC1701_IRQ_RX);
 		while(!XMC_USIC_CH_RXFIFO_IsEmpty(UC1701_USIC)) {
-			*spi_data_read = UC1701_USIC->OUTR;
+			*spi_data_read = *UC1701_USIC_OUTR_PTR;
 			spi_data_read++;
 		}
 		// We have to clear the IRQ here. There might have been an IRQ between the 

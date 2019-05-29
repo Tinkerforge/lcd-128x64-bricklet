@@ -23,3 +23,6 @@
 
 2019-01-04: 2.0.6 (1e2fbb6)
 - Fix off-by-one in button and slider bounding box check
+
+2019-05-29: 2.0.7 (TBD)
+- Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)

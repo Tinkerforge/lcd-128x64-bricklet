@@ -3,13 +3,13 @@
 
 uid=XYZ # Change XYZ to the UID of your LCD 128x64 Bricklet
 
-# Handle incoming gui button pressed callbacks
+# Handle incoming GUI button pressed callbacks
 tinkerforge dispatch lcd-128x64-bricklet $uid gui-button-pressed &
 
-# Handle incoming gui slider value callbacks
+# Handle incoming GUI slider value callbacks
 tinkerforge dispatch lcd-128x64-bricklet $uid gui-slider-value &
 
-# Handle incoming gui tab selected callbacks
+# Handle incoming GUI tab selected callbacks
 tinkerforge dispatch lcd-128x64-bricklet $uid gui-tab-selected &
 
 # Clear display
@@ -32,13 +32,13 @@ tinkerforge call lcd-128x64-bricklet $uid set-gui-tab-text 2 "Tab C"
 tinkerforge call lcd-128x64-bricklet $uid set-gui-tab-text 3 "Tab D"
 tinkerforge call lcd-128x64-bricklet $uid set-gui-tab-text 4 "Tab E"
 
-# Set period for gui button pressed callback to 0.1s (100ms)
+# Set period for GUI button pressed callback to 0.1s (100ms)
 tinkerforge call lcd-128x64-bricklet $uid set-gui-button-pressed-callback-configuration 100 true
 
-# Set period for gui slider value callback to 0.1s (100ms)
+# Set period for GUI slider value callback to 0.1s (100ms)
 tinkerforge call lcd-128x64-bricklet $uid set-gui-slider-value-callback-configuration 100 true
 
-# Set period for gui tab selected callback to 0.1s (100ms)
+# Set period for GUI tab selected callback to 0.1s (100ms)
 tinkerforge call lcd-128x64-bricklet $uid set-gui-tab-selected-callback-configuration 100 true
 
 echo "Press key to exit"; read dummy

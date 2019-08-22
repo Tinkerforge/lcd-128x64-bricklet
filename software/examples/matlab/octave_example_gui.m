@@ -11,13 +11,13 @@ function octave_example_gui()
     ipcon.connect(HOST, PORT); % Connect to brickd
     % Don't use device before ipcon is connected
 
-    % Register gui button pressed callback to function cb_gui_button_pressed
+    % Register GUI button pressed callback to function cb_gui_button_pressed
     lcd.addGUIButtonPressedCallback(@cb_gui_button_pressed);
 
-    % Register gui slider value callback to function cb_gui_slider_value
+    % Register GUI slider value callback to function cb_gui_slider_value
     lcd.addGUISliderValueCallback(@cb_gui_slider_value);
 
-    % Register gui tab selected callback to function cb_gui_tab_selected
+    % Register GUI tab selected callback to function cb_gui_tab_selected
     lcd.addGUITabSelectedCallback(@cb_gui_tab_selected);
 
     % Clear display
@@ -40,34 +40,34 @@ function octave_example_gui()
     lcd.setGUITabText(3, "Tab D");
     lcd.setGUITabText(4, "Tab E");
 
-    % Set period for gui button pressed callback to 0.1s (100ms)
+    % Set period for GUI button pressed callback to 0.1s (100ms)
     lcd.setGUIButtonPressedCallbackConfiguration(100, true);
 
-    % Set period for gui slider value callback to 0.1s (100ms)
+    % Set period for GUI slider value callback to 0.1s (100ms)
     lcd.setGUISliderValueCallbackConfiguration(100, true);
 
-    % Set period for gui tab selected callback to 0.1s (100ms)
+    % Set period for GUI tab selected callback to 0.1s (100ms)
     lcd.setGUITabSelectedCallbackConfiguration(100, true);
 
     input("Press key to exit\n", "s");
     ipcon.disconnect();
 end
 
-% Callback function for gui button pressed callback
+% Callback function for GUI button pressed callback
 function cb_gui_button_pressed(e)
     fprintf("Index: %d\n", e.index);
     fprintf("Pressed: %d\n", e.pressed);
     fprintf("\n");
 end
 
-% Callback function for gui slider value callback
+% Callback function for GUI slider value callback
 function cb_gui_slider_value(e)
     fprintf("Index: %d\n", e.index);
     fprintf("Value: %d\n", e.value);
     fprintf("\n");
 end
 
-% Callback function for gui tab selected callback
+% Callback function for GUI tab selected callback
 function cb_gui_tab_selected(e)
     fprintf("Index: %d\n", e.index);
 end

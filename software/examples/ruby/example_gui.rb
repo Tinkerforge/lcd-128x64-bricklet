@@ -16,21 +16,21 @@ lcd = BrickletLCD128x64.new UID, ipcon # Create device object
 ipcon.connect HOST, PORT # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Register gui button pressed callback
+# Register GUI button pressed callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_GUI_BUTTON_PRESSED) do |index, pressed|
   puts "Index: #{index}"
   puts "Pressed: #{pressed}"
   puts ''
 end
 
-# Register gui slider value callback
+# Register GUI slider value callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_GUI_SLIDER_VALUE) do |index, value|
   puts "Index: #{index}"
   puts "Value: #{value}"
   puts ''
 end
 
-# Register gui tab selected callback
+# Register GUI tab selected callback
 lcd.register_callback(BrickletLCD128x64::CALLBACK_GUI_TAB_SELECTED) do |index|
   puts "Index: #{index}"
 end
@@ -56,13 +56,13 @@ lcd.set_gui_tab_text 2, 'Tab C'
 lcd.set_gui_tab_text 3, 'Tab D'
 lcd.set_gui_tab_text 4, 'Tab E'
 
-# Set period for gui button pressed callback to 0.1s (100ms)
+# Set period for GUI button pressed callback to 0.1s (100ms)
 lcd.set_gui_button_pressed_callback_configuration 100, true
 
-# Set period for gui slider value callback to 0.1s (100ms)
+# Set period for GUI slider value callback to 0.1s (100ms)
 lcd.set_gui_slider_value_callback_configuration 100, true
 
-# Set period for gui tab selected callback to 0.1s (100ms)
+# Set period for GUI tab selected callback to 0.1s (100ms)
 lcd.set_gui_tab_selected_callback_configuration 100, true
 
 puts 'Press key to exit'

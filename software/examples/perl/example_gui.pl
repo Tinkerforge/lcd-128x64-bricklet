@@ -8,7 +8,7 @@ use constant HOST => 'localhost';
 use constant PORT => 4223;
 use constant UID => 'XYZ'; # Change XYZ to the UID of your LCD 128x64 Bricklet
 
-# Callback subroutine for gui button pressed callback
+# Callback subroutine for GUI button pressed callback
 sub cb_gui_button_pressed
 {
     my ($index, $pressed) = @_;
@@ -18,7 +18,7 @@ sub cb_gui_button_pressed
     print "\n";
 }
 
-# Callback subroutine for gui slider value callback
+# Callback subroutine for GUI slider value callback
 sub cb_gui_slider_value
 {
     my ($index, $value) = @_;
@@ -28,7 +28,7 @@ sub cb_gui_slider_value
     print "\n";
 }
 
-# Callback subroutine for gui tab selected callback
+# Callback subroutine for GUI tab selected callback
 sub cb_gui_tab_selected
 {
     my ($index) = @_;
@@ -42,13 +42,13 @@ my $lcd = Tinkerforge::BrickletLCD128x64->new(&UID, $ipcon); # Create device obj
 $ipcon->connect(&HOST, &PORT); # Connect to brickd
 # Don't use device before ipcon is connected
 
-# Register gui button pressed callback to subroutine cb_gui_button_pressed
+# Register GUI button pressed callback to subroutine cb_gui_button_pressed
 $lcd->register_callback($lcd->CALLBACK_GUI_BUTTON_PRESSED, 'cb_gui_button_pressed');
 
-# Register gui slider value callback to subroutine cb_gui_slider_value
+# Register GUI slider value callback to subroutine cb_gui_slider_value
 $lcd->register_callback($lcd->CALLBACK_GUI_SLIDER_VALUE, 'cb_gui_slider_value');
 
-# Register gui tab selected callback to subroutine cb_gui_tab_selected
+# Register GUI tab selected callback to subroutine cb_gui_tab_selected
 $lcd->register_callback($lcd->CALLBACK_GUI_TAB_SELECTED, 'cb_gui_tab_selected');
 
 # Clear display
@@ -71,13 +71,13 @@ $lcd->set_gui_tab_text(2, "Tab C");
 $lcd->set_gui_tab_text(3, "Tab D");
 $lcd->set_gui_tab_text(4, "Tab E");
 
-# Set period for gui button pressed callback to 0.1s (100ms)
+# Set period for GUI button pressed callback to 0.1s (100ms)
 $lcd->set_gui_button_pressed_callback_configuration(100, 1);
 
-# Set period for gui slider value callback to 0.1s (100ms)
+# Set period for GUI slider value callback to 0.1s (100ms)
 $lcd->set_gui_slider_value_callback_configuration(100, 1);
 
-# Set period for gui tab selected callback to 0.1s (100ms)
+# Set period for GUI tab selected callback to 0.1s (100ms)
 $lcd->set_gui_tab_selected_callback_configuration(100, 1);
 
 print "Press key to exit\n";

@@ -17,7 +17,7 @@ public class ExampleGUI {
 		ipcon.connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Add gui button pressed listener
+		// Add GUI button pressed listener
 		lcd.addGUIButtonPressedListener(new BrickletLCD128x64.GUIButtonPressedListener() {
 			public void guiButtonPressed(int index, boolean pressed) {
 				System.out.println("Index: " + index);
@@ -26,7 +26,7 @@ public class ExampleGUI {
 			}
 		});
 
-		// Add gui slider value listener
+		// Add GUI slider value listener
 		lcd.addGUISliderValueListener(new BrickletLCD128x64.GUISliderValueListener() {
 			public void guiSliderValue(int index, int value) {
 				System.out.println("Index: " + index);
@@ -35,7 +35,7 @@ public class ExampleGUI {
 			}
 		});
 
-		// Add gui tab selected listener
+		// Add GUI tab selected listener
 		lcd.addGUITabSelectedListener(new BrickletLCD128x64.GUITabSelectedListener() {
 			public void guiTabSelected(int index) {
 				System.out.println("Index: " + index);
@@ -65,13 +65,13 @@ public class ExampleGUI {
 		lcd.setGUITabText(3, "Tab D");
 		lcd.setGUITabText(4, "Tab E");
 
-		// Set period for gui button pressed callback to 0.1s (100ms)
+		// Set period for GUI button pressed callback to 0.1s (100ms)
 		lcd.setGUIButtonPressedCallbackConfiguration(100, true);
 
-		// Set period for gui slider value callback to 0.1s (100ms)
+		// Set period for GUI slider value callback to 0.1s (100ms)
 		lcd.setGUISliderValueCallbackConfiguration(100, true);
 
-		// Set period for gui tab selected callback to 0.1s (100ms)
+		// Set period for GUI tab selected callback to 0.1s (100ms)
 		lcd.setGUITabSelectedCallbackConfiguration(100, true);
 
 		System.out.println("Press key to exit"); System.in.read();

@@ -6,7 +6,7 @@ Module ExampleGUI
     Const PORT As Integer = 4223
     Const UID As String = "XYZ" ' Change XYZ to the UID of your LCD 128x64 Bricklet
 
-    ' Callback subroutine for gui button pressed callback
+    ' Callback subroutine for GUI button pressed callback
     Sub GUIButtonPressedCB(ByVal sender As BrickletLCD128x64, ByVal index As Byte, _
                            ByVal pressed As Boolean)
         Console.WriteLine("Index: " + index.ToString())
@@ -14,7 +14,7 @@ Module ExampleGUI
         Console.WriteLine("")
     End Sub
 
-    ' Callback subroutine for gui slider value callback
+    ' Callback subroutine for GUI slider value callback
     Sub GUISliderValueCB(ByVal sender As BrickletLCD128x64, ByVal index As Byte, _
                          ByVal value As Byte)
         Console.WriteLine("Index: " + index.ToString())
@@ -22,7 +22,7 @@ Module ExampleGUI
         Console.WriteLine("")
     End Sub
 
-    ' Callback subroutine for gui tab selected callback
+    ' Callback subroutine for GUI tab selected callback
     Sub GUITabSelectedCB(ByVal sender As BrickletLCD128x64, ByVal index As Short)
         Console.WriteLine("Index: " + index.ToString())
     End Sub
@@ -34,13 +34,13 @@ Module ExampleGUI
         ipcon.Connect(HOST, PORT) ' Connect to brickd
         ' Don't use device before ipcon is connected
 
-        ' Register gui button pressed callback to subroutine GUIButtonPressedCB
+        ' Register GUI button pressed callback to subroutine GUIButtonPressedCB
         AddHandler lcd.GUIButtonPressedCallback, AddressOf GUIButtonPressedCB
 
-        ' Register gui slider value callback to subroutine GUISliderValueCB
+        ' Register GUI slider value callback to subroutine GUISliderValueCB
         AddHandler lcd.GUISliderValueCallback, AddressOf GUISliderValueCB
 
-        ' Register gui tab selected callback to subroutine GUITabSelectedCB
+        ' Register GUI tab selected callback to subroutine GUITabSelectedCB
         AddHandler lcd.GUITabSelectedCallback, AddressOf GUITabSelectedCB
 
         ' Clear display
@@ -66,13 +66,13 @@ Module ExampleGUI
         lcd.SetGUITabText(3, "Tab D")
         lcd.SetGUITabText(4, "Tab E")
 
-        ' Set period for gui button pressed callback to 0.1s (100ms)
+        ' Set period for GUI button pressed callback to 0.1s (100ms)
         lcd.SetGUIButtonPressedCallbackConfiguration(100, True)
 
-        ' Set period for gui slider value callback to 0.1s (100ms)
+        ' Set period for GUI slider value callback to 0.1s (100ms)
         lcd.SetGUISliderValueCallbackConfiguration(100, True)
 
-        ' Set period for gui tab selected callback to 0.1s (100ms)
+        ' Set period for GUI tab selected callback to 0.1s (100ms)
         lcd.SetGUITabSelectedCallbackConfiguration(100, True)
 
         Console.WriteLine("Press key to exit")

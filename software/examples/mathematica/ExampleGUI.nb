@@ -18,21 +18,21 @@ Notebook[{
    RowBox[{"ipcon", "@", RowBox[{"Connect", "[", RowBox[{"host", ",", "port"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for gui button pressed callback", "*)"}],
+   RowBox[{"(*", "Callback function for GUI button pressed callback", "*)"}],
    RowBox[{RowBox[{"GUIButtonPressedCB", "[", RowBox[{"sender_", ",", "index_", ",", "pressed_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Pressed: \>\"", "<>", RowBox[{"ToString", "[", "pressed", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUIButtonPressedCallback"}], ",", "GUIButtonPressedCB"}], "]"}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for gui slider value callback", "*)"}],
+   RowBox[{"(*", "Callback function for GUI slider value callback", "*)"}],
    RowBox[{RowBox[{"GUISliderValueCB", "[", RowBox[{"sender_", ",", "index_", ",", "value_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Module", "[", RowBox[{RowBox[{"{", "}"}], ",", RowBox[{"\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}], ";", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Value: \>\"", "<>", RowBox[{"ToString", "[", "value", "]"}]}], "]"}], "\[IndentingNewLine]"}]}], "]"}]}],
    RowBox[{"
 "}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUISliderValueCallback"}], ",", "GUISliderValueCB"}], "]"}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Callback function for gui tab selected callback", "*)"}],
+   RowBox[{"(*", "Callback function for GUI tab selected callback", "*)"}],
    RowBox[{RowBox[{"GUITabSelectedCB", "[", RowBox[{"sender_", ",", "index_"}], "]"}], ":=", "\[IndentingNewLine]", RowBox[{"Print", "[", RowBox[{"\"\<Index: \>\"", "<>", RowBox[{"ToString", "[", "index", "]"}]}], "]"}]}],
    RowBox[{"AddEventHandler", "[", RowBox[{RowBox[{"lcd", "@", "GUITabSelectedCallback"}], ",", "GUITabSelectedCB"}], "]"}],
    RowBox[{"
@@ -61,15 +61,15 @@ Notebook[{
    RowBox[{"lcd", "@", RowBox[{"SetGUITabText", "[", RowBox[{"4", ",", "\"\<Tab E\>\""}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Set period for gui button pressed callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"(*", "Set period for GUI button pressed callback to 0.1s (100ms)", "*)"}],
    RowBox[{"lcd", "@", RowBox[{"SetGUIButtonPressedCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Set period for gui slider value callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"(*", "Set period for GUI slider value callback to 0.1s (100ms)", "*)"}],
    RowBox[{"lcd", "@", RowBox[{"SetGUISliderValueCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],
-   RowBox[{"(*", "Set period for gui tab selected callback to 0.1s (100ms)", "*)"}],
+   RowBox[{"(*", "Set period for GUI tab selected callback to 0.1s (100ms)", "*)"}],
    RowBox[{"lcd", "@", RowBox[{"SetGUITabSelectedCallbackConfiguration", "[", RowBox[{"100", ",", "True"}], "]"}]}],
    RowBox[{"
 "}],

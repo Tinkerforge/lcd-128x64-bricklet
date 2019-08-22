@@ -8,19 +8,19 @@ UID = "XYZ" # Change XYZ to the UID of your LCD 128x64 Bricklet
 from tinkerforge.ip_connection import IPConnection
 from tinkerforge.bricklet_lcd_128x64 import BrickletLCD128x64
 
-# Callback function for gui button pressed callback
+# Callback function for GUI button pressed callback
 def cb_gui_button_pressed(index, pressed):
     print("Index: " + str(index))
     print("Pressed: " + str(pressed))
     print("")
 
-# Callback function for gui slider value callback
+# Callback function for GUI slider value callback
 def cb_gui_slider_value(index, value):
     print("Index: " + str(index))
     print("Value: " + str(value))
     print("")
 
-# Callback function for gui tab selected callback
+# Callback function for GUI tab selected callback
 def cb_gui_tab_selected(index):
     print("Index: " + str(index))
 
@@ -31,13 +31,13 @@ if __name__ == "__main__":
     ipcon.connect(HOST, PORT) # Connect to brickd
     # Don't use device before ipcon is connected
 
-    # Register gui button pressed callback to function cb_gui_button_pressed
+    # Register GUI button pressed callback to function cb_gui_button_pressed
     lcd.register_callback(lcd.CALLBACK_GUI_BUTTON_PRESSED, cb_gui_button_pressed)
 
-    # Register gui slider value callback to function cb_gui_slider_value
+    # Register GUI slider value callback to function cb_gui_slider_value
     lcd.register_callback(lcd.CALLBACK_GUI_SLIDER_VALUE, cb_gui_slider_value)
 
-    # Register gui tab selected callback to function cb_gui_tab_selected
+    # Register GUI tab selected callback to function cb_gui_tab_selected
     lcd.register_callback(lcd.CALLBACK_GUI_TAB_SELECTED, cb_gui_tab_selected)
 
     # Clear display
@@ -60,13 +60,13 @@ if __name__ == "__main__":
     lcd.set_gui_tab_text(3, "Tab D")
     lcd.set_gui_tab_text(4, "Tab E")
 
-    # Set period for gui button pressed callback to 0.1s (100ms)
+    # Set period for GUI button pressed callback to 0.1s (100ms)
     lcd.set_gui_button_pressed_callback_configuration(100, True)
 
-    # Set period for gui slider value callback to 0.1s (100ms)
+    # Set period for GUI slider value callback to 0.1s (100ms)
     lcd.set_gui_slider_value_callback_configuration(100, True)
 
-    # Set period for gui tab selected callback to 0.1s (100ms)
+    # Set period for GUI tab selected callback to 0.1s (100ms)
     lcd.set_gui_tab_selected_callback_configuration(100, True)
 
     raw_input("Press key to exit\n") # Use input() in Python 3

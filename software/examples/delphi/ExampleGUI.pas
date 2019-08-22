@@ -28,7 +28,7 @@ const
 var
   e: TExample;
 
-{ Callback procedure for gui button pressed callback }
+{ Callback procedure for GUI button pressed callback }
 procedure TExample.GUIButtonPressedCB(sender: TBrickletLCD128x64; const index: byte;
                                       const pressed: boolean);
 begin
@@ -37,7 +37,7 @@ begin
   WriteLn('');
 end;
 
-{ Callback procedure for gui slider value callback }
+{ Callback procedure for GUI slider value callback }
 procedure TExample.GUISliderValueCB(sender: TBrickletLCD128x64; const index: byte;
                                     const value: byte);
 begin
@@ -46,7 +46,7 @@ begin
   WriteLn('');
 end;
 
-{ Callback procedure for gui tab selected callback }
+{ Callback procedure for GUI tab selected callback }
 procedure TExample.GUITabSelectedCB(sender: TBrickletLCD128x64; const index: shortint);
 begin
   WriteLn(Format('Index: %d', [index]));
@@ -64,13 +64,13 @@ begin
   ipcon.Connect(HOST, PORT);
   { Don't use device before ipcon is connected }
 
-  { Register gui button pressed callback to procedure GUIButtonPressedCB }
+  { Register GUI button pressed callback to procedure GUIButtonPressedCB }
   lcd.OnGUIButtonPressed := {$ifdef FPC}@{$endif}GUIButtonPressedCB;
 
-  { Register gui slider value callback to procedure GUISliderValueCB }
+  { Register GUI slider value callback to procedure GUISliderValueCB }
   lcd.OnGUISliderValue := {$ifdef FPC}@{$endif}GUISliderValueCB;
 
-  { Register gui tab selected callback to procedure GUITabSelectedCB }
+  { Register GUI tab selected callback to procedure GUITabSelectedCB }
   lcd.OnGUITabSelected := {$ifdef FPC}@{$endif}GUITabSelectedCB;
 
   { Clear display }
@@ -94,13 +94,13 @@ begin
   lcd.SetGUITabText(3, 'Tab D');
   lcd.SetGUITabText(4, 'Tab E');
 
-  { Set period for gui button pressed callback to 0.1s (100ms) }
+  { Set period for GUI button pressed callback to 0.1s (100ms) }
   lcd.SetGUIButtonPressedCallbackConfiguration(100, true);
 
-  { Set period for gui slider value callback to 0.1s (100ms) }
+  { Set period for GUI slider value callback to 0.1s (100ms) }
   lcd.SetGUISliderValueCallbackConfiguration(100, true);
 
-  { Set period for gui tab selected callback to 0.1s (100ms) }
+  { Set period for GUI tab selected callback to 0.1s (100ms) }
   lcd.SetGUITabSelectedCallbackConfiguration(100, true);
 
   WriteLn('Press key to exit');

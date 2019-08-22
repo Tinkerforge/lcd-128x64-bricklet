@@ -39,20 +39,20 @@ ipcon.on(Tinkerforge.IPConnection.CALLBACK_CONNECTED,
         lcd.setGUITabText(3, 'Tab D');
         lcd.setGUITabText(4, 'Tab E');
 
-        // Set period for gui button pressed callback to 0.1s (100ms)
+        // Set period for GUI button pressed callback to 0.1s (100ms)
         lcd.setGUIButtonPressedCallbackConfiguration(100, true);
 
-        // Set period for gui slider value callback to 0.1s (100ms)
+        // Set period for GUI slider value callback to 0.1s (100ms)
         lcd.setGUISliderValueCallbackConfiguration(100, true);
 
-        // Set period for gui tab selected callback to 0.1s (100ms)
+        // Set period for GUI tab selected callback to 0.1s (100ms)
         lcd.setGUITabSelectedCallbackConfiguration(100, true);
     }
 );
 
-// Register gui button pressed callback
+// Register GUI button pressed callback
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_BUTTON_PRESSED,
-    // Callback function for gui button pressed callback
+    // Callback function for GUI button pressed callback
     function (index, pressed) {
         console.log('Index: ' + index);
         console.log('Pressed: ' + pressed);
@@ -60,9 +60,9 @@ lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_BUTTON_PRESSED,
     }
 );
 
-// Register gui slider value callback
+// Register GUI slider value callback
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_SLIDER_VALUE,
-    // Callback function for gui slider value callback
+    // Callback function for GUI slider value callback
     function (index, value) {
         console.log('Index: ' + index);
         console.log('Value: ' + value);
@@ -70,9 +70,9 @@ lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_SLIDER_VALUE,
     }
 );
 
-// Register gui tab selected callback
+// Register GUI tab selected callback
 lcd.on(Tinkerforge.BrickletLCD128x64.CALLBACK_GUI_TAB_SELECTED,
-    // Callback function for gui tab selected callback
+    // Callback function for GUI tab selected callback
     function (index) {
         console.log('Index: ' + index);
     }

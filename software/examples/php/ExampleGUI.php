@@ -10,7 +10,7 @@ const HOST = 'localhost';
 const PORT = 4223;
 const UID = 'XYZ'; // Change XYZ to the UID of your LCD 128x64 Bricklet
 
-// Callback function for gui button pressed callback
+// Callback function for GUI button pressed callback
 function cb_guiButtonPressed($index, $pressed)
 {
     echo "Index: $index\n";
@@ -18,7 +18,7 @@ function cb_guiButtonPressed($index, $pressed)
     echo "\n";
 }
 
-// Callback function for gui slider value callback
+// Callback function for GUI slider value callback
 function cb_guiSliderValue($index, $value)
 {
     echo "Index: $index\n";
@@ -26,7 +26,7 @@ function cb_guiSliderValue($index, $value)
     echo "\n";
 }
 
-// Callback function for gui tab selected callback
+// Callback function for GUI tab selected callback
 function cb_guiTabSelected($index)
 {
     echo "Index: $index\n";
@@ -38,14 +38,14 @@ $lcd = new BrickletLCD128x64(UID, $ipcon); // Create device object
 $ipcon->connect(HOST, PORT); // Connect to brickd
 // Don't use device before ipcon is connected
 
-// Register gui button pressed callback to function cb_guiButtonPressed
+// Register GUI button pressed callback to function cb_guiButtonPressed
 $lcd->registerCallback(BrickletLCD128x64::CALLBACK_GUI_BUTTON_PRESSED,
                        'cb_guiButtonPressed');
 
-// Register gui slider value callback to function cb_guiSliderValue
+// Register GUI slider value callback to function cb_guiSliderValue
 $lcd->registerCallback(BrickletLCD128x64::CALLBACK_GUI_SLIDER_VALUE, 'cb_guiSliderValue');
 
-// Register gui tab selected callback to function cb_guiTabSelected
+// Register GUI tab selected callback to function cb_guiTabSelected
 $lcd->registerCallback(BrickletLCD128x64::CALLBACK_GUI_TAB_SELECTED, 'cb_guiTabSelected');
 
 // Clear display
@@ -69,13 +69,13 @@ $lcd->setGUITabText(2, 'Tab C');
 $lcd->setGUITabText(3, 'Tab D');
 $lcd->setGUITabText(4, 'Tab E');
 
-// Set period for gui button pressed callback to 0.1s (100ms)
+// Set period for GUI button pressed callback to 0.1s (100ms)
 $lcd->setGUIButtonPressedCallbackConfiguration(100, TRUE);
 
-// Set period for gui slider value callback to 0.1s (100ms)
+// Set period for GUI slider value callback to 0.1s (100ms)
 $lcd->setGUISliderValueCallbackConfiguration(100, TRUE);
 
-// Set period for gui tab selected callback to 0.1s (100ms)
+// Set period for GUI tab selected callback to 0.1s (100ms)
 $lcd->setGUITabSelectedCallbackConfiguration(100, TRUE);
 
 echo "Press ctrl+c to exit\n";

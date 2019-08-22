@@ -7,7 +7,7 @@ class Example
 	private static int PORT = 4223;
 	private static string UID = "XYZ"; // Change XYZ to the UID of your LCD 128x64 Bricklet
 
-	// Callback function for gui button pressed callback
+	// Callback function for GUI button pressed callback
 	static void GUIButtonPressedCB(BrickletLCD128x64 sender, byte index, bool pressed)
 	{
 		Console.WriteLine("Index: " + index);
@@ -15,7 +15,7 @@ class Example
 		Console.WriteLine("");
 	}
 
-	// Callback function for gui slider value callback
+	// Callback function for GUI slider value callback
 	static void GUISliderValueCB(BrickletLCD128x64 sender, byte index, byte value)
 	{
 		Console.WriteLine("Index: " + index);
@@ -23,7 +23,7 @@ class Example
 		Console.WriteLine("");
 	}
 
-	// Callback function for gui tab selected callback
+	// Callback function for GUI tab selected callback
 	static void GUITabSelectedCB(BrickletLCD128x64 sender, short index)
 	{
 		Console.WriteLine("Index: " + index);
@@ -37,13 +37,13 @@ class Example
 		ipcon.Connect(HOST, PORT); // Connect to brickd
 		// Don't use device before ipcon is connected
 
-		// Register gui button pressed callback to function GUIButtonPressedCB
+		// Register GUI button pressed callback to function GUIButtonPressedCB
 		lcd.GUIButtonPressedCallback += GUIButtonPressedCB;
 
-		// Register gui slider value callback to function GUISliderValueCB
+		// Register GUI slider value callback to function GUISliderValueCB
 		lcd.GUISliderValueCallback += GUISliderValueCB;
 
-		// Register gui tab selected callback to function GUITabSelectedCB
+		// Register GUI tab selected callback to function GUITabSelectedCB
 		lcd.GUITabSelectedCallback += GUITabSelectedCB;
 
 		// Clear display
@@ -69,13 +69,13 @@ class Example
 		lcd.SetGUITabText(3, "Tab D");
 		lcd.SetGUITabText(4, "Tab E");
 
-		// Set period for gui button pressed callback to 0.1s (100ms)
+		// Set period for GUI button pressed callback to 0.1s (100ms)
 		lcd.SetGUIButtonPressedCallbackConfiguration(100, true);
 
-		// Set period for gui slider value callback to 0.1s (100ms)
+		// Set period for GUI slider value callback to 0.1s (100ms)
 		lcd.SetGUISliderValueCallbackConfiguration(100, true);
 
-		// Set period for gui tab selected callback to 0.1s (100ms)
+		// Set period for GUI tab selected callback to 0.1s (100ms)
 		lcd.SetGUITabSelectedCallbackConfiguration(100, true);
 
 		Console.WriteLine("Press enter to exit");

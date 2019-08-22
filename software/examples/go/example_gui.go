@@ -56,13 +56,13 @@ func main() {
 	lcd.SetGUITabText(3, "Tab D")
 	lcd.SetGUITabText(4, "Tab E")
 
-	// Set period for gui button pressed callback to 0.1s (100ms).
+	// Set period for GUI button pressed callback to 0.1s (100ms).
 	lcd.SetGUIButtonPressedCallbackConfiguration(100, true)
 
-	// Set period for gui slider value callback to 0.1s (100ms).
+	// Set period for GUI slider value callback to 0.1s (100ms).
 	lcd.SetGUISliderValueCallbackConfiguration(100, true)
 
-	// Set period for gui tab selected callback to 0.1s (100ms).
+	// Set period for GUI tab selected callback to 0.1s (100ms).
 	lcd.SetGUITabSelectedCallbackConfiguration(100, true)
 
 	fmt.Print("Press enter to exit.")

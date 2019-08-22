@@ -10,7 +10,7 @@ ipcon=NETNew["Tinkerforge.IPConnection"]
 lcd=NETNew["Tinkerforge.BrickletLCD128x64",uid,ipcon]
 ipcon@Connect[host,port]
 
-(*Callback function for gui button pressed callback*)
+(*Callback function for GUI button pressed callback*)
 GUIButtonPressedCB[sender_,index_,pressed_]:=
  Module[{},
   Print["Index: "<>ToString[index]];
@@ -19,7 +19,7 @@ GUIButtonPressedCB[sender_,index_,pressed_]:=
 
 AddEventHandler[lcd@GUIButtonPressedCallback,GUIButtonPressedCB]
 
-(*Callback function for gui slider value callback*)
+(*Callback function for GUI slider value callback*)
 GUISliderValueCB[sender_,index_,value_]:=
  Module[{},
   Print["Index: "<>ToString[index]];
@@ -28,7 +28,7 @@ GUISliderValueCB[sender_,index_,value_]:=
 
 AddEventHandler[lcd@GUISliderValueCallback,GUISliderValueCB]
 
-(*Callback function for gui tab selected callback*)
+(*Callback function for GUI tab selected callback*)
 GUITabSelectedCB[sender_,index_]:=
  Print["Index: "<>ToString[index]]
 AddEventHandler[lcd@GUITabSelectedCallback,GUITabSelectedCB]
@@ -55,13 +55,13 @@ lcd@SetGUITabText[2,"Tab C"]
 lcd@SetGUITabText[3,"Tab D"]
 lcd@SetGUITabText[4,"Tab E"]
 
-(*Set period for gui button pressed callback to 0.1s (100ms)*)
+(*Set period for GUI button pressed callback to 0.1s (100ms)*)
 lcd@SetGUIButtonPressedCallbackConfiguration[100,True]
 
-(*Set period for gui slider value callback to 0.1s (100ms)*)
+(*Set period for GUI slider value callback to 0.1s (100ms)*)
 lcd@SetGUISliderValueCallbackConfiguration[100,True]
 
-(*Set period for gui tab selected callback to 0.1s (100ms)*)
+(*Set period for GUI tab selected callback to 0.1s (100ms)*)
 lcd@SetGUITabSelectedCallbackConfiguration[100,True]
 
 Input["Click OK to exit"]

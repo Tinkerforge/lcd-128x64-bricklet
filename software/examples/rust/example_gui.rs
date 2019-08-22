@@ -69,13 +69,13 @@ fn main() -> Result<(), Box<dyn Error>> {
     lcd.set_gui_tab_text(3, "Tab D".to_string());
     lcd.set_gui_tab_text(4, "Tab E".to_string());
 
-    // Set period for gui button pressed callback to 0.1s (100ms).
+    // Set period for GUI button pressed callback to 0.1s (100ms).
     lcd.set_gui_button_pressed_callback_configuration(100, true);
 
-    // Set period for gui slider value callback to 0.1s (100ms).
+    // Set period for GUI slider value callback to 0.1s (100ms).
     lcd.set_gui_slider_value_callback_configuration(100, true);
 
-    // Set period for gui tab selected callback to 0.1s (100ms).
+    // Set period for GUI tab selected callback to 0.1s (100ms).
     lcd.set_gui_tab_selected_callback_configuration(100, true);
 
     println!("Press enter to exit.");

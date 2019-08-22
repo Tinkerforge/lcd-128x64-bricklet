@@ -7,7 +7,7 @@
 #define PORT 4223
 #define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
 
-// Callback function for gui button pressed callback
+// Callback function for GUI button pressed callback
 void cb_gui_button_pressed(uint8_t index, bool pressed, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
@@ -16,7 +16,7 @@ void cb_gui_button_pressed(uint8_t index, bool pressed, void *user_data) {
 	printf("\n");
 }
 
-// Callback function for gui slider value callback
+// Callback function for GUI slider value callback
 void cb_gui_slider_value(uint8_t index, uint8_t value, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
@@ -25,7 +25,7 @@ void cb_gui_slider_value(uint8_t index, uint8_t value, void *user_data) {
 	printf("\n");
 }
 
-// Callback function for gui tab selected callback
+// Callback function for GUI tab selected callback
 void cb_gui_tab_selected(int8_t index, void *user_data) {
 	(void)user_data; // avoid unused parameter warning
 
@@ -48,22 +48,22 @@ int main(void) {
 	}
 	// Don't use device before ipcon is connected
 
-	// Register gui button pressed callback to function cb_gui_button_pressed
+	// Register GUI button pressed callback to function cb_gui_button_pressed
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_GUI_BUTTON_PRESSED,
-	                             (void *)cb_gui_button_pressed,
+	                             (void (*)(void))cb_gui_button_pressed,
 	                             NULL);
 
-	// Register gui slider value callback to function cb_gui_slider_value
+	// Register GUI slider value callback to function cb_gui_slider_value
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_GUI_SLIDER_VALUE,
-	                             (void *)cb_gui_slider_value,
+	                             (void (*)(void))cb_gui_slider_value,
 	                             NULL);
 
-	// Register gui tab selected callback to function cb_gui_tab_selected
+	// Register GUI tab selected callback to function cb_gui_tab_selected
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_GUI_TAB_SELECTED,
-	                             (void *)cb_gui_tab_selected,
+	                             (void (*)(void))cb_gui_tab_selected,
 	                             NULL);
 
 	// Clear display
@@ -89,13 +89,13 @@ int main(void) {
 	lcd_128x64_set_gui_tab_text(&lcd, 3, "Tab D");
 	lcd_128x64_set_gui_tab_text(&lcd, 4, "Tab E");
 
-	// Set period for gui button pressed callback to 0.1s (100ms)
+	// Set period for GUI button pressed callback to 0.1s (100ms)
 	lcd_128x64_set_gui_button_pressed_callback_configuration(&lcd, 100, true);
 
-	// Set period for gui slider value callback to 0.1s (100ms)
+	// Set period for GUI slider value callback to 0.1s (100ms)
 	lcd_128x64_set_gui_slider_value_callback_configuration(&lcd, 100, true);
 
-	// Set period for gui tab selected callback to 0.1s (100ms)
+	// Set period for GUI tab selected callback to 0.1s (100ms)
 	lcd_128x64_set_gui_tab_selected_callback_configuration(&lcd, 100, true);
 
 	printf("Press key to exit\n");

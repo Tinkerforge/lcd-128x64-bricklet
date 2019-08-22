@@ -64,13 +64,13 @@ int main(void) {
 	// Register touch position callback to function cb_touch_position
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_TOUCH_POSITION,
-	                             (void *)cb_touch_position,
+	                             (void (*)(void))cb_touch_position,
 	                             NULL);
 
 	// Register touch gesture callback to function cb_touch_gesture
 	lcd_128x64_register_callback(&lcd,
 	                             LCD_128X64_CALLBACK_TOUCH_GESTURE,
-	                             (void *)cb_touch_gesture,
+	                             (void (*)(void))cb_touch_gesture,
 	                             NULL);
 
 	// Set period for touch position callback to 0.1s (100ms)

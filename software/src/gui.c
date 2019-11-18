@@ -382,8 +382,12 @@ void gui_draw_tabs(void) {
 	gui_draw_line_horizontal(0, LCD_MAX_COLUMNS-1, GUI_TAB_POS_Y, true);
 
 	gui_draw_tab(GUI_TAB0_POS_X, GUI_TAB_POS_Y, tabs_shown[0]);
-	gui_draw_tab(GUI_TAB1_POS_X, GUI_TAB_POS_Y, tabs_shown[1]);
-	gui_draw_tab(GUI_TAB2_POS_X, GUI_TAB_POS_Y, tabs_shown[2]);
+	if(gui.tabs_count > 1) {
+		gui_draw_tab(GUI_TAB1_POS_X, GUI_TAB_POS_Y, tabs_shown[1]);
+	}
+	if(gui.tabs_count > 2) {
+		gui_draw_tab(GUI_TAB2_POS_X, GUI_TAB_POS_Y, tabs_shown[2]);
+	}
 
 	if(gui.tabs_count > 3) {
 		if(gui.tabs_current > 1) { 

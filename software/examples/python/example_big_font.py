@@ -21,5 +21,5 @@ if __name__ == "__main__":
     # Write "Hello World" with big 24x32 font
     lcd.draw_text(0, 0, lcd.FONT_24X32, lcd.COLOR_BLACK, "24x32")
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()

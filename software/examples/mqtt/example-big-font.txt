@@ -3,6 +3,6 @@
 setup:
 	# Clear display
 	publish '' to tinkerforge/request/lcd_128x64_bricklet/XYZ/clear_display 
-	
+
 	# Write "Hello World" with big 24x32 font
 	publish '{"position_x": 0, "position_y": 0, "font": "24x32", "color": "black", "text": "24x32"}' to tinkerforge/request/lcd_128x64_bricklet/XYZ/draw_text 

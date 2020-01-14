@@ -29,5 +29,5 @@ if __name__ == "__main__":
 
     lcd.write_pixels(0, 0, WIDTH-1, HEIGHT-1, pixels)
 
-    raw_input("Press key to exit\n") # Use input() in Python 3
+    input("Press key to exit\n") # Use raw_input() in Python 2
     ipcon.disconnect()

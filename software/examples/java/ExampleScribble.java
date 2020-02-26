@@ -7,7 +7,7 @@ import com.tinkerforge.BrickletLCD128x64;
 public class ExampleScribble {
 	private static final String HOST = "localhost";
 	private static final int PORT = 4223;
-	private static final String UID = "XYZ"; // Change to your UID
+	private static final String UID = "XYZ"; // Change XYZ to the UID of your LCD 128x64 Bricklet
 	private static final short WIDTH = 128;
 	private static final short HEIGHT = 64;
 

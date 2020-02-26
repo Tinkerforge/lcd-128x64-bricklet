@@ -3,7 +3,7 @@
 
 HOST = "localhost"
 PORT = 4223
-UID = "XYZ" # Change to your UID
+UID = "XYZ" # Change XYZ to the UID of your LCD 128x64 Bricklet
 WIDTH = 128 # Columns
 HEIGHT = 64 # Rows
 

@@ -1,0 +1,33 @@
+val DIRECTION_HORIZONTAL = 0
+val GRAPH_TYPE_LINE = 1
+val CHANGE_TAB_ON_CLICK_AND_SWIPE = 3
+
+rule "Init GUI"
+when
+    // This trigger ensures, that the GUI is recreated if connection to the brick daemon is lost, or the stack was unplugged.
+    // Change XYZ to the UID of your LCD 128x64 Bricklet
+    Thing tinkerforge:brickletlcd128x64:XYZ changed from INITIALIZING to ONLINE
+then
+    // Change XYZ to the UID of your LCD 128x64 Bricklet
+    val lcd = getActions("tinkerforge", "tinkerforge:brickletlcd128x64:XYZ")
+
+    // Clear display
+    lcd.brickletLCD128x64ClearDisplay()
+    lcd.brickletLCD128x64RemoveAllGUI()
+
+    // Add GUI elements: Button, Slider and Graph with 60 data points
+    lcd.brickletLCD128x64SetGUIButton(0, 0, 0, 60, 20, "button");
+    lcd.brickletLCD128x64SetGUISlider(0, 0, 30, 60, DIRECTION_HORIZONTAL, 50);
+    lcd.brickletLCD128x64SetGUIGraphConfiguration(0, GRAPH_TYPE_LINE, 62, 0, 60, 52, "X", "Y");
+
+    // Add a few data points (the remaining points will be 0)
+    lcd.brickletLCD128x64SetGUIGraphData(0, newArrayList(20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240));
+
+    // Add 5 text tabs without and configure it for click and swipe without auto-redraw
+    lcd.brickletLCD128x64SetGUITabConfiguration(CHANGE_TAB_ON_CLICK_AND_SWIPE, false);
+    lcd.brickletLCD128x64SetGUITabText(0, "Tab A");
+    lcd.brickletLCD128x64SetGUITabText(1, "Tab B");
+    lcd.brickletLCD128x64SetGUITabText(2, "Tab C");
+    lcd.brickletLCD128x64SetGUITabText(3, "Tab D");
+    lcd.brickletLCD128x64SetGUITabText(4, "Tab E");
+end

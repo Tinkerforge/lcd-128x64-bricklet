@@ -14,10 +14,10 @@ fn main() -> Result<(), Box<dyn Error>> {
                                           // Don't use device before ipcon is connected.
 
     // Clear display
-    lcd.clear_display();
+    lcd.clear_display().recv()?;
 
     // Write "Hello World" with big 24x32 font
-    lcd.draw_text(0, 0, LCD_128X64_BRICKLET_FONT_24X32, LCD_128X64_BRICKLET_COLOR_BLACK, "24x32".to_string());
+    lcd.draw_text(0, 0, LCD_128X64_BRICKLET_FONT_24X32, LCD_128X64_BRICKLET_COLOR_BLACK, "24x32".to_string()).recv()?;
 
     println!("Press enter to exit.");
     let mut _input = String::new();

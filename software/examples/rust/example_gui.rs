@@ -50,24 +50,24 @@ fn main() -> Result<(), Box<dyn Error>> {
     });
 
     // Clear display
-    lcd.clear_display();
-    lcd.remove_all_gui();
+    lcd.clear_display().recv()?;
+    lcd.remove_all_gui().recv()?;
 
     // Add GUI elements: Button, Slider and Graph with 60 data points
-    lcd.set_gui_button(0, 0, 0, 60, 20, "button".to_string());
-    lcd.set_gui_slider(0, 0, 30, 60, LCD_128X64_BRICKLET_DIRECTION_HORIZONTAL, 50);
-    lcd.set_gui_graph_configuration(0, LCD_128X64_BRICKLET_GRAPH_TYPE_LINE, 62, 0, 60, 52, "X".to_string(), "Y".to_string());
+    lcd.set_gui_button(0, 0, 0, 60, 20, "button".to_string()).recv()?;
+    lcd.set_gui_slider(0, 0, 30, 60, LCD_128X64_BRICKLET_DIRECTION_HORIZONTAL, 50).recv()?;
+    lcd.set_gui_graph_configuration(0, LCD_128X64_BRICKLET_GRAPH_TYPE_LINE, 62, 0, 60, 52, "X".to_string(), "Y".to_string()).recv()?;
 
     // Add a few data points (the remaining points will be 0)
     lcd.set_gui_graph_data(0, &[20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240])?;
 
     // Add 5 text tabs without and configure it for click and swipe without auto-redraw
-    lcd.set_gui_tab_configuration(LCD_128X64_BRICKLET_CHANGE_TAB_ON_CLICK_AND_SWIPE, false);
-    lcd.set_gui_tab_text(0, "Tab A".to_string());
-    lcd.set_gui_tab_text(1, "Tab B".to_string());
-    lcd.set_gui_tab_text(2, "Tab C".to_string());
-    lcd.set_gui_tab_text(3, "Tab D".to_string());
-    lcd.set_gui_tab_text(4, "Tab E".to_string());
+    lcd.set_gui_tab_configuration(LCD_128X64_BRICKLET_CHANGE_TAB_ON_CLICK_AND_SWIPE, false).recv()?;
+    lcd.set_gui_tab_text(0, "Tab A".to_string()).recv()?;
+    lcd.set_gui_tab_text(1, "Tab B".to_string()).recv()?;
+    lcd.set_gui_tab_text(2, "Tab C".to_string()).recv()?;
+    lcd.set_gui_tab_text(3, "Tab D".to_string()).recv()?;
+    lcd.set_gui_tab_text(4, "Tab E".to_string()).recv()?;
 
     // Set period for GUI button pressed callback to 0.1s (100ms).
     lcd.set_gui_button_pressed_callback_configuration(100, true);

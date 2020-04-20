@@ -27,6 +27,6 @@
 2019-05-29: 2.0.7 (9267474)
 - Fix SPITFP IRQ race condition with other higher prio IRQs (through bricklib2)
 
-2020-04-20: 2.0.8 (<unkown>)
+2020-04-20: 2.0.8 (e2298cc)
 - Don't draw empty tabs if less than 3 are active
 - Don't send wrong reponse from remove-gui-tab function

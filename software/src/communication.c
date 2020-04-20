@@ -716,7 +716,7 @@ BootloaderHandleMessageResponse remove_gui_tab(const RemoveGUITab *data) {
 	gui_update_tabs();
 	gui_redraw();
 
-	return HANDLE_MESSAGE_RESPONSE_NEW_MESSAGE;
+	return HANDLE_MESSAGE_RESPONSE_EMPTY;
 }
 
 BootloaderHandleMessageResponse set_gui_tab_selected(const SetGUITabSelected *data) {

@@ -94,27 +94,12 @@ void uc1701_task_set_cursor(uint8_t row, uint8_t column) {
 	uc1701_task_write_command(set_cursor_command, 3);
 }
 
-inline bool uc1701_set_bit(uint8_t column, uint8_t row, bool value, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
-	const uint8_t display_bit = row % 8;
-
-	if(value) {
-		if(!(data[row/8][column] & (1 << display_bit))) {
-			data[row/8][column] |= (1 << display_bit);
-			return true;
-		}
-	} else {
-		if((data[row/8][column] & (1 << display_bit))) {
-			data[row/8][column] &= ~(1 << display_bit);
-			return true;
-		}
-	}
-
-	return false;
+inline void uc1701_set_byte(uint8_t column, uint8_t row_byte, uint8_t value, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
+	data[row_byte][column] = value;
 }
 
-inline bool uc1701_get_bit(uint8_t column, uint8_t row, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
-	const uint8_t display_bit = row % 8;
-	return data[row/8][column] & (1 << display_bit);
+inline uint8_t uc1701_get_byte(uint8_t column, uint8_t row_byte, uint8_t data[LCD_MAX_ROWS][LCD_MAX_COLUMNS]) {
+	return data[row_byte][column];
 }
 
 void uc1701_task_tick(void) {
@@ -167,14 +152,14 @@ void uc1701_task_tick(void) {
 				memcpy(uc1701.display_user_save, uc1701.display_user, LCD_MAX_ROWS*LCD_MAX_COLUMNS);
 			}
 
-			for(uint8_t row = 0; row < LCD_MAX_ROWS*8; row++) {
+			for(uint8_t row = 0; row < LCD_MAX_ROWS; row++) {
 				for(uint8_t column = 0; column < LCD_MAX_COLUMNS; column++) {
-					bool bit_new   = uc1701_get_bit(column, row, uc1701.display_user_save) | uc1701_get_bit(column, row, uc1701.display_gui);
-					bool bit_write = uc1701_get_bit(column, row, uc1701.display_write);
+					uint8_t byte_new   = uc1701_get_byte(column, row, uc1701.display_user_save) | uc1701_get_byte(column, row, uc1701.display_gui);
+					uint8_t byte_write = uc1701_get_byte(column, row, uc1701.display_write);
 
-					if(bit_new != bit_write) {
-						uc1701_set_bit(column, row, bit_new, uc1701.display_write);
-						uc1701_set_bit(column, row, true, uc1701.display_mask_write);
+					if(byte_new != byte_write) {
+						uc1701_set_byte(column, row, byte_new, uc1701.display_write);
+						uc1701_set_byte(column, row, byte_new ^ byte_write, uc1701.display_mask_write);
 					}
 				}
 			}

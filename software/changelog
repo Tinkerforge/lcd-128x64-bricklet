@@ -30,3 +30,6 @@
 2020-04-20: 2.0.8 (e2298cc)
 - Don't draw empty tabs if less than 3 are active
 - Don't send wrong response from remove-gui-tab function
+
+2020-06-05: 2.0.9 (<unknown>)
+- Improve draw performance

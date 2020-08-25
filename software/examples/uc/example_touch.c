@@ -1,13 +1,9 @@
-
-
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_lcd_128x64.h"
 
 #define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
 
 void check(int rc, const char* msg);
-
-
 
 // Callback function for touch position callback
 void touch_position_handler(TF_LCD128x64 *device, uint16_t pressure, uint16_t x,
@@ -47,7 +43,6 @@ void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture, uint32_t durat
 	tf_hal_printf("Age: %u\n", age);
 	tf_hal_printf("\n");
 }
-
 
 TF_LCD128x64 lcd;
 

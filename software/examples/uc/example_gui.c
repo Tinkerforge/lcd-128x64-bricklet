@@ -1,13 +1,9 @@
-
-
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_lcd_128x64.h"
 
 #define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
 
 void check(int rc, const char* msg);
-
-
 
 // Callback function for GUI button pressed callback
 void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool pressed,
@@ -35,7 +31,6 @@ void gui_tab_selected_handler(TF_LCD128x64 *device, int8_t index, void *user_dat
 
 	tf_hal_printf("Index: %d\n", index);
 }
-
 
 TF_LCD128x64 lcd;
 

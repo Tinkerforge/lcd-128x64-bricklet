@@ -1,14 +1,9 @@
-
-
 #include "bindings/hal_common.h"
 #include "bindings/bricklet_lcd_128x64.h"
 
 #define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
 
 void check(int rc, const char* msg);
-
-
-
 
 TF_LCD128x64 lcd;
 

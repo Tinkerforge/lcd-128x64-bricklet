@@ -38,21 +38,20 @@ void example_setup(TF_HalContext *hal) {
 	// Create device object
 	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
 
-
 	// Register GUI button pressed callback to function gui_button_pressed_handler
 	tf_lcd_128x64_register_gui_button_pressed_callback(&lcd,
-	                                                  gui_button_pressed_handler,
-	                                                  NULL);
+	                                                   gui_button_pressed_handler,
+	                                                   NULL);
 
 	// Register GUI slider value callback to function gui_slider_value_handler
 	tf_lcd_128x64_register_gui_slider_value_callback(&lcd,
-	                                                gui_slider_value_handler,
-	                                                NULL);
+	                                                 gui_slider_value_handler,
+	                                                 NULL);
 
 	// Register GUI tab selected callback to function gui_tab_selected_handler
 	tf_lcd_128x64_register_gui_tab_selected_callback(&lcd,
-	                                                gui_tab_selected_handler,
-	                                                NULL);
+	                                                 gui_tab_selected_handler,
+	                                                 NULL);
 
 	// Clear display
 	check(tf_lcd_128x64_clear_display(&lcd), "call clear_display");
@@ -91,7 +90,6 @@ void example_setup(TF_HalContext *hal) {
 
 	// Set period for GUI tab selected callback to 0.1s (100ms)
 	tf_lcd_128x64_set_gui_tab_selected_callback_configuration(&lcd, 100, true);
-
 }
 
 void example_loop(TF_HalContext *hal) {

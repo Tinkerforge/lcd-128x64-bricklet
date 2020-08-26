@@ -50,23 +50,21 @@ void example_setup(TF_HalContext *hal) {
 	// Create device object
 	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
 
-
 	// Register touch position callback to function touch_position_handler
 	tf_lcd_128x64_register_touch_position_callback(&lcd,
-	                                              touch_position_handler,
-	                                              NULL);
+	                                               touch_position_handler,
+	                                               NULL);
 
 	// Register touch gesture callback to function touch_gesture_handler
 	tf_lcd_128x64_register_touch_gesture_callback(&lcd,
-	                                             touch_gesture_handler,
-	                                             NULL);
+	                                              touch_gesture_handler,
+	                                              NULL);
 
 	// Set period for touch position callback to 0.1s (100ms)
 	tf_lcd_128x64_set_touch_position_callback_configuration(&lcd, 100, true);
 
 	// Set period for touch gesture callback to 0.1s (100ms)
 	tf_lcd_128x64_set_touch_gesture_callback_configuration(&lcd, 100, true);
-
 }
 
 void example_loop(TF_HalContext *hal) {

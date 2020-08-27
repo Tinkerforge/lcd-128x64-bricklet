@@ -5,9 +5,13 @@
 
 void check(int rc, const char* msg);
 
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
+
 // Callback function for GUI button pressed callback
-void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool pressed,
-                                void *user_data) {
+static void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool pressed,
+                                       void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Index: %u\n", index);
@@ -16,8 +20,8 @@ void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool presse
 }
 
 // Callback function for GUI slider value callback
-void gui_slider_value_handler(TF_LCD128x64 *device, uint8_t index, uint8_t value,
-                              void *user_data) {
+static void gui_slider_value_handler(TF_LCD128x64 *device, uint8_t index, uint8_t value,
+                                     void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Index: %u\n", index);
@@ -26,13 +30,14 @@ void gui_slider_value_handler(TF_LCD128x64 *device, uint8_t index, uint8_t value
 }
 
 // Callback function for GUI tab selected callback
-void gui_tab_selected_handler(TF_LCD128x64 *device, int8_t index, void *user_data) {
+static void gui_tab_selected_handler(TF_LCD128x64 *device, int8_t index,
+                                     void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Index: %d\n", index);
 }
 
-TF_LCD128x64 lcd;
+static TF_LCD128x64 lcd;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object

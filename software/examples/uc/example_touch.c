@@ -5,9 +5,13 @@
 
 void check(int rc, const char* msg);
 
+void example_setup(TF_HalContext *hal);
+void example_loop(TF_HalContext *hal);
+
+
 // Callback function for touch position callback
-void touch_position_handler(TF_LCD128x64 *device, uint16_t pressure, uint16_t x,
-                            uint16_t y, uint32_t age, void *user_data) {
+static void touch_position_handler(TF_LCD128x64 *device, uint16_t pressure, uint16_t x,
+                                   uint16_t y, uint32_t age, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	tf_hal_printf("Pressure: %u\n", pressure);
@@ -18,10 +22,10 @@ void touch_position_handler(TF_LCD128x64 *device, uint16_t pressure, uint16_t x,
 }
 
 // Callback function for touch gesture callback
-void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture, uint32_t duration,
-                           uint16_t pressure_max, uint16_t x_start, uint16_t x_end,
-                           uint16_t y_start, uint16_t y_end, uint32_t age,
-                           void *user_data) {
+static void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture,
+                                  uint32_t duration, uint16_t pressure_max,
+                                  uint16_t x_start, uint16_t x_end, uint16_t y_start,
+                                  uint16_t y_end, uint32_t age, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
 	if(gesture == TF_LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
@@ -44,7 +48,7 @@ void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture, uint32_t durat
 	tf_hal_printf("\n");
 }
 
-TF_LCD128x64 lcd;
+static TF_LCD128x64 lcd;
 
 void example_setup(TF_HalContext *hal) {
 	// Create device object

@@ -14,10 +14,10 @@ static void touch_position_handler(TF_LCD128x64 *device, uint16_t pressure, uint
                                    uint16_t y, uint32_t age, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Pressure: %u\n", pressure);
-	tf_hal_printf("X: %u\n", x);
-	tf_hal_printf("Y: %u\n", y);
-	tf_hal_printf("Age: %u\n", age);
+	tf_hal_printf("Pressure: %I16u\n", pressure);
+	tf_hal_printf("X: %I16u\n", x);
+	tf_hal_printf("Y: %I16u\n", y);
+	tf_hal_printf("Age: %I32u\n", age);
 	tf_hal_printf("\n");
 }
 
@@ -38,13 +38,13 @@ static void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture,
 		tf_hal_printf("Gesture: Bottom To Top\n");
 	}
 
-	tf_hal_printf("Duration: %u\n", duration);
-	tf_hal_printf("Pressure Max: %u\n", pressure_max);
-	tf_hal_printf("X Start: %u\n", x_start);
-	tf_hal_printf("X End: %u\n", x_end);
-	tf_hal_printf("Y Start: %u\n", y_start);
-	tf_hal_printf("Y End: %u\n", y_end);
-	tf_hal_printf("Age: %u\n", age);
+	tf_hal_printf("Duration: %I32u\n", duration);
+	tf_hal_printf("Pressure Max: %I16u\n", pressure_max);
+	tf_hal_printf("X Start: %I16u\n", x_start);
+	tf_hal_printf("X End: %I16u\n", x_end);
+	tf_hal_printf("Y Start: %I16u\n", y_start);
+	tf_hal_printf("Y End: %I16u\n", y_end);
+	tf_hal_printf("Age: %I32u\n", age);
 	tf_hal_printf("\n");
 }
 

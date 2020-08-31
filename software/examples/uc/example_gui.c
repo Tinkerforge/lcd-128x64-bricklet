@@ -14,7 +14,7 @@ static void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool
                                        void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Index: %u\n", index);
+	tf_hal_printf("Index: %I8u\n", index);
 	tf_hal_printf("Pressed: %s\n", pressed ? "true" : "false");
 	tf_hal_printf("\n");
 }
@@ -24,8 +24,8 @@ static void gui_slider_value_handler(TF_LCD128x64 *device, uint8_t index, uint8_
                                      void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Index: %u\n", index);
-	tf_hal_printf("Value: %u\n", value);
+	tf_hal_printf("Index: %I8u\n", index);
+	tf_hal_printf("Value: %I8u\n", value);
 	tf_hal_printf("\n");
 }
 
@@ -34,7 +34,7 @@ static void gui_tab_selected_handler(TF_LCD128x64 *device, int8_t index,
                                      void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	tf_hal_printf("Index: %d\n", index);
+	tf_hal_printf("Index: %I8d\n", index);
 }
 
 static TF_LCD128x64 lcd;

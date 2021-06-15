@@ -34,5 +34,5 @@
 2020-06-05: 2.0.9 (0391854)
 - Improve draw performance
 
-2021-06-15: 2.0.10 (TBD)
+2021-06-15: 2.0.10 (b27c89d)
 - Make sure position_value_has_to_change=False works with touch_pressure=1

@@ -939,7 +939,7 @@ bool handle_touch_position_callback(void) {
 		}
 
 		// Never trigger callback by pressure of 1
-		if(tsc2046e.touch_pressure == 1) {
+		if(tsc2046e.position_value_has_to_change && (tsc2046e.touch_pressure == 1)) {
 			return false;
 		}
 

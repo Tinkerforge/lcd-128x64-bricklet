@@ -9,8 +9,8 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 // Callback function for GUI button pressed callback
@@ -43,7 +43,7 @@ static void gui_tab_selected_handler(TF_LCD128x64 *device, int8_t index,
 
 static TF_LCD128x64 lcd;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
 
@@ -101,7 +101,7 @@ void example_setup(TF_HalContext *hal) {
 	tf_lcd_128x64_set_gui_tab_selected_callback_configuration(&lcd, 100, true);
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }

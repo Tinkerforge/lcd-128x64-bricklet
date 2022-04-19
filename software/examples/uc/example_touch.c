@@ -9,8 +9,8 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 // Callback function for touch position callback
@@ -32,13 +32,13 @@ static void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture,
                                   uint16_t y_end, uint32_t age, void *user_data) {
 	(void)device; (void)user_data; // avoid unused parameter warning
 
-	if(gesture == TF_LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
+	if (gesture == TF_LCD_128X64_GESTURE_LEFT_TO_RIGHT) {
 		tf_hal_printf("Gesture: Left To Right\n");
-	} else if(gesture == TF_LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
+	} else if (gesture == TF_LCD_128X64_GESTURE_RIGHT_TO_LEFT) {
 		tf_hal_printf("Gesture: Right To Left\n");
-	} else if(gesture == TF_LCD_128X64_GESTURE_TOP_TO_BOTTOM) {
+	} else if (gesture == TF_LCD_128X64_GESTURE_TOP_TO_BOTTOM) {
 		tf_hal_printf("Gesture: Top To Bottom\n");
-	} else if(gesture == TF_LCD_128X64_GESTURE_BOTTOM_TO_TOP) {
+	} else if (gesture == TF_LCD_128X64_GESTURE_BOTTOM_TO_TOP) {
 		tf_hal_printf("Gesture: Bottom To Top\n");
 	}
 
@@ -54,7 +54,7 @@ static void touch_gesture_handler(TF_LCD128x64 *device, uint8_t gesture,
 
 static TF_LCD128x64 lcd;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
 
@@ -75,7 +75,7 @@ void example_setup(TF_HalContext *hal) {
 	tf_lcd_128x64_set_touch_gesture_callback_configuration(&lcd, 100, true);
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }

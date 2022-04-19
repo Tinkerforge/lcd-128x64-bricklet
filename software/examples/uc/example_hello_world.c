@@ -9,13 +9,13 @@
 
 void check(int rc, const char* msg);
 
-void example_setup(TF_HalContext *hal);
-void example_loop(TF_HalContext *hal);
+void example_setup(TF_HAL *hal);
+void example_loop(TF_HAL *hal);
 
 
 static TF_LCD128x64 lcd;
 
-void example_setup(TF_HalContext *hal) {
+void example_setup(TF_HAL *hal) {
 	// Create device object
 	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
 
@@ -26,7 +26,7 @@ void example_setup(TF_HalContext *hal) {
 	check(tf_lcd_128x64_write_line(&lcd, 0, 0, "Hello World"), "call write_line");
 }
 
-void example_loop(TF_HalContext *hal) {
+void example_loop(TF_HAL *hal) {
 	// Poll for callbacks
 	tf_hal_callback_tick(hal, 0);
 }

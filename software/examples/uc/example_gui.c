@@ -1,17 +1,13 @@
 // This example is not self-contained.
-// It requres usage of the example driver specific to your platform.
+// It requires usage of the example driver specific to your platform.
 // See the HAL documentation.
 
-#include "bindings/hal_common.h"
-#include "bindings/bricklet_lcd_128x64.h"
+#include "src/bindings/hal_common.h"
+#include "src/bindings/bricklet_lcd_128x64.h"
 
-#define UID "XYZ" // Change XYZ to the UID of your LCD 128x64 Bricklet
-
-void check(int rc, const char* msg);
-
+void check(int rc, const char *msg);
 void example_setup(TF_HAL *hal);
 void example_loop(TF_HAL *hal);
-
 
 // Callback function for GUI button pressed callback
 static void gui_button_pressed_handler(TF_LCD128x64 *device, uint8_t index, bool pressed,
@@ -45,7 +41,7 @@ static TF_LCD128x64 lcd;
 
 void example_setup(TF_HAL *hal) {
 	// Create device object
-	check(tf_lcd_128x64_create(&lcd, UID, hal), "create device object");
+	check(tf_lcd_128x64_create(&lcd, NULL, hal), "create device object");
 
 	// Register GUI button pressed callback to function gui_button_pressed_handler
 	tf_lcd_128x64_register_gui_button_pressed_callback(&lcd,

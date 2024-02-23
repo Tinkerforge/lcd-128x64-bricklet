@@ -25,10 +25,10 @@ Module ExamplePixelMatrix
         For row As Integer = 0 To HEIGHT - 1
             For column As Integer = 0 To WIDTH - 1
                 pixels(row*WIDTH + column) = (row \ 8) Mod 2 = (column \ 8) Mod 2
-            Next row
-        Next column
+            Next column
+        Next row
 
-		lcd.WritePixels(0, 0, WIDTH-1, HEIGHT-1, pixels)
+        lcd.WritePixels(0, 0, WIDTH-1, HEIGHT-1, pixels)
 
         Console.WriteLine("Press key to exit")
         Console.ReadLine()
